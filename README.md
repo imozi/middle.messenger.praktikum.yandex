@@ -1,5 +1,7 @@
 # Самостоятельный учебный проект в [Яндекс Практикум - Мидл-фронтенд разработчик](https://practicum.yandex.ru/middle-frontend/): Мессанджер
 
+![Messanger-chat](https://user-images.githubusercontent.com/29326762/189125988-04f34488-4b4d-4fb5-a194-e9886be08dcb.png)
+
 
 ## Общие сведения
 
