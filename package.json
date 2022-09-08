@@ -1,0 +1,20 @@
+{
+  "name": "middle.messenger.praktikum.yandex",
+  "version": "1.0.0",
+  "description": "Educational project by profession middle-front-end developer",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/imozi/middle.messenger.praktikum.yandex.git"
+  },
+  "keywords": ["messenger", "yandex", "praktikum", "frontend"],
+  "author": "Oleg Zaytsev <zaytsevoi.90@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/imozi/middle.messenger.praktikum.yandex/issues"
+  },
+  "homepage": "https://github.com/imozi/middle.messenger.praktikum.yandex#readme"
+}
