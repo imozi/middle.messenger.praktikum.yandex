@@ -6,6 +6,6 @@ export default `
       <img src=${logo} alt="OziHub Messanger">
     </div>
   <h1 class="login__title">Добро пожаловать!</h1>
-  <a href="/login">Войти</a>
+  <a href="./login">Войти</a>
 </section>
 `;

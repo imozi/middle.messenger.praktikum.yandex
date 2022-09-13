@@ -10,6 +10,6 @@ export default `
   </a>
   <h1 class="login__title">Вход</h1>
      ${Templater.patrials.get('form')}
-  <a href="/registration">У вас нет аккаунта?</a>
+  <a href="./registration">У вас нет аккаунта?</a>
 </section>
 `;
