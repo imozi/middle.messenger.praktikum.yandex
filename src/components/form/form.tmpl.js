@@ -1,5 +1,5 @@
 export default `
-<form action="#" class="{{class}} form">
+<form action="{{action}}" class="{{class}} form" method="{{method}}">
     {{#each inputs}}
         {{> input this}}
     {{/each}}
@@ -7,4 +7,5 @@ export default `
     {{> button button}}
     </div>
 </form>
+{{> link link}}
 `;

@@ -4,6 +4,6 @@ export default `
       <img src="img/svg/500.svg" alt="OziHub Messanger">
     </div>
   <h1 class="serv-error__title">Ошибка сервера!</h1>
-  <a href="/">Вернуться</a>
+  {{> link link}}
 </section>
 `;

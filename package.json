@@ -4,7 +4,7 @@
   "description": "Educational project by profession middle-front-end developer",
   "scripts": {
     "start": "node index.js",
-    "dev": "parcel ./public/index.html --no-cache -p 3000 --open",
+    "dev": "parcel ./public/index.html --no-cache -p 3000",
     "build": "parcel build ./public/index.html --no-source-maps --no-cache"
   },
   "repository": {
@@ -45,6 +45,8 @@
     "parcel-namer-struct": "^1.0.0",
     "parcel-reporter-static-files-copy": "^1.4.0",
     "postcss-import": "^15.0.0",
-    "postcss-nested": "^5.0.6"
+    "postcss-mixins": "^9.0.4",
+    "postcss-nested": "^5.0.6",
+    "postcss-simple-vars": "^7.0.0"
   }
 }
