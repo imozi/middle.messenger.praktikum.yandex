@@ -1,6 +1,7 @@
 html {
   font-size: var(--font-size);
   box-sizing: border-box;
+  overflow: hidden;
 }
 
 *,
@@ -21,6 +22,38 @@ body {
   font-weight: 400;
   color: var(--color-blue-900);
   background-color: var(--color-gray);
+}
+
+#root[aria-busy="true"]::before {
+  position: absolute;
+  content: "";
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: var(--color-gray);
+  background-image: url("../assets//svg/logo-light.svg");
+  background-position: center center;
+  background-repeat: no-repeat;
+  animation-name: pulse;
+  animation-timing-function: ease-in-out;
+  animation-duration: 1.2s;
+  animation-iteration-count: infinite;
+  z-index: 9999;
+}
+
+@keyframes pulse {
+  from {
+    transform: scale3d(1, 1, 1);
+  }
+
+  50% {
+    transform: scale3d(1.05, 1.05, 1.05);
+  }
+
+  to {
+    transform: scale3d(1, 1, 1);
+  }
 }
 
 .visually-hidden {

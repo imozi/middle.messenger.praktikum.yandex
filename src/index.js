@@ -1,7 +1,9 @@
 import { routes } from './pages';
 
-const body = document.querySelector('body');
-const content = routes[document.location.pathname]
+const root = document.getElementById('root');
+let content = routes[document.location.pathname]
   ? routes[document.location.pathname]
   : routes['/404'];
-body.insertAdjacentHTML('afterbegin', content());
+
+root.insertAdjacentHTML('afterbegin', content());
+window.onload = () => (root.ariaBusy = false);
