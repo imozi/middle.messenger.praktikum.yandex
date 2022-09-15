@@ -1,9 +1,12 @@
 import hbs from 'handlebars';
+import helpers from './helpers';
 
 class Templater {
   constructor() {
     this.templates = new Map();
     this.patrials = new Map();
+    this.helpers = new Map();
+    this._regHelpers(helpers);
   }
 
   regTmpl(name, template) {
@@ -25,6 +28,13 @@ class Templater {
 
   renderTmpl(template, props) {
     return this.templates.get(template)(props);
+  }
+
+  _regHelpers(obj) {
+    for (const [key, value] of Object.entries(obj)) {
+      hbs.registerHelper(key, value);
+      this.helpers.set(key, hbs.helpers[key]);
+    }
   }
 }
 

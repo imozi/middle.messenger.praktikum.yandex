@@ -4,8 +4,12 @@ export default `
         {{> input this}}
     {{/each}}
     <div class="form__row">
-    {{> button button}}
+        <div class="form__btn">
+            {{> button button}}
+        </div>
+        <div class="form__link">
+            {{> link link}}
+        </div>
     </div>
 </form>
-{{> link link}}
 `;

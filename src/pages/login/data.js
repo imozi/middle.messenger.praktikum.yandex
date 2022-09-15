@@ -1,7 +1,11 @@
 export const data = {
-  action: "#",
+  action: '#',
   method: 'post',
   class: 'login__form',
+  header: {
+    class: 'login__header',
+    title: 'Вход',
+  },
   inputs: [
     {
       id: 'login',

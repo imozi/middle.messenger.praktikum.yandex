@@ -6,8 +6,10 @@
 @import url('./animation.css');
 @import url('../pages/home/home.css');
 @import url('../pages/login/login.css');
+@import url('../pages/registration/registration.css');
 @import url('../pages/404/404.css');
 @import url('../pages/500/500.css');
+@import url('../components/header/header.css');
 @import url('../components/form/form.css');
 @import url('../components/input/input.css');
 @import url('../components/button/button.css');
