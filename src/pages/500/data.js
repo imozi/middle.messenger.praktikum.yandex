@@ -1,6 +1,6 @@
 export const data = {
   link: {
-    url: 'login',
+    url: 'registration',
     text: 'Вернуться',
   },
 };
