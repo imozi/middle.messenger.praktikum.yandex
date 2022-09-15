@@ -28,7 +28,7 @@ export const data = {
       id: 'second_name',
       title: 'Имя',
       type: 'text',
-      name: 'first_name',
+      name: 'second_name',
       placeholder: 'Имя',
       value: 'ozi',
     },
