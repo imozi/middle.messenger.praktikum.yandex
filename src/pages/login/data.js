@@ -1,6 +1,6 @@
 export const data = {
-  action: '#',
-  method: 'post',
+  action: '/404',
+  method: 'get',
   class: 'login__form',
   header: {
     class: 'login__header',
@@ -13,6 +13,7 @@ export const data = {
       type: 'text',
       name: 'login',
       placeholder: 'Ваш логин',
+      value: 'ozihub',
       icon: 'user',
     },
     {
@@ -21,6 +22,7 @@ export const data = {
       type: 'password',
       name: 'password',
       placeholder: 'Пароль',
+      value: 'ozihub',
       icon: 'hide',
     },
   ],

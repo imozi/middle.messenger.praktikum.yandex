@@ -30,6 +30,24 @@ input {
   &[type='password'] + .input-icon {
     cursor: pointer;
   }
+
+  &[type='email'] {
+    &:valid {
+      border-color: $color-green-200;
+    }
+
+    &:valid:focus {
+      box-shadow: 0px 0px 0px 4px $color-green-200-50;
+    }
+
+    &:invalid {
+      border-color: $color-red;
+    }
+
+    &:invalid:focus {
+      box-shadow: 0px 0px 0px 4px $color-red-50;
+    }
+  }
 }
 
 .input-icon {

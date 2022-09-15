@@ -1,6 +1,6 @@
 export const data = {
-  action: '#',
-  method: 'post',
+  action: '/500',
+  method: 'get',
   class: 'registration__form',
   header: {
     class: 'registration__header',
@@ -13,6 +13,7 @@ export const data = {
       type: 'text',
       name: 'first_name',
       placeholder: 'Фамилия',
+      value: 'hub',
     },
     {
       id: 'login',
@@ -20,6 +21,7 @@ export const data = {
       type: 'text',
       name: 'login',
       placeholder: 'Ваш логин',
+      value: 'ozihub',
       icon: 'user',
     },
     {
@@ -28,6 +30,7 @@ export const data = {
       type: 'text',
       name: 'first_name',
       placeholder: 'Имя',
+      value: 'ozi',
     },
     {
       id: 'password',
@@ -35,6 +38,7 @@ export const data = {
       type: 'password',
       name: 'password',
       placeholder: 'Пароль',
+      value: 'ozihub',
       icon: 'hide',
     },
     {
@@ -42,9 +46,9 @@ export const data = {
       title: 'Почта',
       type: 'email',
       name: 'email',
-      placeholder: 'Имя',
-      value: 'pochta@yandex.ru',
-      icon: 'phone',
+      placeholder: 'pochta@yandex.ru',
+      value: 'ozihub@yandex.ru',
+      pattern: '[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$',
     },
     {
       id: 'password-repeated',
@@ -52,6 +56,7 @@ export const data = {
       type: 'password',
       name: 'password-repeated',
       placeholder: 'Пароль (еще раз)',
+      value: 'ozihub',
     },
     {
       id: 'phone',
@@ -60,6 +65,7 @@ export const data = {
       name: 'phone',
       placeholder: '+7 (924) 896 33 79',
       value: '+7 (924) 896 33 79',
+      icon: 'phone',
     },
   ],
   button: {

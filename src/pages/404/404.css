@@ -6,4 +6,14 @@
   flex-direction: column;
   align-items: center;
   transform: translate(-50%, -50%);
+
+  &__img {
+    margin-bottom: 1.5rem;
+  }
+
+  &__title {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    font-size: 1.8rem;
+  }
 }
