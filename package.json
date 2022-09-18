@@ -1,0 +1,54 @@
+{
+  "name": "middle.messenger.praktikum.yandex",
+  "version": "1.0.0",
+  "description": "Educational project by profession middle-front-end developer",
+  "scripts": {
+    "start": "npm run build && node index.js",
+    "dev": "npm run clear && parcel ./public/index.html --no-cache -p 3000",
+    "build": "npm run clear && parcel build ./public/index.html --no-source-maps --no-cache --dist-dir dist --public-url ./",
+    "clear": "rm -rf dist .parcel-cache"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/imozi/middle.messenger.praktikum.yandex.git"
+  },
+  "keywords": [
+    "messenger",
+    "yandex",
+    "praktikum",
+    "frontend"
+  ],
+  "author": "Oleg Zaytsev <zaytsevoi.90@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/imozi/middle.messenger.praktikum.yandex/issues"
+  },
+  "homepage": "https://github.com/imozi/middle.messenger.praktikum.yandex#readme",
+  "browserslist": "> 0.5%, last 2 versions, Firefox ESR, not dead",
+  "engines": {
+    "node": "16.17.0"
+  },
+  "parcel-namer-custom": {
+    ".css$": "css/[name].[hash].[type]",
+    ".js$": "js/[name].[hash].[type]"
+  },
+  "staticFiles": {
+    "staticPath": "src/assets",
+    "staticOutPath": "img"
+  },
+  "devDependencies": {
+    "dotenv": "~16.0.2",
+    "express": "~4.18.1",
+    "handlebars": "~4.7.7",
+    "open": "^8.4.0",
+    "parcel": "~2.7.0",
+    "parcel-namer-custom": "^0.2.0",
+    "parcel-namer-rewrite": "^2.0.0-rc.2",
+    "parcel-namer-struct": "^1.0.0",
+    "parcel-reporter-static-files-copy": "^1.4.0",
+    "postcss-import": "^15.0.0",
+    "postcss-mixins": "^9.0.4",
+    "postcss-nested": "^5.0.6",
+    "postcss-simple-vars": "^7.0.0"
+  }
+}
