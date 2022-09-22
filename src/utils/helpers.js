@@ -1,7 +1,9 @@
-const ifEqual = function (a, b, options) {
+function ifEqual(a, b, options) {
   return a === b ? options.fn(this) : options.inverse(this);
-};
+}
 
-export default {
+const helpers = {
   ifEqual,
 };
+
+export { helpers };

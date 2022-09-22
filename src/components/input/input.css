@@ -1,7 +1,15 @@
 label {
   display: inline-block;
-  color: $color-dark-gray;
   margin-bottom: 0.7rem;
+  color: $color-dark-gray;
+}
+
+.input-icon {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  display: flex;
+  transform: translateY(-50%);
 }
 
 input {
@@ -9,14 +17,14 @@ input {
   width: 100%;
   height: 50px;
   padding: 1.6rem 1.1rem;
-  font-family: inherit;
-  font-size: inherit;
   color: $color-blue-900;
+  font-size: inherit;
+  font-family: inherit;
   background-color: $color-gray;
   border: 1px solid $color-light-gray;
   border-radius: $border-radius;
-  transition: $transition;
   outline: none;
+  transition: $transition;
 
   &:hover {
     border-color: $color-blue-100;
@@ -24,7 +32,7 @@ input {
 
   &:focus {
     border-color: $color-blue-100;
-    box-shadow: 0px 0px 0px 4px $color-light-blue-50;
+    box-shadow: 0 0 0 4px $color-light-blue-50;
   }
 
   &[type='password'] + .input-icon {
@@ -32,28 +40,20 @@ input {
   }
 
   &[type='email'] {
-    &:valid {
-      border-color: $color-green-200;
-    }
-
-    &:valid:focus {
-      box-shadow: 0px 0px 0px 4px $color-green-200-50;
-    }
-
     &:invalid {
       border-color: $color-red;
     }
 
+    &:valid {
+      border-color: $color-green-200;
+    }
+
     &:invalid:focus {
-      box-shadow: 0px 0px 0px 4px $color-red-50;
+      box-shadow: 0 0 0 4px $color-red-50;
+    }
+
+    &:valid:focus {
+      box-shadow: 0 0 0 4px $color-green-200-50;
     }
   }
-}
-
-.input-icon {
-  position: absolute;
-  display: flex;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
 }

@@ -1,10 +1,12 @@
 import Templater from '../../utils/Templater';
-import template from './login.tmpl';
+import { template } from './login.tmpl';
 import { data } from './data';
 
-Templater.regTmpl('login', template);
+Templater.regTmpl('Login', template);
 
-export const login = {
+const Login = {
   title: 'Вход | Messanger',
-  context: Templater.renderTmpl('login', data),
+  context: Templater.renderTmpl('Login', data),
 };
+
+export { Login };

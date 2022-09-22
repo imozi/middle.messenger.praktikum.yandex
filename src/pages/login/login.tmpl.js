@@ -1,6 +1,8 @@
-export default `
+const template = `
 <section class="login">
-     {{> header header}}
-     {{> form}}
+     {{> Header header}}
+     {{> Form}}
 </section>
 `;
+
+export { template };

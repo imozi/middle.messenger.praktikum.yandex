@@ -1,5 +1,5 @@
-import './header';
-import './form';
-import './input';
-import './button';
-import './link';
+import './Header';
+import './Form';
+import './Input';
+import './Button';
+import './Link';

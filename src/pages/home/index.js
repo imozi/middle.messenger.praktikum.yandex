@@ -1,10 +1,12 @@
 import Templater from '../../utils/Templater';
-import template from './home.tmpl';
+import { template } from './home.tmpl';
 import { data } from './data';
 
-Templater.regTmpl('home', template);
+Templater.regTmpl('Home', template);
 
-export const home = {
+const Home = {
   title: 'OziHub | Messanger',
-  context: Templater.renderTmpl('home', data),
+  context: Templater.renderTmpl('Home', data),
 };
+
+export { Home };

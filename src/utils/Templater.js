@@ -1,5 +1,5 @@
 import hbs from 'handlebars';
-import helpers from './helpers';
+import { helpers } from './helpers';
 
 class Templater {
   constructor() {

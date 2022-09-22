@@ -1,10 +1,12 @@
 import Templater from '../../utils/Templater';
-import template from './registration.tmpl';
+import { template } from './registration.tmpl';
 import { data } from './data';
 
-Templater.regTmpl('registration', template);
+Templater.regTmpl('Registration', template);
 
-export const registration = {
+const Registration = {
   title: 'Регистрация | Messanger',
-  context: Templater.renderTmpl('registration', data),
+  context: Templater.renderTmpl('Registration', data),
 };
+
+export { Registration };

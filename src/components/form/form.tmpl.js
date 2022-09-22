@@ -1,15 +1,17 @@
-export default `
+const template = `
 <form action="{{action}}" class="{{class}} form" method="{{method}}">
     {{#each inputs}}
-        {{> input this}}
+        {{> Input this}}
     {{/each}}
     <div class="form__row">
         <div class="form__btn">
-            {{> button button}}
+            {{> Button button}}
         </div>
         <div class="form__link">
-            {{> link link}}
+            {{> Link link}}
         </div>
     </div>
 </form>
 `;
+
+export { template };

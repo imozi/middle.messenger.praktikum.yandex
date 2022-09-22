@@ -1,4 +1,4 @@
 import Tepmlater from '../../utils/Templater';
-import template from './form.tmpl';
+import { template } from './form.tmpl';
 
-Tepmlater.regPart('form', template);
+Tepmlater.regPart('Form', template);

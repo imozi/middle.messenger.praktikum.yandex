@@ -1,0 +1,27 @@
+{
+  "env": {
+    "browser": true
+  },
+  "extends": [
+    "airbnb",
+    "prettier"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "plugins": [
+    "@typescript-eslint",
+    "prettier"
+  ],
+  "rules": {
+    "import/no-extraneous-dependencies": "off",
+    "no-restricted-syntax": "off",
+    "no-underscore-dangle": "off",
+    "prettier/prettier": "error",
+    "no-return-assign": "off",
+    "import/prefer-default-export": "off"
+  },
+  "settings": {
+    "react": {
+      "version": "0"
+    }
+  }
+}

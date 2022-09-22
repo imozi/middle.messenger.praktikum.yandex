@@ -1,4 +1,4 @@
-export const data = {
+const data = {
   action: '/500',
   method: 'get',
   class: 'registration__form',
@@ -79,3 +79,5 @@ export const data = {
     class: 'registration__link',
   },
 };
+
+export { data };

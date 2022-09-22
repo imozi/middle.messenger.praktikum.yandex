@@ -5,19 +5,19 @@
 
 @define-mixin visually-hidden {
   position: absolute;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
   width: 1px;
   height: 1px;
-  padding: 0;
   margin: -1px;
+  padding: 0;
+  overflow: hidden;
   border: 0;
+  clip: rect(0 0 0 0);
 }
 
-@define-mixin animation-pulse $timing, $duration, $iteration {
-  animation-name: pulse;
-  animation-timing-function: $timing;
+@define-mixin animation-pulse-center $timing, $duration, $iteration {
+  animation-name: pulse-position-center;
   animation-duration: $duration;
+  animation-timing-function: $timing;
   animation-iteration-count: $iteration;
 }
 

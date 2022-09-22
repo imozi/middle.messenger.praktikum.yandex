@@ -1,15 +1,17 @@
 import '../components';
-import { home } from './home';
-import { login } from './login';
-import { registration } from './registration';
-import { notFound } from './404';
-import { servError } from './500';
-import getRouteContent from '../utils/getRouteContent';
+import { Home } from './Home';
+import { Login } from './Login';
+import { Registration } from './Registration';
+import { NotFound } from './Error/404';
+import { ServError } from './Error/500';
+import { getRouteContent } from '../utils/getRouteContent';
 
-export const routes = {
-  '/': getRouteContent(home),
-  '/login': getRouteContent(login),
-  '/registration': getRouteContent(registration),
-  '/404': getRouteContent(notFound),
-  '/500': getRouteContent(servError),
+const routes = {
+  '/': getRouteContent(Home),
+  '/login': getRouteContent(Login),
+  '/registration': getRouteContent(Registration),
+  '/404': getRouteContent(NotFound),
+  '/500': getRouteContent(ServError),
 };
+
+export { routes };
