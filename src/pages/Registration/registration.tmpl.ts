@@ -1,4 +1,4 @@
-const template = `
+const template: string = `
 <section class="registration">
   {{> Header header}}
   {{> Form}}

@@ -6,7 +6,11 @@ import { NotFound } from './Error/404';
 import { ServError } from './Error/500';
 import { getRouteContent } from '../utils/getRouteContent';
 
-const routes = {
+type Routes = {
+  [key: string]: Function;
+};
+
+const routes: Routes = {
   '/': getRouteContent(Home),
   '/login': getRouteContent(Login),
   '/registration': getRouteContent(Registration),

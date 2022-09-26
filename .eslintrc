@@ -1,6 +1,7 @@
 {
   "env": {
-    "browser": true
+    "browser": true,
+    "node": true
   },
   "extends": [
     "airbnb",
@@ -12,6 +13,13 @@
     "prettier"
   ],
   "rules": {
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "ts": "never"
+      }
+    ],
     "import/no-extraneous-dependencies": "off",
     "no-restricted-syntax": "off",
     "no-underscore-dangle": "off",
@@ -20,6 +28,11 @@
     "import/prefer-default-export": "off"
   },
   "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".ts"]
+      }
+    },
     "react": {
       "version": "0"
     }

@@ -57,7 +57,7 @@
     "postcss-nested": "5.0.6",
     "postcss-simple-vars": "7.0.0",
     "prettier": "2.7.1",
-    "rimraf": "^3.0.2",
+    "rimraf": "3.0.2",
     "stylelint": "14.12.1",
     "stylelint-config-idiomatic-order": "8.1.0",
     "stylelint-config-prettier": "9.0.3",
