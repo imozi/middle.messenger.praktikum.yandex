@@ -1,4 +1,1 @@
-import Tepmlater from '../../utils/Templater';
-import { template } from './button.tmpl';
-
-Tepmlater.regPart('Button', template);
+export { Button } from './button';

@@ -1,9 +1,9 @@
-import { routes } from './pages';
+import { routes } from './core/Router';
 
 const root = <HTMLElement>document.getElementById('root');
 const content = routes[document.location.pathname]
   ? routes[document.location.pathname]
   : routes['/404'];
 
-root.insertAdjacentHTML('afterbegin', content());
+root.append(content().el);
 window.onload = () => (root.ariaBusy = 'false');
