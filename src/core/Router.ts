@@ -1,9 +1,9 @@
 import '../components';
 import { HomePage } from '../pages/Home';
-// import { Login } from './Login';
-// import { Registration } from './Registration';
+import { LoginPage } from '../pages/Login';
+import { RegistrationPage } from '../pages/Registration';
 import { NotFound } from '../pages/Error/404';
-// import { ServError } from './Error/500';
+import { ServError } from '../pages/Error/500';
 
 type Routes = {
   [key: string]: Function;
@@ -11,10 +11,10 @@ type Routes = {
 
 const routes: Routes = {
   '/': () => new HomePage(),
-  // '/login': getRouteContent(Login),
-  // '/registration': getRouteContent(Registration),
+  '/login': () => new LoginPage(),
+  '/registration': () => new RegistrationPage(),
   '/404': () => new NotFound(),
-  // '/500': getRouteContent(ServError),
+  '/500': () => new ServError(),
 };
 
 export { routes };

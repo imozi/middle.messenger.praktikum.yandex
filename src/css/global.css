@@ -49,3 +49,14 @@ body {
   background-color: $color-gray;
   content: '';
 }
+
+.form {
+  &__row {
+    max-width: 300px;
+    margin-bottom: 2.4rem;
+  }
+
+  &__input {
+    position: relative;
+  }
+}

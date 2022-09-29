@@ -28,6 +28,9 @@
   "engines": {
     "node": "16.17.0"
   },
+  "alias": {
+    "core": "./src/core"
+  },
   "parcel-namer-custom": {
     ".css$": "css/[name].[hash].[type]",
     ".js$": "js/[name].[hash].[type]"

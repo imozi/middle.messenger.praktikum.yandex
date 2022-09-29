@@ -8,7 +8,7 @@ export class HomePage extends Component {
           <img src="img/svg/logo.svg" alt="OziHub Messanger">
         </div>
       <h1 class="home__title">Добро пожаловать! 👋</h1>
-        {{{Link url="404" class="home__link" text="Стартуем! 🚀"}}}
+        {{{Link url="login" class="home__link" text="Стартуем! 🚀"}}}
     </main>
     `;
   }

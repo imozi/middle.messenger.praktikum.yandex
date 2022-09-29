@@ -22,10 +22,10 @@ class Templater {
   }
 
   _regHelpers(helpers) {
-    for (const [key, fn] of Object.entries(helpers)) {
+    Object.entries(helpers).forEach(([key, fn]) => {
       hbs.registerHelper(key, fn);
       this.helpers.set(key, hbs.helpers[key]);
-    }
+    });
   }
 
   regComponents(Component) {
@@ -46,7 +46,7 @@ class Templater {
       this.components.set(Component.name, hbs.helpers[Component.name]);
 
       if (ref) {
-        refs[ref] = component.el;
+        refs[ref] = component;
       }
       return `<component id="${component.id}"></component>`;
     });

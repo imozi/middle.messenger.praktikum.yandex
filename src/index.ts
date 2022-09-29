@@ -5,5 +5,5 @@ const content = routes[document.location.pathname]
   ? routes[document.location.pathname]
   : routes['/404'];
 
-root.append(content().el);
+root.append(content().getEl());
 window.onload = () => (root.ariaBusy = 'false');

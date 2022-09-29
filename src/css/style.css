@@ -10,7 +10,8 @@
 @import '../pages/Error/404/404.css';
 @import '../pages/Error/500/500.css';
 @import '../components/Header/header.css';
-@import '../components/Form/form.css';
 @import '../components/Input/input.css';
+@import '../components/Icon/icon.css';
+@import '../components/Label/label.css';
 @import '../components/Button/button.css';
 @import '../components/Link/link.css';

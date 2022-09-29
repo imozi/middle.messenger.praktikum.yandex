@@ -8,15 +8,12 @@ interface LinkProps {
 
 export class Link extends Component {
   constructor(props: LinkProps) {
-    const onClick = (evt: MouseEvent) => {
-      console.log('click');
-    };
-    super({ ...props, events: { click: onClick } });
+    super({ ...props });
   }
 
   render() {
     return `
-    <a href="/{{url}}" class="{{class}} link">{{text}}</a>
+    <a href="/{{url}}" class="link {{class}}">{{text}}</a>
     `;
   }
 }
