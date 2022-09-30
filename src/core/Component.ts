@@ -1,6 +1,7 @@
-import { v4 as generateId } from 'uuid';
+import { v4 as makeUUID } from 'uuid';
 import Templater from './Templater/Templater';
 import { EventBus } from './EventBus';
+import { deepCompare } from './utils/deepCompare';
 
 export abstract class Component {
   static EVENTS = {
@@ -10,7 +11,7 @@ export abstract class Component {
     FLOW_RENDER: 'flow:render',
   } as const;
 
-  protected id = generateId();
+  protected id = makeUUID();
 
   protected _el = null;
 
@@ -29,6 +30,7 @@ export abstract class Component {
     this.evtBus = () => eventBus;
 
     this.props = this._makeProxyProps(props || {});
+    this.state = this._makeProxyProps(this.state);
 
     this._regEvents(eventBus);
     eventBus.emit(Component.EVENTS.INIT, this.props);
@@ -38,8 +40,31 @@ export abstract class Component {
     return this._el;
   }
 
+  _makeProxyProps(props) {
+    const self = this;
+
+    return new Proxy(props, {
+      get(target, prop) {
+        const value = target[prop];
+        return typeof value === 'function' ? value.bind(target) : value;
+      },
+      set(target, prop, value) {
+        const oldProps = { ...target };
+        target[prop] = value;
+        self.evtBus().emit(Component.EVENTS.FLOW_DU, oldProps, target);
+        return true;
+      },
+      deleteProperty() {
+        throw new Error('Нет доступа');
+      },
+    });
+  }
+
   _render() {
-    this._el = this._compile();
+    const el = this._compile();
+    this._el?.replaceWith(el);
+
+    this._el = el;
     this._addEvents();
   }
 
@@ -82,22 +107,13 @@ export abstract class Component {
     });
   }
 
-  _makeProxyProps(props) {
-    const self = this;
+  _removeEvents() {
+    if (!this.props?.events) {
+      return;
+    }
 
-    return new Proxy(props, {
-      get(target, prop) {
-        const value = target[prop];
-        return typeof value === 'function' ? value.bind(target) : value;
-      },
-      set(target, prop, value) {
-        target[prop] = value;
-        self.evtBus().emit(Component.EVENTS.FLOW_DU, { ...target }, target);
-        return true;
-      },
-      deleteProperty() {
-        throw new Error('Нет доступа');
-      },
+    Object.entries(this.props.events).forEach(([event, listener]) => {
+      this._el!.removeEventListener(event, listener);
     });
   }
 
@@ -105,9 +121,10 @@ export abstract class Component {
     this.didMount(props);
   }
 
-  _didUpdate(oldProps, newProps) {
-    const response = this.didUpdate(oldProps, newProps);
-    if (!response) {
+  _didUpdate(oldProps, newProps): void {
+    const isProps = this.didUpdate(oldProps, newProps);
+
+    if (isProps) {
       return;
     }
     this._render();
@@ -116,7 +133,7 @@ export abstract class Component {
   didMount() {}
 
   didUpdate(oldProps, newProps) {
-    return true;
+    return deepCompare(oldProps, newProps);
   }
 
   getEl() {
@@ -130,6 +147,14 @@ export abstract class Component {
 
     return this.el!;
   }
+
+  setProps = (newProps) => {
+    if (!newProps) {
+      return;
+    }
+
+    Object.assign(this.props, newProps);
+  };
 
   init() {
     Templater.setTemplate(this.id, this.render());
