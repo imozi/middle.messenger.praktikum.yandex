@@ -68,7 +68,6 @@ export abstract class Component {
   }
 
   _render() {
-    console.log(Templater);
     const el: any = this._compile().firstElementChild;
     this._el?.replaceWith(el);
 
