@@ -3,6 +3,7 @@ input {
   width: 100%;
   height: 50px;
   padding: 1.6rem 1.1rem;
+  padding-right: 3.4rem;
   color: $color-blue-900;
   font-size: inherit;
   font-family: inherit;
@@ -21,25 +22,19 @@ input {
     box-shadow: 0 0 0 4px $color-light-blue-50;
   }
 
-  &[type='password'] + .input-icon {
+  &[data-hide='true'] + .input-icon {
     cursor: pointer;
   }
 
-  &[type='email'] {
-    &:invalid {
-      border-color: $color-red;
-    }
+  &[data-hide='false'] + .input-icon {
+    cursor: pointer;
+  }
 
-    &:valid {
-      border-color: $color-green-200;
-    }
+  &[data-invalid='true'] {
+    border-color: $color-red;
 
-    &:invalid:focus {
+    &:focus {
       box-shadow: 0 0 0 4px $color-red-50;
-    }
-
-    &:valid:focus {
-      box-shadow: 0 0 0 4px $color-green-200-50;
     }
   }
 }

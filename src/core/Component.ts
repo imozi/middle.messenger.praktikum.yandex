@@ -1,7 +1,8 @@
 import { v4 as makeUUID } from 'uuid';
-import Templater from './Templater/Templater';
+import Templater from './Templater';
+import { Nullable } from './utils/type';
 import { EventBus } from './EventBus';
-import { deepCompare } from './utils/deepCompare';
+import { deepCompare } from './utils';
 
 export abstract class Component {
   static EVENTS = {
@@ -11,23 +12,27 @@ export abstract class Component {
     FLOW_RENDER: 'flow:render',
   } as const;
 
-  protected id = makeUUID();
+  public id = makeUUID();
 
-  protected _el = null;
+  protected _el: Nullable<HTMLElement> = null;
 
   protected readonly props;
 
-  protected children = {};
+  protected children: { [id: string]: Component } = {};
 
   protected state = {};
 
-  protected refs = {};
+  public refs: { [key: string]: Component } = {};
+
+  name: any;
 
   evtBus: () => EventBus;
 
-  public constructor(props: any) {
+  public constructor(props?: any) {
     const eventBus = new EventBus();
     this.evtBus = () => eventBus;
+
+    this.getStateFromProps(props);
 
     this.props = this._makeProxyProps(props || {});
     this.state = this._makeProxyProps(this.state);
@@ -40,7 +45,7 @@ export abstract class Component {
     return this._el;
   }
 
-  _makeProxyProps(props) {
+  _makeProxyProps(props: any) {
     const self = this;
 
     return new Proxy(props, {
@@ -61,33 +66,34 @@ export abstract class Component {
   }
 
   _render() {
-    const el = this._compile();
+    const el: any = this._compile().firstElementChild;
     this._el?.replaceWith(el);
 
     this._el = el;
     this._addEvents();
   }
 
-  _compile() {
+  _compile(): DocumentFragment {
     const fragment = document.createElement('template');
     const tmpl = Templater.getTemplate(this.id);
     fragment.innerHTML = tmpl({
+      ...this.state,
       ...this.props,
       children: this.children,
       refs: this.refs,
     });
 
     Object.entries(this.children).forEach(([id, component]) => {
-      const stub = fragment.content.getElementById(id);
+      const stub: Nullable<HTMLElement> = fragment.content.getElementById(id);
 
       if (!stub) {
         return;
       }
 
-      stub.replaceWith(component.el);
+      stub.replaceWith(component.getEl());
     });
 
-    return fragment.content.firstElementChild;
+    return fragment.content;
   }
 
   _regEvents(evtBus: EventBus) {
@@ -98,30 +104,34 @@ export abstract class Component {
   }
 
   _addEvents() {
-    if (!this.props?.events) {
+    const events: Record<string, () => void> = (this.props as any).events;
+
+    if (!events) {
       return;
     }
 
-    Object.entries(this.props.events).forEach(([event, listener]) => {
+    Object.entries(events).forEach(([event, listener]) => {
       this._el!.addEventListener(event, listener);
     });
   }
 
   _removeEvents() {
-    if (!this.props?.events) {
+    const events: Record<string, () => void> = (this.props as any).events;
+
+    if (!events) {
       return;
     }
 
-    Object.entries(this.props.events).forEach(([event, listener]) => {
+    Object.entries(events).forEach(([event, listener]) => {
       this._el!.removeEventListener(event, listener);
     });
   }
 
-  _didMount(props) {
-    this.didMount(props);
+  _didMount() {
+    this.didMount();
   }
 
-  _didUpdate(oldProps, newProps): void {
+  _didUpdate(oldProps: any, newProps: any): void {
     const isProps = this.didUpdate(oldProps, newProps);
 
     if (isProps) {
@@ -132,11 +142,11 @@ export abstract class Component {
 
   didMount() {}
 
-  didUpdate(oldProps, newProps) {
+  didUpdate(oldProps: any, newProps: any) {
     return deepCompare(oldProps, newProps);
   }
 
-  getEl() {
+  getEl(): HTMLElement {
     if (this.el?.parentNode?.nodeType === Node.DOCUMENT_FRAGMENT_NODE) {
       setTimeout(() => {
         if (this.el?.parentNode?.nodeType !== Node.DOCUMENT_FRAGMENT_NODE) {
@@ -148,7 +158,7 @@ export abstract class Component {
     return this.el!;
   }
 
-  setProps = (newProps) => {
+  setProps = (newProps: any) => {
     if (!newProps) {
       return;
     }
@@ -156,12 +166,32 @@ export abstract class Component {
     Object.assign(this.props, newProps);
   };
 
+  setState = (nextState: any) => {
+    if (!nextState) {
+      return;
+    }
+
+    Object.assign(this.state, nextState);
+  };
+
   init() {
     Templater.setTemplate(this.id, this.render());
     this.evtBus().emit(Component.EVENTS.FLOW_RENDER, this.props);
   }
 
-  protected render() {
+  show() {
+    this.getEl().style.display = 'block';
+  }
+
+  hide() {
+    this.getEl().style.display = 'none';
+  }
+
+  protected getStateFromProps(_props: any): void {
+    this.state = {};
+  }
+
+  protected render(): string {
     return '';
   }
 }

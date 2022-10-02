@@ -1,8 +1,8 @@
-import { Component } from '../../core/Component';
+import { Component } from 'core/Component';
 
 interface LinkProps {
   url: string;
-  class: string;
+  className: string;
   text: string;
 }
 
@@ -13,7 +13,7 @@ export class Link extends Component {
 
   render() {
     return `
-    <a href="/{{url}}" class="link {{class}}">{{text}}</a>
+    <a href="/{{url}}" class="link {{className}}">{{text}}</a>
     `;
   }
 }

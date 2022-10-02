@@ -1,19 +1,20 @@
-import { Component } from '../../core/Component';
+import { Component } from 'core/Component';
 
 interface ButtonProps {
-  class: string;
+  className: string;
   type: string;
   text: string;
+  click: (evt: Event) => void;
 }
 
 export class Button extends Component {
-  constructor(props: ButtonProps) {
-    super({ ...props });
+  constructor({ className, type, text, click }: ButtonProps) {
+    super({ className, type, text, events: { click } });
   }
 
   render() {
     return `
-    <button class="btn {{class}}" type="{{type}}">{{text}}</button>
+    <button class="btn {{className}}" type="{{type}}">{{text}}</button>
     `;
   }
 }

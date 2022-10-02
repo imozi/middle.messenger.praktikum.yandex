@@ -1,7 +1,12 @@
-import hbs from 'handlebars';
+import hbs, { HelperOptions } from 'handlebars';
+import { Component } from 'core/Component';
 import { helpers } from './helpers';
 
-class Templater {
+interface ComponentConstructable<Props = any> {
+  new (props: Props): Component;
+}
+
+export class Templater {
   protected template = new Map();
 
   protected helpers = new Map();
@@ -12,45 +17,46 @@ class Templater {
     this._regHelpers(helpers);
   }
 
-  setTemplate(id, template) {
+  setTemplate(id: string, template: string) {
     const tmp = hbs.compile(template);
     this.template.set(id, tmp);
   }
 
-  getTemplate(id) {
+  getTemplate(id: string) {
     return this.template.get(id);
   }
 
-  _regHelpers(helpers) {
-    Object.entries(helpers).forEach(([key, fn]) => {
+  _regHelpers(obj: object) {
+    Object.entries(obj).forEach(([key, fn]) => {
       hbs.registerHelper(key, fn);
       this.helpers.set(key, hbs.helpers[key]);
     });
   }
 
-  regComponents(Component) {
-    hbs.registerHelper(Component.name, ({ hash: { ref, ...hash }, data }) => {
-      if (!data.root.children) {
-        data.root.children = {};
-      }
+  regComponents(Cmpnt: ComponentConstructable) {
+    hbs.registerHelper(
+      Cmpnt.name,
+      ({ hash: { ref, ...hash }, data }: HelperOptions) => {
+        if (!data.root.children) {
+          data.root.children = {};
+        }
 
-      if (!data.root.refs) {
-        data.root.refs = {};
-      }
+        if (!data.root.refs) {
+          data.root.refs = {};
+        }
 
-      const { children, refs } = data.root;
+        const { children, refs } = data.root;
 
-      const component = new Component(hash);
+        const component = new Cmpnt(hash);
 
-      children[component.id] = component;
-      this.components.set(Component.name, hbs.helpers[Component.name]);
+        children[component.id] = component;
+        this.components.set(Cmpnt.name, hbs.helpers[Cmpnt.name]);
 
-      if (ref) {
-        refs[ref] = component;
-      }
-      return `<component id="${component.id}"></component>`;
-    });
+        if (ref) {
+          refs[ref] = component;
+        }
+        return `<component id="${component.id}"></component>`;
+      },
+    );
   }
 }
-
-export default new Templater();

@@ -1,7 +1,7 @@
-import { Component } from '../../core/Component';
+import { Component } from 'core/Component';
 
 interface HeaderProps {
-  class: string;
+  className: string;
   title: string;
 }
 
@@ -12,7 +12,7 @@ export class Header extends Component {
 
   render() {
     return `
-    <header class="{{class}} header">
+    <header class="{{className}} header">
         <a href="/" class="header__link" area-label="home page">
         <div class="header__logo">
           <img src="img/svg/logo.svg" alt="OziHub Messanger">

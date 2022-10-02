@@ -6,6 +6,10 @@
   background-color: $color-white;
   border-radius: $border-radius;
 
+  &__notification {
+    right: -55%;
+  }
+
   &__header {
     align-self: center;
     margin-bottom: 2rem;

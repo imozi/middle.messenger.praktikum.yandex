@@ -1,10 +1,63 @@
+import { Validation } from 'core/utils';
 import { Component } from '../../core/Component';
 
+const validation: { [key: string]: Function } = {
+  login: Validation.Login,
+  password: Validation.Password,
+};
+
 export class LoginPage extends Component {
+  protected getStateFromProps() {
+    this.state = {
+      onLogin: (evt: Event) => {
+        evt.preventDefault();
+
+        const loginData = {
+          login: (this.refs.login.getEl() as HTMLInputElement).value,
+          password: (this.refs.password.getEl() as HTMLInputElement).value,
+        };
+
+        const root = document.getElementById('root');
+        const notification = this.refs.notification;
+
+        try {
+          validation.login(loginData.login);
+          validation.password(loginData.password);
+
+          // eslint-disable-next-line no-console
+          console.log(loginData);
+        } catch (error: Error | any) {
+          notification.setProps({
+            type: 'error',
+            text: error.message,
+          });
+
+          if (root?.contains(notification.getEl())) {
+            notification.show();
+            notification.getEl().click();
+          }
+        }
+      },
+      closeNotification: () => {
+        this.refs.notification.hide();
+      },
+    };
+  }
+
+  didMount(): void {
+    Object.entries(this.refs).forEach(([key, component]) => {
+      if (key === 'icon') {
+        component.refs.password = this.refs.password;
+      }
+      component.refs.notification = this.refs.notification;
+    });
+  }
+
   render() {
     return `
     <main class="login">
-         {{{Header  class="login__header" title="Вход"}}}
+    {{{Notification className="login__notification" type="" text="" ref="notification" click=closeNotification}}}
+         {{{Header  className="login__header" title="Вход"}}}
          <form action="/404" class="form login__form" method="get">
             <div class="form__row">
               <div class="form__label">
@@ -17,15 +70,14 @@ export class LoginPage extends Component {
                 name="login"
                 placeholder="Ваш логин"
                 icon="user"
-                value="ozihub"
-                ref="loginInput"
+                ref="login"
                 }}}
-                {{{Icon class="input-icon" icon="user"}}}
+                {{{Icon className="input-icon" icon="user"}}}
               </div>
             </div>
             <div class="form__row">
               <div class="form__label">
-                {{{Label id="login" text="Пароль"}}}
+                {{{Label id="password" text="Пароль"}}}
               </div>
               <div class="form__input ">
                 {{{Input
@@ -33,19 +85,19 @@ export class LoginPage extends Component {
                 type="password"
                 name="password"
                 placeholder="Пароль"
+                hide="true"
                 icon="hide"
-                value="ozihub"
-                ref="pwdInput"
+                ref="password"
                 }}}
-                {{{Icon class="input-icon" icon="hide" ref="icon"}}}
+                {{{Icon className="input-icon" icon="hide" ref="icon"}}}
               </div>
             </div>
             <div class="form__row">
                 <div class="form__btn">
-                    {{{Button class="btn--blue" type="submit" text="Авторизация" ref="submitBtn"}}}
+                    {{{Button className="btn--blue" type="submit" text="Авторизация" ref="submitBtn" click=onLogin}}}
                 </div>
                 <div class="form__link">
-                    {{{Link url="registration" class="login__link" text="У вас нет аккаунта?"}}}
+                    {{{Link url="registration" className="login__link" text="У вас нет аккаунта?"}}}
                 </div>
             </div>
         </form>

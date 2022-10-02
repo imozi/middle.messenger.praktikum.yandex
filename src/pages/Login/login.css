@@ -7,6 +7,10 @@
   background-color: $color-white;
   border-radius: $border-radius;
 
+  &__notification {
+    right: -110%;
+  }
+
   &__header {
     align-self: center;
     margin-bottom: 0.5rem;

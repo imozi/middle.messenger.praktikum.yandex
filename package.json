@@ -29,7 +29,9 @@
     "node": "16.17.0"
   },
   "alias": {
-    "core": "./src/core"
+    "core": "./src/core",
+    "components": "./src/components",
+    "pages": "./src/pages"
   },
   "parcel-namer-custom": {
     ".css$": "css/[name].[hash].[type]",

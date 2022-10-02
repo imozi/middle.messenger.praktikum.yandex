@@ -1,19 +1,4 @@
-function isObject(value: unknown): boolean {
-  return Object.prototype.toString.call(value) === '[object Object]';
-}
-
-function isArray(value: unknown): boolean {
-  return Array.isArray(value);
-}
-
-function isSameType(value1: unknown, value2: unknown): boolean {
-  return (
-    Object.prototype.toString.call(value1) ===
-    Object.prototype.toString.call(value2)
-  );
-}
-
-export function deepCompare(a: unknown, b: unknown): boolean {
+export function deepCompare(a: any, b: any): boolean {
   if (a === b) {
     return true;
   }
@@ -27,7 +12,7 @@ export function deepCompare(a: unknown, b: unknown): boolean {
   }
 
   for (const key of Object.keys(a)) {
-    if (!b.hasOwnProperty(key)) {
+    if (!Object.prototype.hasOwnProperty.call(b, key)) {
       return false;
     }
 
@@ -37,4 +22,19 @@ export function deepCompare(a: unknown, b: unknown): boolean {
   }
 
   return true;
+}
+
+function isObject(value: unknown): boolean {
+  return Object.prototype.toString.call(value) === '[object Object]';
+}
+
+function isArray(value: unknown): boolean {
+  return Array.isArray(value);
+}
+
+function isSameType(value1: unknown, value2: unknown): boolean {
+  return (
+    Object.prototype.toString.call(value1) ===
+    Object.prototype.toString.call(value2)
+  );
 }

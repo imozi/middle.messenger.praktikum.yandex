@@ -18,5 +18,5 @@ app.get('*', (req, res) => {
 app.listen({ port: PORT, host: HOST }, () => {
   // eslint-disable-next-line no-console
   console.log(`🚀 Server ready at ${url}`);
-  open(url);
+  // open(url);
 });

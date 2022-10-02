@@ -1,11 +1,84 @@
+import { Validation } from 'core/utils/validation';
 import { Component } from '../../core/Component';
 
+const validation: { [key: string]: Function } = {
+  first_name: Validation.FirstSecondName,
+  second_name: Validation.FirstSecondName,
+  login: Validation.Login,
+  password: Validation.Password,
+  passwordRepeated: Validation.PasswordRepeat,
+  email: Validation.Email,
+  phone: Validation.Phone,
+};
+
 export class RegistrationPage extends Component {
+  protected getStateFromProps() {
+    this.state = {
+      onRegistration: (evt: Event) => {
+        evt.preventDefault();
+
+        const registrationData = {
+          first_name: (this.refs.firstName.getEl() as HTMLInputElement).value,
+          second_name: (this.refs.secondName.getEl() as HTMLInputElement).value,
+          login: (this.refs.login.getEl() as HTMLInputElement).value,
+          password: (this.refs.password.getEl() as HTMLInputElement).value,
+          passwordRepeated: (
+            this.refs.passwordRepeated.getEl() as HTMLInputElement
+          ).value,
+          email: (this.refs.email.getEl() as HTMLInputElement).value,
+          phone: (this.refs.phone.getEl() as HTMLInputElement).value,
+        };
+
+        const root = document.getElementById('root');
+        const notification = this.refs.notification;
+
+        try {
+          validation.first_name(registrationData.first_name, 'Фамилия');
+          validation.second_name(registrationData.second_name, 'Имя');
+          validation.email(registrationData.email);
+          validation.phone(registrationData.phone);
+          validation.login(registrationData.login);
+          validation.password(registrationData.password);
+          validation.passwordRepeated(
+            registrationData.passwordRepeated,
+            registrationData.password,
+          );
+
+          // eslint-disable-next-line no-console
+          console.log(registrationData);
+        } catch (error: Error | any) {
+          notification.setProps({
+            type: 'error',
+            text: error.message,
+          });
+
+          if (root?.contains(notification.getEl())) {
+            notification.show();
+            notification.getEl().click();
+          }
+        }
+      },
+      closeNotification: () => {
+        this.refs.notification.hide();
+      },
+    };
+  }
+
+  didMount(): void {
+    Object.entries(this.refs).forEach(([key, component]) => {
+      if (key === 'icon' || key === 'passwordRepeated') {
+        component.refs.password = this.refs.password;
+      }
+      component.refs.notification = this.refs.notification;
+    });
+  }
+
   render() {
     return `
     <main class="registration">
-         {{{Header  class="registration__header" title="Регистрация"}}}
-         <form action="/500" class="form registration__form" method="get">
+         {{{Notification className="registration__notification" text="" type="" ref="notification" click=closeNotification}}}
+         {{{Header className="registration__header" title="Регистрация"}}}
+         <form action="/500" class="form registration__form" method="get" ref="form">
 
          <div class="form__row">
            <div class="form__label">
@@ -17,7 +90,7 @@ export class RegistrationPage extends Component {
              type="text"
              name="first_name"
              placeholder="Фамилия"
-             value="hub"
+             ref="firstName"
              }}}
            </div>
          </div>
@@ -32,9 +105,9 @@ export class RegistrationPage extends Component {
              type="text"
              name="login"
              placeholder="Ваш логин"
-             value="ozihub"
+             ref="login"
              }}}
-             {{{Icon class="input-icon" icon="user"}}}
+             {{{Icon className="input-icon" icon="user"}}}
            </div>
          </div>
 
@@ -48,7 +121,7 @@ export class RegistrationPage extends Component {
              type="text"
              name="second_name"
              placeholder="Имя"
-             value="ozi"
+             ref="secondName"
              }}}
            </div>
          </div>
@@ -63,9 +136,10 @@ export class RegistrationPage extends Component {
              type="password"
              name="password"
              placeholder="Пароль"
-             value="ozihub"
+             hide="true"
+             ref="password"
              }}}
-             {{{Icon class="input-icon" icon="hide"}}}
+             {{{Icon className="input-icon" icon="hide" ref="icon"}}}
            </div>
          </div>
 
@@ -79,22 +153,22 @@ export class RegistrationPage extends Component {
              type="email"
              name="email"
              placeholder="pochta@yandex.ru"
-             value="ozihub@yandex.ru"
+             ref="email"
              }}}
            </div>
          </div>
 
          <div class="form__row">
            <div class="form__label">
-             {{{Label id="password-repeated" text="Пароль (еще раз)"}}}
+             {{{Label id="passwordRepeated" text="Пароль (еще раз)"}}}
            </div>
            <div class="form__input ">
              {{{Input
-             id="password-repeated"
+             id="passwordRepeated"
              type="password"
-             name="password-repeated"
+             name="passwordRepeated"
              placeholder="Пароль (еще раз)"
-             value="ozihub"
+             ref="passwordRepeated"
              }}}
            </div>
          </div>
@@ -109,24 +183,18 @@ export class RegistrationPage extends Component {
              type="tel"
              name="phone"
              placeholder="+7 (924) 896 33 79"
-             value="+7 (924) 896 33 79"
+             ref="phone"
              }}}
-             {{{Icon class="input-icon" icon="phone"}}}
+             {{{Icon className="input-icon" icon="phone"}}}
            </div>
          </div>
 
-         
-
          <div class="form__row">
              <div class="form__btn">
-
-                 {{{Button class="btn--blue" type="submit" text="Зарегистрироваться"}}}
-
+                 {{{Button className="btn--blue" type="submit" text="Зарегистрироваться" click=onRegistration}}}
              </div>
              <div class="form__link">
-
-                 {{{Link url="login" class="registration__link" text="Войти"}}}
-
+                 {{{Link url="login" className="registration__link" text="Войти"}}}
              </div>
          </div>
      </form>
