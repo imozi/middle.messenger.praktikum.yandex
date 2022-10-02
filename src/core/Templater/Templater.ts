@@ -1,8 +1,9 @@
 import hbs, { HelperOptions } from 'handlebars';
-import { Component } from 'core/Component';
+import { Component } from '../Component';
 import { helpers } from './helpers';
 
 interface ComponentConstructable<Props = any> {
+  componentName: string;
   new (props: Props): Component;
 }
 
@@ -35,7 +36,7 @@ export class Templater {
 
   regComponents(Cmpnt: ComponentConstructable) {
     hbs.registerHelper(
-      Cmpnt.name,
+      Cmpnt.componentName,
       ({ hash: { ref, ...hash }, data }: HelperOptions) => {
         if (!data.root.children) {
           data.root.children = {};
@@ -50,7 +51,10 @@ export class Templater {
         const component = new Cmpnt(hash);
 
         children[component.id] = component;
-        this.components.set(Cmpnt.name, hbs.helpers[Cmpnt.name]);
+        this.components.set(
+          Cmpnt.componentName,
+          hbs.helpers[Cmpnt.componentName],
+        );
 
         if (ref) {
           refs[ref] = component;

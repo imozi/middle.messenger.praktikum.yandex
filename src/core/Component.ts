@@ -12,6 +12,8 @@ export abstract class Component {
     FLOW_RENDER: 'flow:render',
   } as const;
 
+  static componentName: string;
+
   public id = makeUUID();
 
   protected _el: Nullable<HTMLElement> = null;
@@ -66,6 +68,7 @@ export abstract class Component {
   }
 
   _render() {
+    console.log(Templater);
     const el: any = this._compile().firstElementChild;
     this._el?.replaceWith(el);
 

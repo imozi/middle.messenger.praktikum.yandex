@@ -9,6 +9,8 @@ interface NotificationProps {
 }
 
 export class Notification extends Component {
+  static componentName = 'Notification';
+
   constructor({ text, type, className, click }: NotificationProps) {
     super({
       text,

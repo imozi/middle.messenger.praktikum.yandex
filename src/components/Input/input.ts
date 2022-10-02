@@ -26,6 +26,8 @@ const validation: { [key: string]: Function } = {
 };
 
 export class Input extends Component {
+  static componentName = 'Input';
+
   constructor(props: InputProps) {
     const onValidate = (evt: { target: HTMLInputElement }) => {
       const target = evt.target;

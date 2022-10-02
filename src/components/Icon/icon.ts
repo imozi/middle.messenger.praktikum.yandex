@@ -9,6 +9,8 @@ interface IconProps {
 }
 
 export class Icon extends Component {
+  static componentName = 'Icon';
+
   constructor(props: IconProps) {
     const onClick = () => {
       const password = this.refs.password;

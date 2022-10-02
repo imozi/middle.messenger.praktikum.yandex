@@ -7,6 +7,8 @@ interface LinkProps {
 }
 
 export class Link extends Component {
+  static componentName = 'Link';
+
   constructor(props: LinkProps) {
     super({ ...props });
   }

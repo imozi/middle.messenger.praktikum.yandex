@@ -6,6 +6,8 @@ interface LabelProps {
 }
 
 export class Label extends Component {
+  static componentName = 'Label';
+
   constructor(props: LabelProps) {
     super({ ...props });
   }

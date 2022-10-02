@@ -6,6 +6,8 @@ interface HeaderProps {
 }
 
 export class Header extends Component {
+  static componentName = 'Header';
+
   constructor(props: HeaderProps) {
     super({ ...props });
   }
