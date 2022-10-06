@@ -1,0 +1,13 @@
+.link {
+  color: $color-blue-400-80;
+  text-decoration: none;
+  transition: $transition;
+
+  &:hover {
+    color: $color-blue-400;
+  }
+
+  &:focus {
+    color: $color-blue-400;
+  }
+}

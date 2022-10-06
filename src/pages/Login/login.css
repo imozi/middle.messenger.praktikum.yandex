@@ -1,0 +1,56 @@
+.login {
+  @mixin position-center;
+  @mixin flex-column;
+
+  width: 380px;
+  padding: 4rem;
+  background-color: $color-white;
+  border-radius: $border-radius;
+
+  &__notification {
+    right: -110%;
+  }
+
+  &__header {
+    align-self: center;
+    margin-bottom: 0.5rem;
+  }
+
+  &__form {
+    @mixin flex-column;
+  }
+
+  &__form .form__row {
+    flex-wrap: nowrap;
+    @mixin flex-column;
+  }
+
+  &__form .form__input {
+    @mixin flex-column;
+  }
+
+  &__form .form__row:nth-child(2) {
+    margin-bottom: 5rem;
+  }
+
+  &__form .form__row:last-of-type {
+    align-self: center;
+    width: 100%;
+    max-width: 200px;
+    margin-bottom: 0;
+  }
+
+  &__form .form__row-wrapper {
+    @mixin flex-column;
+
+    align-items: center;
+  }
+
+  &__form .form__btn {
+    margin-bottom: 1rem;
+  }
+
+  &__form .form__link {
+    align-self: center;
+  }
+}

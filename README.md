@@ -13,7 +13,9 @@
  - Сборщик проекта - [Parcel](https://parceljs.org/) 
  - Шаблонизатор HTML - [Handlebars](https://handlebarsjs.com/)
  - CSS - [PostCSS](https://postcss.org/)
- - JS - [ES6+](https://262.ecma-international.org/6.0/)
+ - TypeScript - [TS](https://www.typescriptlang.org/)
+ - Статический анализ кода JS/TS Eslint - [Eslint](https://www.typescriptlang.org/)
+ - Статический анализ кода CSS Stylelint - [Stylelint](https://stylelint.io/)
  - NodeJS - [v16.17.0](https://nodejs.org/dist/v16.17.0/)
  - Локальный сервер - [Express](https://expressjs.com/)
 

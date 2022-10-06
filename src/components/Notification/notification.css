@@ -1,0 +1,36 @@
+.notification {
+  position: absolute;
+  top: 0;
+  min-width: 380px;
+  max-width: 380px;
+  min-height: 60px;
+  margin-bottom: 1rem;
+  padding: 2rem;
+  padding-left: 3rem;
+  background-color: $color-white;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+
+  & p {
+    margin: 0;
+  }
+
+  &::after {
+    position: absolute;
+    top: 50%;
+    left: 0.7rem;
+    width: 0.4rem;
+    height: 85%;
+    border-radius: 0.3rem;
+    transform: translateY(-50%);
+    content: '';
+  }
+
+  &--error::after {
+    background-color: $color-red;
+  }
+
+  &--info::after {
+    background-color: $color-blue-200;
+  }
+}
