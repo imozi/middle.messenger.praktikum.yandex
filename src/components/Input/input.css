@@ -37,4 +37,8 @@ input {
       box-shadow: 0 0 0 4px $color-red-50;
     }
   }
+
+  &[name='search']::placeholder {
+    text-align: center;
+  }
 }

@@ -6,6 +6,16 @@ import { Label } from './Label';
 import { Input } from './Input';
 import { Icon } from './Icon';
 import { Notification } from './Notification';
+import { UserRoom } from './UserRoom';
 
-const component = [Link, Button, Header, Label, Input, Icon, Notification];
+const component = [
+  Link,
+  Button,
+  Header,
+  Label,
+  Input,
+  Icon,
+  Notification,
+  UserRoom,
+];
 component.forEach((component) => Templater.regComponents(component));

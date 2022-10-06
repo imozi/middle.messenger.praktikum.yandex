@@ -40,4 +40,28 @@
       box-shadow: 0 0 0 4px $color-green-200-50;
     }
   }
+
+  &-icon {
+    display: block;
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: $transition;
+
+    & img {
+      width: 25px;
+      height: 25px;
+    }
+
+    &:hover {
+      opacity: 1;
+    }
+
+    &:focus {
+      opacity: 1;
+    }
+  }
 }
