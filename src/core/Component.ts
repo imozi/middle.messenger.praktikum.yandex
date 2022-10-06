@@ -4,6 +4,15 @@ import { Nullable } from './utils/type';
 import { EventBus } from './EventBus';
 import { deepCompare } from './utils';
 
+interface customEventsProps {
+  name: string;
+  options?: {
+    bubbles?: boolean;
+    cancelable?: boolean;
+    composed?: boolean;
+  };
+}
+
 export abstract class Component {
   static EVENTS = {
     INIT: 'init',
@@ -14,7 +23,7 @@ export abstract class Component {
 
   static componentName: string;
 
-  public id = makeUUID();
+  public id: string = makeUUID();
 
   protected _el: Nullable<HTMLElement> = null;
 
@@ -22,11 +31,9 @@ export abstract class Component {
 
   protected children: { [id: string]: Component } = {};
 
-  protected state = {};
+  protected state: { [key: string]: any } = {};
 
-  public refs: { [key: string]: Component } = {};
-
-  name: any;
+  protected refs: { [key: string]: Component } = {};
 
   evtBus: () => EventBus;
 
@@ -34,7 +41,7 @@ export abstract class Component {
     const eventBus = new EventBus();
     this.evtBus = () => eventBus;
 
-    this.getStateFromProps(props);
+    this.initState();
 
     this.props = this._makeProxyProps(props || {});
     this.state = this._makeProxyProps(this.state);
@@ -47,7 +54,7 @@ export abstract class Component {
     return this._el;
   }
 
-  _makeProxyProps(props: any) {
+  _makeProxyProps(props: any): ProxyConstructor {
     const self = this;
 
     return new Proxy(props, {
@@ -67,7 +74,7 @@ export abstract class Component {
     });
   }
 
-  _render() {
+  _render(): void {
     const el: any = this._compile().firstElementChild;
     this._el?.replaceWith(el);
 
@@ -98,14 +105,14 @@ export abstract class Component {
     return fragment.content;
   }
 
-  _regEvents(evtBus: EventBus) {
+  _regEvents(evtBus: EventBus): void {
     evtBus.on(Component.EVENTS.INIT, this.init.bind(this));
     evtBus.on(Component.EVENTS.FLOW_DM, this._didMount.bind(this));
     evtBus.on(Component.EVENTS.FLOW_DU, this._didUpdate.bind(this));
     evtBus.on(Component.EVENTS.FLOW_RENDER, this._render.bind(this));
   }
 
-  _addEvents() {
+  _addEvents(): void {
     const events: Record<string, () => void> = (this.props as any).events;
 
     if (!events) {
@@ -117,7 +124,11 @@ export abstract class Component {
     });
   }
 
-  _removeEvents() {
+  dispatchEvent({ name, options }: customEventsProps): void {
+    this.getEl().dispatchEvent(new Event(name, options));
+  }
+
+  _removeEvents(): void {
     const events: Record<string, () => void> = (this.props as any).events;
 
     if (!events) {
@@ -129,7 +140,7 @@ export abstract class Component {
     });
   }
 
-  _didMount() {
+  _didMount(): void {
     this.didMount();
   }
 
@@ -142,7 +153,7 @@ export abstract class Component {
     this._render();
   }
 
-  didMount() {}
+  didMount(): void {}
 
   didUpdate(oldProps: any, newProps: any) {
     return deepCompare(oldProps, newProps);
@@ -176,20 +187,20 @@ export abstract class Component {
     Object.assign(this.state, nextState);
   };
 
-  init() {
+  init(): void {
     Templater.setTemplate(this.id, this.render());
     this.evtBus().emit(Component.EVENTS.FLOW_RENDER, this.props);
   }
 
-  show() {
+  show(): void {
     this.getEl().style.display = 'block';
   }
 
-  hide() {
+  hide(): void {
     this.getEl().style.display = 'none';
   }
 
-  protected getStateFromProps(_props: any): void {
+  protected initState(): void {
     this.state = {};
   }
 

@@ -2,7 +2,7 @@ import { Component } from 'core/Component';
 
 interface LinkProps {
   url: string;
-  className: string;
+  className?: string;
   text: string;
 }
 

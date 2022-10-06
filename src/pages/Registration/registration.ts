@@ -1,62 +1,96 @@
-import { Validation } from 'core/utils/validation';
-import { Component } from '../../core/Component';
-
-const validation: { [key: string]: Function } = {
-  first_name: Validation.FirstSecondName,
-  second_name: Validation.FirstSecondName,
-  login: Validation.Login,
-  password: Validation.Password,
-  passwordRepeated: Validation.PasswordRepeat,
-  email: Validation.Email,
-  phone: Validation.Phone,
-};
+import { Validation } from 'core/utils';
+import { Component } from 'core/Component';
 
 export class RegistrationPage extends Component {
-  protected getStateFromProps() {
+  protected initState(): void {
     this.state = {
-      onRegistration: (evt: Event) => {
+      formData: {
+        first_name: '',
+        second_name: '',
+        email: '',
+        phone: '',
+        login: '',
+        password: '',
+        passwordRepeated: '',
+      },
+      onClickSubmit: (evt: Event) => {
         evt.preventDefault();
-
-        const registrationData = {
-          first_name: (this.refs.firstName.getEl() as HTMLInputElement).value,
-          second_name: (this.refs.secondName.getEl() as HTMLInputElement).value,
-          login: (this.refs.login.getEl() as HTMLInputElement).value,
-          password: (this.refs.password.getEl() as HTMLInputElement).value,
-          passwordRepeated: (
-            this.refs.passwordRepeated.getEl() as HTMLInputElement
-          ).value,
-          email: (this.refs.email.getEl() as HTMLInputElement).value,
-          phone: (this.refs.phone.getEl() as HTMLInputElement).value,
-        };
-
-        const root = document.getElementById('root');
-        const notification = this.refs.notification;
+        const { formData, showNotification } = this.state;
 
         try {
-          validation.first_name(registrationData.first_name, 'Фамилия');
-          validation.second_name(registrationData.second_name, 'Имя');
-          validation.email(registrationData.email);
-          validation.phone(registrationData.phone);
-          validation.login(registrationData.login);
-          validation.password(registrationData.password);
-          validation.passwordRepeated(
-            registrationData.passwordRepeated,
-            registrationData.password,
-          );
-
-          // eslint-disable-next-line no-console
-          console.log(registrationData);
-        } catch (error: Error | any) {
-          notification.setProps({
-            type: 'error',
-            text: error.message,
+          Object.entries(formData).forEach(([key, value]) => {
+            if (key === 'passwordRepeated') {
+              const { password } = formData;
+              Validation[key](value, password);
+            } else {
+              Validation[key](value, key === 'first_name' ? 'Фамилия' : 'Имя');
+            }
           });
-
-          if (root?.contains(notification.getEl())) {
-            notification.show();
-            notification.getEl().click();
-          }
+          // eslint-disable-next-line no-console
+          console.log(formData);
+        } catch (error: Error | any) {
+          showNotification('error', error.message);
         }
+      },
+      onValidateInput: (evt: { target: HTMLInputElement }) => {
+        const { formData, showNotification } = this.state;
+        const target = evt.target;
+        const name = target.name;
+        const value = formData[name];
+
+        try {
+          if (name === 'passwordRepeated') {
+            const { password } = formData;
+            Validation[name](value, password);
+          } else {
+            Validation[name](value, name === 'first_name' ? 'Фамилия' : 'Имя');
+          }
+        } catch (error: Error | any) {
+          if (value) {
+            target.dataset.invalid = 'true';
+          }
+          showNotification(value ? 'error' : 'info', error.message);
+        }
+      },
+      onKeyUpInput: (evt: { target: HTMLInputElement }) => {
+        const { formData } = this.state;
+        const target = evt.target;
+
+        if (target.dataset.invalid === 'true') {
+          target.dataset.invalid = 'false';
+        }
+
+        formData[target.name] = target.value;
+      },
+      onClickShowPassword: () => {
+        const password = this.refs.password.getEl() as HTMLInputElement;
+        const icon = this.refs.icon;
+
+        if (password.type === 'password') {
+          password.type = 'text';
+
+          icon.setProps({
+            icon: 'visible',
+          });
+        } else {
+          password.type = 'password';
+
+          icon.setProps({
+            icon: 'hide',
+          });
+        }
+      },
+      showNotification: (type: string, error: string) => {
+        this.refs.notification.setProps({
+          type,
+          text: error,
+        });
+
+        setTimeout(() => {
+          this.refs.notification.show();
+        }, 0);
+
+        this.refs.notification.dispatchEvent({ name: 'close' });
       },
       closeNotification: () => {
         this.refs.notification.hide();
@@ -64,19 +98,10 @@ export class RegistrationPage extends Component {
     };
   }
 
-  didMount(): void {
-    Object.entries(this.refs).forEach(([key, component]) => {
-      if (key === 'icon' || key === 'passwordRepeated') {
-        component.refs.password = this.refs.password;
-      }
-      component.refs.notification = this.refs.notification;
-    });
-  }
-
   render() {
     return `
     <main class="registration">
-         {{{Notification className="registration__notification" text="" type="" ref="notification" click=closeNotification}}}
+         {{{Notification className="registration__notification" text="" type="" ref="notification" close=closeNotification}}}
          {{{Header className="registration__header" title="Регистрация"}}}
          <form action="/500" class="form registration__form" method="get" ref="form">
 
@@ -91,6 +116,9 @@ export class RegistrationPage extends Component {
              name="first_name"
              placeholder="Фамилия"
              ref="firstName"
+             focus=onValidateInput
+             blur=onValidateInput
+             keyup=onKeyUpInput
              }}}
            </div>
          </div>
@@ -106,6 +134,9 @@ export class RegistrationPage extends Component {
              name="login"
              placeholder="Ваш логин"
              ref="login"
+             focus=onValidateInput
+             blur=onValidateInput
+             keyup=onKeyUpInput
              }}}
              {{{Icon className="input-icon" icon="user"}}}
            </div>
@@ -122,6 +153,9 @@ export class RegistrationPage extends Component {
              name="second_name"
              placeholder="Имя"
              ref="secondName"
+             focus=onValidateInput
+             blur=onValidateInput
+             keyup=onKeyUpInput
              }}}
            </div>
          </div>
@@ -138,8 +172,11 @@ export class RegistrationPage extends Component {
              placeholder="Пароль"
              hide="true"
              ref="password"
+             focus=onValidateInput
+             blur=onValidateInput
+             keyup=onKeyUpInput
              }}}
-             {{{Icon className="input-icon" icon="hide" ref="icon"}}}
+             {{{Icon className="input-icon" icon="hide" ref="icon" click=onClickShowPassword}}}
            </div>
          </div>
 
@@ -154,6 +191,9 @@ export class RegistrationPage extends Component {
              name="email"
              placeholder="pochta@yandex.ru"
              ref="email"
+             focus=onValidateInput
+             blur=onValidateInput
+             keyup=onKeyUpInput
              }}}
            </div>
          </div>
@@ -169,6 +209,9 @@ export class RegistrationPage extends Component {
              name="passwordRepeated"
              placeholder="Пароль (еще раз)"
              ref="passwordRepeated"
+             focus=onValidateInput
+             blur=onValidateInput
+             keyup=onKeyUpInput
              }}}
            </div>
          </div>
@@ -184,6 +227,9 @@ export class RegistrationPage extends Component {
              name="phone"
              placeholder="+7 (924) 896 33 79"
              ref="phone"
+             focus=onValidateInput
+             blur=onValidateInput
+             keyup=onKeyUpInput
              }}}
              {{{Icon className="input-icon" icon="phone"}}}
            </div>
@@ -191,7 +237,7 @@ export class RegistrationPage extends Component {
 
          <div class="form__row">
              <div class="form__btn">
-                 {{{Button className="btn--blue" type="submit" text="Зарегистрироваться" click=onRegistration}}}
+                 {{{Button className="btn--blue" type="submit" text="Зарегистрироваться" click=onClickSubmit}}}
              </div>
              <div class="form__link">
                  {{{Link url="login" className="registration__link" text="Войти"}}}

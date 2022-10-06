@@ -10,6 +10,14 @@
     right: -55%;
   }
 
+  &__notification[data-hide='false'] {
+    top: 0;
+  }
+
+  &__notification[data-hide='true'] {
+    top: -100%;
+  }
+
   &__header {
     align-self: center;
     margin-bottom: 2rem;

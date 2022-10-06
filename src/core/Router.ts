@@ -2,6 +2,7 @@ import 'components';
 import { HomePage } from 'pages/Home';
 import { LoginPage } from 'pages/Login';
 import { RegistrationPage } from 'pages/Registration';
+import { ChatPage } from 'pages/Chat';
 import { NotFound } from 'pages/Error/404';
 import { ServError } from 'pages/Error/500';
 
@@ -13,6 +14,7 @@ const routes: Routes = {
   '/': () => new HomePage(),
   '/login': () => new LoginPage(),
   '/registration': () => new RegistrationPage(),
+  '/chat': () => new ChatPage(),
   '/404': () => new NotFound(),
   '/500': () => new ServError(),
 };

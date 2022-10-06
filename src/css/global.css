@@ -25,6 +25,10 @@ body {
   background-color: $color-gray;
 }
 
+#root {
+  height: 100%;
+}
+
 #root[aria-busy='true']::before {
   top: calc(50% - (90px / 2));
   left: calc(50% - (90px / 2));

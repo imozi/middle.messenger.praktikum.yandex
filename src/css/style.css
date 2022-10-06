@@ -7,6 +7,7 @@
 @import '../pages/Home/home.css';
 @import '../pages/Login/login.css';
 @import '../pages/Registration/registration.css';
+@import '../pages/Chat/chat.css';
 @import '../pages/Error/404/404.css';
 @import '../pages/Error/500/500.css';
 @import '../components/Header/header.css';
