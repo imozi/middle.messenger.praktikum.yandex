@@ -55,6 +55,7 @@
 
   &__name {
     margin: 0;
+    font-weight: inherit;
     font-size: inherit;
   }
 

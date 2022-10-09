@@ -10,6 +10,11 @@
     overflow: hidden;
     background-color: $color-white;
     border-right: 0.1rem solid $color-light-gray;
+
+    &-search {
+      position: relative;
+      display: flex;
+    }
   }
 
   &__header {

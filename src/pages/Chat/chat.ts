@@ -81,6 +81,7 @@ export class ChatPage extends Component {
               icon="search"
               ref="search"
             }}}
+            {{{Icon className="input-icon" icon="search" ref="icon"}}}
           </div>
         </div>
 

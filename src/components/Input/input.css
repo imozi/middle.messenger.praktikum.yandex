@@ -38,7 +38,19 @@ input {
     }
   }
 
-  &[name='search']::placeholder {
-    text-align: center;
+  &[name='search'] {
+    padding-left: 3.1rem;
+
+    &::placeholder {
+      text-align: center;
+    }
+
+    & + .input-icon {
+      top: 50%;
+      left: 11px;
+      width: 17px;
+      height: 18px;
+      transform: translateY(-50%);
+    }
   }
 }
