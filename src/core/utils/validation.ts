@@ -1,4 +1,4 @@
-function FirstSecondName(value: string, name?: string): boolean | string {
+function FirstSecondName(value: string, name?: string): boolean | never {
   const regexp = /^[А-ЯA-Z][а-яa-z-]+$/;
 
   if (!regexp.test(value)) {
@@ -10,7 +10,7 @@ function FirstSecondName(value: string, name?: string): boolean | string {
   return true;
 }
 
-function Login(value: string): boolean | string {
+function Login(value: string): boolean | never {
   const regexp = /^[a-zA-Z][a-zA-Z0-9_-]{2,20}$/;
 
   if (!regexp.test(value)) {
@@ -22,7 +22,7 @@ function Login(value: string): boolean | string {
   return true;
 }
 
-function Password(value: string): boolean | string {
+function Password(value: string): boolean | never {
   const regexp = /^(?=.*[A-Z])(?=.*[a-z].*[a-z].*[a-z]).{8,40}$/;
 
   if (!regexp.test(value)) {
@@ -33,14 +33,14 @@ function Password(value: string): boolean | string {
   return true;
 }
 
-function PasswordRepeat(value1: string, value2: string): boolean | string {
+function PasswordRepeat(value1: string, value2: string): boolean | never {
   if (value1 !== value2) {
     throw new Error(`Пароли должны совпадать`);
   }
   return true;
 }
 
-function Email(value: string): boolean | string {
+function Email(value: string): boolean | never {
   const regexp = /^[A-Z0-9._%+-]+@[A-Z0-9-]+.+.[A-Z]{2,4}$/i;
 
   if (!regexp.test(value)) {
@@ -51,7 +51,7 @@ function Email(value: string): boolean | string {
   return true;
 }
 
-function Phone(value: string): boolean | string {
+function Phone(value: string): boolean | never {
   const regexp = /^(\+)?((\d{2,3}) ?\d|\d)(([ -]?\d)|( ?(\d{2,3}) ?)){9}\d$/;
 
   if (!regexp.test(value)) {
@@ -62,14 +62,14 @@ function Phone(value: string): boolean | string {
   return true;
 }
 
-function Message(value: string): boolean | string {
+function Message(value: string): boolean | never {
   if (!value) {
     throw new Error(`Сообщение не должно быть пустым`);
   }
   return true;
 }
 
-export const Validation: { [key: string]: Function } = {
+export const validation: Record<string, Function> = {
   first_name: FirstSecondName,
   second_name: FirstSecondName,
   login: Login,

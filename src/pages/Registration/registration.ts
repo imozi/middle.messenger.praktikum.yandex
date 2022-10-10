@@ -1,4 +1,4 @@
-import { Validation } from 'core/utils';
+import { validation } from 'core/utils';
 import { Component } from 'core/Component';
 
 export class RegistrationPage extends Component {
@@ -21,9 +21,9 @@ export class RegistrationPage extends Component {
           Object.entries(formData).forEach(([key, value]) => {
             if (key === 'passwordRepeated') {
               const { password } = formData;
-              Validation[key](value, password);
+              validation[key](value, password);
             } else {
-              Validation[key](value, key === 'first_name' ? 'Фамилия' : 'Имя');
+              validation[key](value, key === 'first_name' ? 'Фамилия' : 'Имя');
             }
           });
           // eslint-disable-next-line no-console
@@ -41,9 +41,9 @@ export class RegistrationPage extends Component {
         try {
           if (name === 'passwordRepeated') {
             const { password } = formData;
-            Validation[name](value, password);
+            validation[name](value, password);
           } else {
-            Validation[name](value, name === 'first_name' ? 'Фамилия' : 'Имя');
+            validation[name](value, name === 'first_name' ? 'Фамилия' : 'Имя');
           }
         } catch (error: Error | any) {
           if (value) {

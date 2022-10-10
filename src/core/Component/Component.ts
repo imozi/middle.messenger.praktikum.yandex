@@ -1,8 +1,8 @@
 import { v4 as makeUUID } from 'uuid';
-import Templater from './Templater';
-import { Nullable } from './utils/type';
-import { EventBus } from './EventBus';
-import { deepCompare } from './utils';
+import Templater from 'core/Templater';
+import { Nullable } from 'core/types';
+import { EventBus } from 'core/EventBus';
+import { deepCompare } from 'core/utils';
 
 interface customEventsProps {
   name: string;
@@ -54,7 +54,7 @@ export abstract class Component {
     return this._el;
   }
 
-  _makeProxyProps(props: any): ProxyConstructor {
+  private _makeProxyProps(props: any): ProxyConstructor {
     const self = this;
 
     return new Proxy(props, {
@@ -74,15 +74,17 @@ export abstract class Component {
     });
   }
 
-  _render(): void {
+  private _render(): void {
     const el: any = this._compile().firstElementChild;
+    // this._removeEvents();
+
     this._el?.replaceWith(el);
 
     this._el = el;
     this._addEvents();
   }
 
-  _compile(): DocumentFragment {
+  private _compile(): DocumentFragment {
     const fragment = document.createElement('template');
     const tmpl = Templater.getTemplate(this.id);
     fragment.innerHTML = tmpl({
@@ -105,14 +107,14 @@ export abstract class Component {
     return fragment.content;
   }
 
-  _regEvents(evtBus: EventBus): void {
+  private _regEvents(evtBus: EventBus): void {
     evtBus.on(Component.EVENTS.INIT, this.init.bind(this));
     evtBus.on(Component.EVENTS.FLOW_DM, this._didMount.bind(this));
     evtBus.on(Component.EVENTS.FLOW_DU, this._didUpdate.bind(this));
     evtBus.on(Component.EVENTS.FLOW_RENDER, this._render.bind(this));
   }
 
-  _addEvents(): void {
+  private _addEvents(): void {
     const events: Record<string, () => void> = (this.props as any).events;
 
     if (!events) {
@@ -124,11 +126,7 @@ export abstract class Component {
     });
   }
 
-  dispatchEvent({ name, options }: customEventsProps): void {
-    this.getEl().dispatchEvent(new Event(name, options));
-  }
-
-  _removeEvents(): void {
+  private _removeEvents(): void {
     const events: Record<string, () => void> = (this.props as any).events;
 
     if (!events) {
@@ -140,11 +138,11 @@ export abstract class Component {
     });
   }
 
-  _didMount(): void {
+  private _didMount(): void {
     this.didMount();
   }
 
-  _didUpdate(oldProps: any, newProps: any): void {
+  private _didUpdate(oldProps: any, newProps: any): void {
     const isProps = this.didUpdate(oldProps, newProps);
 
     if (isProps) {
@@ -153,9 +151,13 @@ export abstract class Component {
     this._render();
   }
 
+  dispatchEvent({ name, options }: customEventsProps): void {
+    this.getEl().dispatchEvent(new Event(name, options));
+  }
+
   didMount(): void {}
 
-  didUpdate(oldProps: any, newProps: any) {
+  didUpdate(oldProps: any, newProps: any): boolean {
     return deepCompare(oldProps, newProps);
   }
 
@@ -171,7 +173,7 @@ export abstract class Component {
     return this.el!;
   }
 
-  setProps = (newProps: any) => {
+  setProps = (newProps: any): void => {
     if (!newProps) {
       return;
     }
@@ -179,7 +181,7 @@ export abstract class Component {
     Object.assign(this.props, newProps);
   };
 
-  setState = (nextState: any) => {
+  setState = (nextState: any): void => {
     if (!nextState) {
       return;
     }

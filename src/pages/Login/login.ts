@@ -1,4 +1,4 @@
-import { Validation } from 'core/utils';
+import { validation } from 'core/utils';
 import { Component } from 'core/Component';
 
 export class LoginPage extends Component {
@@ -14,7 +14,7 @@ export class LoginPage extends Component {
 
         try {
           Object.entries(formData).forEach(([key, value]) => {
-            Validation[key](value);
+            validation[key](value);
           });
           // eslint-disable-next-line no-console
           console.log(formData);
@@ -29,7 +29,7 @@ export class LoginPage extends Component {
         const value = formData[name];
 
         try {
-          Validation[name](value);
+          validation[name](value);
         } catch (error: Error | any) {
           if (value) {
             target.dataset.invalid = 'true';

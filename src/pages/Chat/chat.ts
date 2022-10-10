@@ -1,4 +1,4 @@
-import { Component } from '../../core/Component';
+import { Component } from 'core/Component';
 
 export class ChatPage extends Component {
   protected initState(): void {

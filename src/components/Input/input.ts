@@ -6,6 +6,7 @@ interface InputProps {
   text: string;
   type: string;
   hide?: string;
+  value?: string;
   blur?: (e: Event) => void;
   focus?: (e: Event) => void;
   keyup?: (e: Event) => void;
@@ -38,6 +39,7 @@ export class Input extends Component {
       {{#if pattern}}pattern={{pattern}}{{/if}} 
       {{#if hide}}data-hide={{hide}}{{/if}} 
       data-invalid="false"
+      value={{value}}
       {{#if required}} required {{/if}}
       >
     `;
