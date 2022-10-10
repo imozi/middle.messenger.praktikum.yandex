@@ -4,7 +4,7 @@ import { Nullable } from 'core/types';
 import { EventBus } from 'core/EventBus';
 import { deepCompare } from 'core/utils';
 
-interface customEventsProps {
+interface ICustomEventsProps {
   name: string;
   options?: {
     bubbles?: boolean;
@@ -13,7 +13,7 @@ interface customEventsProps {
   };
 }
 
-export abstract class Component {
+export class Component {
   static EVENTS = {
     INIT: 'init',
     FLOW_DM: 'flow:did-mount',
@@ -25,15 +25,15 @@ export abstract class Component {
 
   public id: string = makeUUID();
 
-  protected _el: Nullable<HTMLElement> = null;
+  private _el: Nullable<HTMLElement> = null;
 
   protected readonly props;
 
-  protected children: { [id: string]: Component } = {};
+  protected children: Record<string, Component> = {};
 
-  protected state: { [key: string]: any } = {};
+  protected state;
 
-  protected refs: { [key: string]: Component } = {};
+  protected refs: Record<string, Component> = {};
 
   evtBus: () => EventBus;
 
@@ -54,7 +54,7 @@ export abstract class Component {
     return this._el;
   }
 
-  private _makeProxyProps(props: any): ProxyConstructor {
+  private _makeProxyProps(props: any) {
     const self = this;
 
     return new Proxy(props, {
@@ -76,7 +76,6 @@ export abstract class Component {
 
   private _render(): void {
     const el: any = this._compile().firstElementChild;
-    // this._removeEvents();
 
     this._el?.replaceWith(el);
 
@@ -126,18 +125,6 @@ export abstract class Component {
     });
   }
 
-  private _removeEvents(): void {
-    const events: Record<string, () => void> = (this.props as any).events;
-
-    if (!events) {
-      return;
-    }
-
-    Object.entries(events).forEach(([event, listener]) => {
-      this._el!.removeEventListener(event, listener);
-    });
-  }
-
   private _didMount(): void {
     this.didMount();
   }
@@ -151,7 +138,7 @@ export abstract class Component {
     this._render();
   }
 
-  dispatchEvent({ name, options }: customEventsProps): void {
+  dispatchEvent({ name, options }: ICustomEventsProps): void {
     this.getEl().dispatchEvent(new Event(name, options));
   }
 

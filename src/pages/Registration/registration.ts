@@ -240,7 +240,7 @@ export class RegistrationPage extends Component {
                  {{{Button className="btn--blue" type="submit" text="Зарегистрироваться" click=onClickSubmit}}}
              </div>
              <div class="form__link">
-                 {{{Link url="login" className="registration__link" text="Войти"}}}
+                 {{{Link url="/login" className="registration__link" text="Войти"}}}
              </div>
          </div>
      </form>

@@ -8,7 +8,7 @@ export class NotFound extends Component {
           <img src="img/svg/404.svg" alt="OziHub Messanger">
         </div>
       <h1 class="not-found__title">Такой страницы не существует!</h1>
-      {{{Link url="login" class="home__link" text="Вернуться"}}}
+      {{{Link url="/back" class="home__link" text="Вернуться"}}}
     </section>
     `;
   }
