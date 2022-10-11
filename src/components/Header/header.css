@@ -5,15 +5,12 @@
 
   & .header__logo {
     width: 150px;
+    margin-bottom: 3rem;
   }
 
   & .header__title {
     margin: 0;
     font-weight: 700;
     font-size: 2rem;
-  }
-
-  & .header__link {
-    margin-bottom: 3rem;
   }
 }

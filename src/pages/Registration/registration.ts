@@ -68,16 +68,11 @@ export class RegistrationPage extends Component {
 
         if (password.type === 'password') {
           password.type = 'text';
-
-          icon.setProps({
-            icon: 'visible',
-          });
+          icon.getEl().dataset.hide = 'false';
         } else {
           password.type = 'password';
 
-          icon.setProps({
-            icon: 'hide',
-          });
+          icon.getEl().dataset.hide = 'true';
         }
       },
       showNotification: (type: string, error: string) => {
