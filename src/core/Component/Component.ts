@@ -27,7 +27,7 @@ export class Component {
 
   private _el: Nullable<HTMLElement> = null;
 
-  protected readonly props;
+  protected props;
 
   protected children: Record<string, Component> = {};
 
@@ -41,9 +41,10 @@ export class Component {
     const eventBus = new EventBus();
     this.evtBus = () => eventBus;
 
-    this.initState();
+    this.initStateWithNotConstructor();
+    this.initPropsWithNotConstructor();
 
-    this.props = this._makeProxyProps(props || {});
+    this.props = this._makeProxyProps(props || this.props);
     this.state = this._makeProxyProps(this.state);
 
     this._regEvents(eventBus);
@@ -86,6 +87,7 @@ export class Component {
   private _compile(): DocumentFragment {
     const fragment = document.createElement('template');
     const tmpl = Templater.getTemplate(this.id);
+
     fragment.innerHTML = tmpl({
       ...this.state,
       ...this.props,
@@ -135,6 +137,7 @@ export class Component {
     if (isProps) {
       return;
     }
+
     this._render();
   }
 
@@ -189,8 +192,12 @@ export class Component {
     this.getEl().style.display = 'none';
   }
 
-  protected initState(): void {
+  protected initStateWithNotConstructor(): void {
     this.state = {};
+  }
+
+  protected initPropsWithNotConstructor(): void {
+    this.props = {};
   }
 
   protected render(): string {

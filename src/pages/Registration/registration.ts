@@ -2,7 +2,7 @@ import { validation } from 'core/utils';
 import { Component } from 'core/Component';
 
 export class RegistrationPage extends Component {
-  protected initState(): void {
+  protected initStateWithNotConstructor(): void {
     this.state = {
       formData: {
         first_name: '',
@@ -13,9 +13,14 @@ export class RegistrationPage extends Component {
         password: '',
         passwordRepeated: '',
       },
+    };
+  }
+
+  protected initPropsWithNotConstructor(): void {
+    this.props = {
       onClickSubmit: (evt: Event) => {
         evt.preventDefault();
-        const { formData, showNotification } = this.state;
+        const { formData } = this.state;
 
         try {
           Object.entries(formData).forEach(([key, value]) => {
@@ -29,7 +34,7 @@ export class RegistrationPage extends Component {
           // eslint-disable-next-line no-console
           console.log(formData);
         } catch (error: Error | any) {
-          showNotification('error', error.message);
+          this.props.showNotification('error', error.message);
         }
       },
       onValidateInput: (evt: { target: HTMLInputElement }) => {
@@ -49,7 +54,7 @@ export class RegistrationPage extends Component {
           if (value) {
             target.dataset.invalid = 'true';
           }
-          showNotification(value ? 'error' : 'info', error.message);
+          this.props.showNotification(value ? 'error' : 'info', error.message);
         }
       },
       onKeyUpInput: (evt: { target: HTMLInputElement }) => {

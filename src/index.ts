@@ -5,7 +5,7 @@ import { RegistrationPage } from 'pages/Registration';
 import { ChatPage } from 'pages/Chat';
 import { NotFound } from 'pages/Error/404';
 import { ServError } from 'pages/Error/500';
-import { Router } from './core/Router';
+import { Router } from 'core/Router';
 
 const router = new Router();
 
