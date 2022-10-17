@@ -21,6 +21,13 @@
   animation-iteration-count: $iteration;
 }
 
+@define-mixin animation-pulse $timing, $duration, $iteration {
+  animation-name: pulse;
+  animation-duration: $duration;
+  animation-timing-function: $timing;
+  animation-iteration-count: $iteration;
+}
+
 @define-mixin position-center {
   position: absolute;
   top: 50%;

@@ -1,1 +1,1 @@
-export { Nullable } from './type';
+export { Nullable } from './types';

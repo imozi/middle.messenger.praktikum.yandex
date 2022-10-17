@@ -1,7 +1,7 @@
 import { Component } from 'core/Component';
 
 export class ChatPage extends Component {
-  protected initState(): void {
+  protected initStateWithNotConstructor(): void {
     this.state = {
       usersRoom: [
         {

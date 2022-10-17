@@ -31,7 +31,8 @@
   "alias": {
     "core": "./src/core",
     "components": "./src/components",
-    "pages": "./src/pages"
+    "pages": "./src/pages",
+    "services": "./src/services"
   },
   "parcel-namer-custom": {
     ".css$": "css/[name].[hash].[type]",
@@ -58,13 +59,11 @@
     "parcel-namer-rewrite": "2.0.0-rc.2",
     "parcel-namer-struct": "1.0.0",
     "parcel-reporter-static-files-copy": "1.4.0",
-    "path-browserify": "^1.0.1",
     "postcss-import": "15.0.0",
     "postcss-mixins": "9.0.4",
     "postcss-nested": "5.0.6",
     "postcss-simple-vars": "7.0.0",
     "prettier": "2.7.1",
-    "process": "^0.11.10",
     "rimraf": "3.0.2",
     "stylelint": "14.12.1",
     "stylelint-config-idiomatic-order": "8.1.0",

@@ -1,5 +1,6 @@
 import { validation } from 'core/utils';
 import { Component } from 'core/Component';
+import Auth from 'services/Auth';
 
 export class LoginPage extends Component {
   protected initStateWithNotConstructor(): void {
@@ -13,17 +14,18 @@ export class LoginPage extends Component {
 
   protected initPropsWithNotConstructor(): void {
     this.props = {
-      onClickSubmit: (evt: Event) => {
+      onClickSubmit: async (evt: Event) => {
         evt.preventDefault();
         const { formData } = this.state;
+        const target = evt.target as HTMLButtonElement;
 
         try {
-          Object.entries(formData).forEach(([key, value]) => {
-            validation[key](value);
-          });
-          // eslint-disable-next-line no-console
-          console.log(formData);
+          target.disabled = true;
+          this.refs.link.hide();
+          await Auth.signin(formData);
         } catch (error: Error | any) {
+          target.disabled = false;
+          this.refs.link.show();
           this.props.showNotification('error', error.message);
         }
       },
@@ -133,7 +135,7 @@ export class LoginPage extends Component {
                       {{{Button className="btn--blue" type="submit" text="Авторизация" click=onClickSubmit}}}
                   </div>
                   <div class="form__link">
-                      {{{Link url="/registration" className="login__link" text="У вас нет аккаунта?"}}}
+                      {{{Link url="/registration" className="login__link" text="У вас нет аккаунта?" ref="link"}}}
                   </div>
               </div>
           </form>

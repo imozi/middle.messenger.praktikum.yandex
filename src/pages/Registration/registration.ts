@@ -1,5 +1,6 @@
 import { validation } from 'core/utils';
 import { Component } from 'core/Component';
+import Auth from 'services/Auth';
 
 export class RegistrationPage extends Component {
   protected initStateWithNotConstructor(): void {
@@ -18,27 +19,23 @@ export class RegistrationPage extends Component {
 
   protected initPropsWithNotConstructor(): void {
     this.props = {
-      onClickSubmit: (evt: Event) => {
+      onClickSubmit: async (evt: Event) => {
         evt.preventDefault();
         const { formData } = this.state;
+        const target = evt.target as HTMLButtonElement;
 
         try {
-          Object.entries(formData).forEach(([key, value]) => {
-            if (key === 'passwordRepeated') {
-              const { password } = formData;
-              validation[key](value, password);
-            } else {
-              validation[key](value, key === 'first_name' ? 'Фамилия' : 'Имя');
-            }
-          });
-          // eslint-disable-next-line no-console
-          console.log(formData);
+          target.disabled = true;
+          this.refs.link.hide();
+          await Auth.signup(formData);
         } catch (error: Error | any) {
+          target.disabled = false;
+          this.refs.link.show();
           this.props.showNotification('error', error.message);
         }
       },
       onValidateInput: (evt: { target: HTMLInputElement }) => {
-        const { formData, showNotification } = this.state;
+        const { formData } = this.state;
         const target = evt.target;
         const name = target.name;
         const value = formData[name];
@@ -240,7 +237,7 @@ export class RegistrationPage extends Component {
                  {{{Button className="btn--blue" type="submit" text="Зарегистрироваться" click=onClickSubmit}}}
              </div>
              <div class="form__link">
-                 {{{Link url="/login" className="registration__link" text="Войти"}}}
+                 {{{Link url="/login" className="registration__link" text="Войти" ref="link"}}}
              </div>
          </div>
      </form>

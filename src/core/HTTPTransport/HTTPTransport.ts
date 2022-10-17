@@ -26,31 +26,37 @@ export class HTTPTransport {
     this.options = options;
   }
 
-  public get<Response>(): Promise<Response> {
-    return this._request<Response>(Method.Get);
+  public get<Response>(path: string): Promise<Response> {
+    return this._request<Response>(Method.Get, path);
   }
 
-  public post<Response>(data: Data): Promise<Response> {
-    return this._request(Method.Post, data);
+  public post<Response>(path: string, data?: Data): Promise<Response> {
+    return this._request(Method.Post, path, data);
   }
 
-  public put<Response>(data: Data): Promise<Response> {
-    return this._request(Method.Put, data);
+  public put<Response>(path: string, data: Data): Promise<Response> {
+    return this._request(Method.Put, path, data);
   }
 
-  public delete<Response>(data: Data): Promise<Response> {
-    return this._request(Method.Delete, data);
+  public delete<Response>(path: string, data: Data): Promise<Response> {
+    return this._request(Method.Delete, path, data);
   }
 
-  private _request<Response>(method: Method, data?: Data): Promise<Response> {
+  private _request<Response>(
+    method: Method,
+    path: string,
+    data?: Data,
+  ): Promise<Response> {
     return new Promise((res, rej) => {
       const xhr = new XMLHttpRequest();
-      xhr.open(method, this.endpoint);
+      xhr.open(method, `${this.endpoint}${path}`);
 
       xhr.onreadystatechange = () => {
         if (xhr.readyState === XMLHttpRequest.DONE) {
           if (xhr.status < 400) {
             res(xhr.response);
+          } else {
+            rej(xhr.response);
           }
         }
       };

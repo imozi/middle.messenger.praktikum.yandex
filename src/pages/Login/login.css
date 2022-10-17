@@ -60,5 +60,6 @@
 
   &__form .form__link {
     align-self: center;
+    min-height: 24px;
   }
 }
