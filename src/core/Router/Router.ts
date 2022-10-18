@@ -3,9 +3,7 @@ import { Nullable } from 'core/types';
 import { Route } from './Route';
 
 export class Router {
-  private static __instance: Router;
-
-  private _root!: string;
+  private _root: string;
 
   private _routes: Route[] = [];
 
@@ -14,11 +12,7 @@ export class Router {
   private _currentRoute: Nullable<Route> = null;
 
   constructor(root: string = '#root') {
-    if (Router.__instance) {
-      return Router.__instance;
-    }
     this._root = root;
-    Router.__instance = this;
   }
 
   private _getRoute(path: string): Route {

@@ -1,17 +1,19 @@
 import { Component } from 'core/Component';
 import Auth from 'services/Auth';
-import { Router } from 'core/Router';
+import Router from 'core/Router';
 
 export class SettingsPage extends Component {
-  protected initPropsWithNotConstructor(): void {
-    this.props = {
+  constructor() {
+    super();
+
+    this.setProps({
       userName: 'Анастасия',
       displayName: 'anastationkot',
       onClickLogout: async () => {
         await Auth.logout();
-        new Router().go('/sign-in');
+        Router.go('/sign-in');
       },
-    };
+    });
   }
 
   render() {

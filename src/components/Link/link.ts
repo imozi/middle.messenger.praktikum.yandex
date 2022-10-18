@@ -1,5 +1,5 @@
 import { Component } from 'core/Component';
-import { Router } from 'core/Router';
+import Router from 'core/Router';
 
 interface LinkProps {
   url: string;
@@ -15,15 +15,13 @@ export class Link extends Component {
     const onClick = (evt: MouseEvent) => {
       evt.preventDefault();
 
-      const router = new Router();
-
       if (this.props.url === '/back') {
-        router.back();
+        Router.back();
         return;
       }
 
       if (this.props.url) {
-        router.go(this.props.url);
+        Router.go(this.props.url);
       }
     };
     super({ ...props, events: { click: onClick } });

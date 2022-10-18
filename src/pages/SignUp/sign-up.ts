@@ -1,11 +1,13 @@
 import { validation } from 'core/utils';
 import { Component } from 'core/Component';
 import Auth from 'services/Auth';
-import { Router } from 'core/Router';
+import Router from 'core/Router';
 
 export class SignUpPage extends Component {
-  protected initStateWithNotConstructor(): void {
-    this.state = {
+  constructor() {
+    super();
+
+    this.setState({
       formData: {
         first_name: '',
         second_name: '',
@@ -15,11 +17,9 @@ export class SignUpPage extends Component {
         password: '',
         passwordRepeated: '',
       },
-    };
-  }
+    });
 
-  protected initPropsWithNotConstructor(): void {
-    this.props = {
+    this.setProps({
       onClickSubmit: async (evt: Event) => {
         evt.preventDefault();
         const { formData } = this.state;
@@ -30,7 +30,7 @@ export class SignUpPage extends Component {
           this.refs.link.hide();
 
           await Auth.signup(formData);
-          new Router().go('/messenger');
+          Router.go('/messenger');
 
           target.disabled = false;
           this.refs.link.show();
@@ -98,7 +98,7 @@ export class SignUpPage extends Component {
       closeNotification: () => {
         this.refs.notification.hide();
       },
-    };
+    });
   }
 
   render() {

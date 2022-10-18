@@ -30,7 +30,7 @@ export class Notification extends Component {
 
   render() {
     return `
-      <div class="notification {{className}} notification--{{type}} data-hide="true"">
+      <div class="notification {{className}} notification--{{type}}" data-hide="true"">
         <p>{{text}}</p>
       </div>
     `;

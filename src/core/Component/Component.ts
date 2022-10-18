@@ -1,23 +1,24 @@
 import { v4 as makeUUID } from 'uuid';
 import Templater from 'core/Templater';
-import { Nullable } from 'core/types';
+import { Nullable, Rec } from 'core/types';
 import { EventBus } from 'core/EventBus';
 import { deepCompare } from 'core/utils';
 
-interface ICustomEventsProps {
+type CustomEventsProps = {
   name: string;
   options?: {
     bubbles?: boolean;
     cancelable?: boolean;
     composed?: boolean;
   };
-}
+};
 
 export class Component {
   static EVENTS = {
     INIT: 'init',
-    FLOW_DM: 'flow:did-mount',
-    FLOW_DU: 'flow:did-update',
+    FLOW_CDM: 'flow:component-did-mount',
+    FLOW_CDU: 'flow:component-did-update',
+    FLOW_CWU: 'flow:component-will-unmount',
     FLOW_RENDER: 'flow:render',
   } as const;
 
@@ -27,13 +28,13 @@ export class Component {
 
   private _el: Nullable<HTMLElement> = null;
 
-  protected props;
+  protected props: Rec<any>;
 
-  protected children: Record<string, Component> = {};
+  protected children: Rec<Component> = {};
 
-  protected state;
+  protected state: Rec<any> = {};
 
-  protected refs: Record<string, Component> = {};
+  protected refs: Rec<Component> = {};
 
   evtBus: () => EventBus;
 
@@ -41,14 +42,12 @@ export class Component {
     const eventBus = new EventBus();
     this.evtBus = () => eventBus;
 
-    this.initStateWithNotConstructor();
-    this.initPropsWithNotConstructor();
-
-    this.props = this._makeProxyProps(props || this.props);
+    this.props = this._makeProxyProps(props || {});
     this.state = this._makeProxyProps(this.state);
 
     this._regEvents(eventBus);
-    eventBus.emit(Component.EVENTS.INIT, this.props);
+
+    eventBus.emit(Component.EVENTS.INIT);
   }
 
   get el() {
@@ -56,17 +55,13 @@ export class Component {
   }
 
   private _makeProxyProps(props: any) {
-    const self = this;
-
     return new Proxy(props, {
       get(target, prop) {
         const value = target[prop];
         return typeof value === 'function' ? value.bind(target) : value;
       },
       set(target, prop, value) {
-        const oldProps = { ...target };
         target[prop] = value;
-        self.evtBus().emit(Component.EVENTS.FLOW_DU, oldProps, target);
         return true;
       },
       deleteProperty() {
@@ -75,9 +70,13 @@ export class Component {
     });
   }
 
+  private _init(): void {
+    Templater.setTemplate(this.id, this.render());
+    this.evtBus().emit(Component.EVENTS.FLOW_RENDER);
+  }
+
   private _render(): void {
     const el: any = this._compile().firstElementChild;
-
     this._el?.replaceWith(el);
 
     this._el = el;
@@ -109,9 +108,10 @@ export class Component {
   }
 
   private _regEvents(evtBus: EventBus): void {
-    evtBus.on(Component.EVENTS.INIT, this.init.bind(this));
-    evtBus.on(Component.EVENTS.FLOW_DM, this._didMount.bind(this));
-    evtBus.on(Component.EVENTS.FLOW_DU, this._didUpdate.bind(this));
+    evtBus.on(Component.EVENTS.INIT, this._init.bind(this));
+    evtBus.on(Component.EVENTS.FLOW_CDM, this._componentDidMount.bind(this));
+    evtBus.on(Component.EVENTS.FLOW_CDU, this._componentDidUpdate.bind(this));
+    evtBus.on(Component.EVENTS.FLOW_CWU, this._componentWillUnmount.bind(this));
     evtBus.on(Component.EVENTS.FLOW_RENDER, this._render.bind(this));
   }
 
@@ -127,35 +127,44 @@ export class Component {
     });
   }
 
-  private _didMount(): void {
-    this.didMount();
+  private _componentDidMount(): void {
+    this.componentDidMount();
   }
 
-  private _didUpdate(oldProps: any, newProps: any): void {
-    const isProps = this.didUpdate(oldProps, newProps);
+  private _componentWillUpdate(nextProps: any): boolean {
+    return deepCompare(this.props, nextProps);
+  }
+
+  private _componentDidUpdate(nextProps: any): void {
+    const assignProps = { ...this.props, ...nextProps };
+
+    const isProps = this._componentWillUpdate(assignProps);
 
     if (isProps) {
       return;
     }
 
+    this.props = assignProps;
     this._render();
   }
 
-  dispatchEvent({ name, options }: ICustomEventsProps): void {
+  private _componentWillUnmount() {
+    this.componentWillUnmount();
+  }
+
+  public dispatchEvent({ name, options }: CustomEventsProps): void {
     this.getEl().dispatchEvent(new Event(name, options));
   }
 
-  didMount(): void {}
+  public componentDidMount(): void {}
 
-  didUpdate(oldProps: any, newProps: any): boolean {
-    return deepCompare(oldProps, newProps);
-  }
+  public componentWillUnmount(): void {}
 
-  getEl(): HTMLElement {
+  public getEl(): HTMLElement {
     if (this.el?.parentNode?.nodeType === Node.DOCUMENT_FRAGMENT_NODE) {
       setTimeout(() => {
         if (this.el?.parentNode?.nodeType !== Node.DOCUMENT_FRAGMENT_NODE) {
-          this.evtBus().emit(Component.EVENTS.FLOW_DM);
+          this.evtBus().emit(Component.EVENTS.FLOW_CDM);
         }
       }, 100);
     }
@@ -163,41 +172,39 @@ export class Component {
     return this.el!;
   }
 
-  setProps = (newProps: any): void => {
-    if (!newProps) {
+  public setProps = <T>(nextProps?: Rec<T>): void => {
+    if (!nextProps) {
       return;
     }
 
-    Object.assign(this.props, newProps);
+    if (!Object.keys(this.props).length) {
+      Object.assign(this.props, nextProps);
+      this._render();
+      return;
+    }
+
+    this.evtBus().emit(Component.EVENTS.FLOW_CDU, nextProps);
   };
 
-  setState = (nextState: any): void => {
+  public setState = <T>(nextState?: Rec<T>): void => {
     if (!nextState) {
       return;
     }
 
-    Object.assign(this.state, nextState);
+    if (!Object.keys(this.state).length) {
+      Object.assign(this.state, nextState);
+      return;
+    }
+
+    this.evtBus().emit(Component.EVENTS.FLOW_CDU, nextState);
   };
 
-  init(): void {
-    Templater.setTemplate(this.id, this.render());
-    this.evtBus().emit(Component.EVENTS.FLOW_RENDER, this.props);
-  }
-
-  show(): void {
+  public show(): void {
     this.getEl().style.display = 'block';
   }
 
-  hide(): void {
+  public hide(): void {
     this.getEl().style.display = 'none';
-  }
-
-  protected initStateWithNotConstructor(): void {
-    this.state = {};
-  }
-
-  protected initPropsWithNotConstructor(): void {
-    this.props = {};
   }
 
   protected render(): string {

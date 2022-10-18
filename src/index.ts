@@ -6,12 +6,9 @@ import { MessengerPage } from 'pages/Messenger';
 import { SettingsPage } from 'pages/Settings';
 import { NotFound } from 'pages/Error/404';
 import { ServError } from 'pages/Error/500';
-import { Router } from 'core/Router';
+import Router from 'core/Router';
 
-const router = new Router();
-
-router
-  .use('/', HomePage)
+Router.use('/', HomePage)
   .use('/sign-in', SignInPage)
   .use('/sign-up', SignUpPage)
   .use('/messenger', MessengerPage)

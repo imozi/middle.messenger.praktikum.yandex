@@ -1,20 +1,20 @@
 import { validation } from 'core/utils';
 import { Component } from 'core/Component';
 import Auth from 'services/Auth';
-import { Router } from 'core/Router';
+import Router from 'core/Router';
 
 export class SignInPage extends Component {
-  protected initStateWithNotConstructor(): void {
-    this.state = {
+  constructor() {
+    super();
+
+    this.setState({
       formData: {
         login: '',
         password: '',
       },
-    };
-  }
+    });
 
-  protected initPropsWithNotConstructor(): void {
-    this.props = {
+    this.setProps({
       onClickSubmit: async (evt: Event) => {
         evt.preventDefault();
         const { formData } = this.state;
@@ -25,7 +25,7 @@ export class SignInPage extends Component {
           this.refs.link.hide();
 
           await Auth.signin(formData);
-          new Router().go('/messenger');
+          Router.go('/messenger');
 
           target.disabled = false;
           this.refs.link.show();
@@ -89,7 +89,7 @@ export class SignInPage extends Component {
       closeNotification: () => {
         this.refs.notification.hide();
       },
-    };
+    });
   }
 
   protected render(): string {
