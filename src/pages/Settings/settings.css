@@ -1,0 +1,56 @@
+.settings {
+  &__profile {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    column-gap: 1rem;
+
+    &-name {
+      margin: 0;
+      font-weight: inherit;
+      font-size: inherit;
+    }
+
+    &-display-name {
+      max-width: 180px;
+      margin: 0;
+      color: $color-dark-gray-50;
+      font-size: 1.3rem;
+    }
+  }
+
+  &__list {
+    @mixin flex-column;
+    @mixin list-reset;
+
+    height: calc(100% - 168px);
+    padding-top: 1rem;
+    padding-bottom: 2rem;
+
+    & li {
+      padding: 1rem 3rem;
+    }
+
+    &-item {
+      display: grid;
+      grid-template-columns: max-content max-content;
+      align-items: center;
+      width: 100%;
+      column-gap: 1.5rem;
+
+      & img {
+        width: auto;
+        height: auto;
+      }
+    }
+
+    &-wrap {
+      @mixin flex-column;
+
+      height: 100%;
+
+      & li:last-of-type {
+        margin-top: auto;
+      }
+    }
+  }
+}

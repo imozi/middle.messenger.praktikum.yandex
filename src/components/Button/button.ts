@@ -4,6 +4,7 @@ interface ButtonProps {
   className: string;
   type?: string;
   text?: string;
+  active?: boolean;
   icon: string;
   click?: (evt: Event) => void;
 }
@@ -18,8 +19,8 @@ export class Button extends Component {
   render() {
     return `
     {{#if icon}}
-    <button class="btn-icon {{className}}">
-    <span><img src="img/icons/icon-{{icon}}.svg" alt="icon {{icon}}"></span>
+    <button class="btn-icon {{className}}" {{#if active}}disabled{{/if}}>
+      <span><img src="img/icons/icon-{{icon}}.svg" alt="icon {{icon}}"></span>{{text}}
     </button>
     {{else}}
     <button class="btn {{className}}" type="{{type}}">{{text}}</button>

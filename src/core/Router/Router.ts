@@ -29,7 +29,6 @@ export class Router {
 
   private _onRoute(path: string): void {
     const route = this._getRoute(path);
-
     if (this._currentRoute) {
       this._currentRoute.unmount();
     }

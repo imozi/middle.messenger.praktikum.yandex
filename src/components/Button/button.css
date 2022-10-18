@@ -64,6 +64,11 @@
     &:focus {
       opacity: 1;
     }
+
+    &:disabled {
+      cursor: auto;
+      opacity: 1;
+    }
   }
 
   &::after {

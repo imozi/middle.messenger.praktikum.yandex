@@ -1,7 +1,6 @@
 import { HTTPTransport } from 'core/HTTPTransport';
 import { ErrorResponse } from 'services/types';
 import { validation } from 'core/utils';
-import { Router } from 'core/Router';
 import { UserSignInData, UserSignUpData, ResponseSignup } from './types';
 
 export class Auth {
@@ -35,7 +34,6 @@ export class Auth {
 
     try {
       await this.request.post<ErrorResponse>('/signin', data);
-      new Router().go('/chat');
     } catch (error: ErrorResponse<any>) {
       throw new Error(error.reason);
     }

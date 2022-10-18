@@ -1,8 +1,9 @@
 import { validation } from 'core/utils';
 import { Component } from 'core/Component';
 import Auth from 'services/Auth';
+import { Router } from 'core/Router';
 
-export class LoginPage extends Component {
+export class SignInPage extends Component {
   protected initStateWithNotConstructor(): void {
     this.state = {
       formData: {
@@ -22,10 +23,16 @@ export class LoginPage extends Component {
         try {
           target.disabled = true;
           this.refs.link.hide();
+
           await Auth.signin(formData);
+          new Router().go('/messenger');
+
+          target.disabled = false;
+          this.refs.link.show();
         } catch (error: Error | any) {
           target.disabled = false;
           this.refs.link.show();
+
           this.props.showNotification('error', error.message);
         }
       },
@@ -135,7 +142,7 @@ export class LoginPage extends Component {
                       {{{Button className="btn--blue" type="submit" text="Авторизация" click=onClickSubmit}}}
                   </div>
                   <div class="form__link">
-                      {{{Link url="/registration" className="login__link" text="У вас нет аккаунта?" ref="link"}}}
+                      {{{Link url="/sign-up" className="login__link" text="У вас нет аккаунта?" ref="link"}}}
                   </div>
               </div>
           </form>
