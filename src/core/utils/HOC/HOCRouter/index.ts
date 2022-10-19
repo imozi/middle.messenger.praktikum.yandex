@@ -1,0 +1,1 @@
+export { HOCRouter } from './HOCRouter';

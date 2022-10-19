@@ -24,6 +24,7 @@ export class Route {
   public unmount() {
     if (this._component) {
       this._component.getEl().remove();
+      this._component.evtBus().emit(Component.EVENTS.FLOW_CWU);
     }
   }
 

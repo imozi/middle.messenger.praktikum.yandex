@@ -28,7 +28,7 @@ export class Component {
 
   private _el: Nullable<HTMLElement> = null;
 
-  protected props: Rec<any>;
+  protected props: Rec<any> = {};
 
   protected children: Rec<Component> = {};
 
@@ -44,8 +44,9 @@ export class Component {
     const eventBus = new EventBus();
     this.evtBus = () => eventBus;
 
-    this.props = this._makeProxyProps(props || {});
-    this.state = this._makeProxyProps(this.state);
+    if (props) {
+      this.props = this._makeProxyProps(props);
+    }
 
     this._regEvents(eventBus);
 
@@ -168,6 +169,7 @@ export class Component {
   }
 
   private _componentWillUnmount() {
+    this.evtBus().emit(Component.EVENTS.FLOW_RENDER);
     this.componentWillUnmount();
   }
 
