@@ -9,7 +9,7 @@ export function HOCRouter(Builder: typeof Component) {
 
     constructor(props: any) {
       super({ ...props });
-      this.router = Router;
+      this.hocs.router = Router;
     }
   };
 }

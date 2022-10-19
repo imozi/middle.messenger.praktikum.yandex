@@ -34,6 +34,8 @@ export class Component {
 
   protected state: Rec<any> = {};
 
+  protected hocs: Rec<any> = {};
+
   protected refs: Rec<Component> = {};
 
   evtBus: () => EventBus;

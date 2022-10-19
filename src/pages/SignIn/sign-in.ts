@@ -24,7 +24,7 @@ export class SignInPage extends Component {
           this.refs.link.hide();
 
           await Auth.signin(formData);
-          this.router.go('/messenger');
+          this.hocs.router.go('/messenger');
 
           target.disabled = false;
           this.refs.link.show();
