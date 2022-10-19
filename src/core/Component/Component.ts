@@ -2,7 +2,7 @@ import { v4 as makeUUID } from 'uuid';
 import Templater from 'core/Templater';
 import { Nullable, Rec } from 'core/types';
 import { EventBus } from 'core/EventBus';
-import { deepCompare } from 'core/utils';
+import { deepCompare, isEmpty } from 'core/utils';
 
 type CustomEventsProps = {
   name: string;
@@ -22,7 +22,7 @@ export class Component {
     FLOW_RENDER: 'flow:render',
   } as const;
 
-  static componentName: string;
+  public static componentName: string;
 
   public id: string = makeUUID();
 
@@ -55,13 +55,30 @@ export class Component {
   }
 
   private _makeProxyProps(props: any) {
+    let waitUpdate = false;
+
     return new Proxy(props, {
       get(target, prop) {
-        const value = target[prop];
+        const value: any = target[prop];
         return typeof value === 'function' ? value.bind(target) : value;
       },
-      set(target, prop, value) {
+      set: (target, prop, value) => {
+        const oldProps = { ...target };
+
+        if (target[prop] === value) {
+          return true;
+        }
+
         target[prop] = value;
+
+        if (!waitUpdate) {
+          waitUpdate = true;
+          setTimeout(() => {
+            this.evtBus().emit(Component.EVENTS.FLOW_CDU, oldProps, target);
+            waitUpdate = false;
+          }, 0);
+        }
+
         return true;
       },
       deleteProperty() {
@@ -78,7 +95,6 @@ export class Component {
   private _render(): void {
     const el: any = this._compile().firstElementChild;
     this._el?.replaceWith(el);
-
     this._el = el;
     this._addEvents();
   }
@@ -86,6 +102,10 @@ export class Component {
   private _compile(): DocumentFragment {
     const fragment = document.createElement('template');
     const tmpl = Templater.getTemplate(this.id);
+
+    if (!isEmpty<Rec<Component>>(this.children)) {
+      this.children = {};
+    }
 
     fragment.innerHTML = tmpl({
       ...this.state,
@@ -131,20 +151,17 @@ export class Component {
     this.componentDidMount();
   }
 
-  private _componentWillUpdate(nextProps: any): boolean {
-    return deepCompare(this.props, nextProps);
+  private _componentWillUpdate(oldProps: any, nextProps: any): boolean {
+    return deepCompare(oldProps, nextProps);
   }
 
-  private _componentDidUpdate(nextProps: any): void {
-    const assignProps = { ...this.props, ...nextProps };
-
-    const isProps = this._componentWillUpdate(assignProps);
+  private _componentDidUpdate(oldProps: any, nextProps: any): void {
+    const isProps = this._componentWillUpdate(oldProps, nextProps);
 
     if (isProps) {
       return;
     }
 
-    this.props = assignProps;
     this._render();
   }
 
@@ -177,13 +194,13 @@ export class Component {
       return;
     }
 
-    if (!Object.keys(this.props).length) {
-      Object.assign(this.props, nextProps);
-      this._render();
+    if (isEmpty(this.props)) {
+      this.props = this._makeProxyProps(nextProps);
+      this.evtBus().emit(Component.EVENTS.FLOW_RENDER);
       return;
     }
 
-    this.evtBus().emit(Component.EVENTS.FLOW_CDU, nextProps);
+    Object.assign(this.props, nextProps);
   };
 
   public setState = <T>(nextState?: Rec<T>): void => {
@@ -191,12 +208,12 @@ export class Component {
       return;
     }
 
-    if (!Object.keys(this.state).length) {
-      Object.assign(this.state, nextState);
+    if (isEmpty(this.state)) {
+      this.state = this._makeProxyProps(nextState);
       return;
     }
 
-    this.evtBus().emit(Component.EVENTS.FLOW_CDU, nextState);
+    Object.assign(this.state, nextState);
   };
 
   public show(): void {

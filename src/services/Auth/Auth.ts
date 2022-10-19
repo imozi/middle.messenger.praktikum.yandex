@@ -39,7 +39,7 @@ export class Auth {
     }
   }
 
-  public async me() {
+  public async user() {
     this.request.get('/user');
   }
 

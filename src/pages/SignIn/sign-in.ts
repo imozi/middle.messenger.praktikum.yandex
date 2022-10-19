@@ -1,7 +1,6 @@
 import { validation } from 'core/utils';
 import { Component } from 'core/Component';
 import Auth from 'services/Auth';
-import Router from 'core/Router';
 
 export class SignInPage extends Component {
   constructor() {
@@ -25,7 +24,7 @@ export class SignInPage extends Component {
           this.refs.link.hide();
 
           await Auth.signin(formData);
-          Router.go('/messenger');
+          this.router.go('/messenger');
 
           target.disabled = false;
           this.refs.link.show();

@@ -1,3 +1,5 @@
+import { isObject, isArray, isSameType } from './isType';
+
 export function deepCompare(a: any, b: any): boolean {
   if (a === b) {
     return true;
@@ -22,19 +24,4 @@ export function deepCompare(a: any, b: any): boolean {
   }
 
   return true;
-}
-
-function isObject(value: unknown): boolean {
-  return Object.prototype.toString.call(value) === '[object Object]';
-}
-
-function isArray(value: unknown): boolean {
-  return Array.isArray(value);
-}
-
-function isSameType(value1: unknown, value2: unknown): boolean {
-  return (
-    Object.prototype.toString.call(value1) ===
-    Object.prototype.toString.call(value2)
-  );
 }
