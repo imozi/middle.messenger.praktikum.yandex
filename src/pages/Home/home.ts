@@ -2,6 +2,7 @@ import { Component } from 'core/Component';
 
 export class HomePage extends Component {
   render() {
+    console.log(this);
     return `
     <main class="home">
         <div class="home__logo">

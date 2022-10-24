@@ -12,6 +12,6 @@ export type UserSignInData = {
   password: string;
 };
 
-export type ResponseSignup = {
+export type ResponseSignUp = {
   id: string;
 };

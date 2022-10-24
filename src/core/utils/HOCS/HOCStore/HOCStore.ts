@@ -1,15 +1,15 @@
 import { Component } from 'core/Component';
-import Store from 'core/Store';
+import { store } from 'store';
 
 export function HOCStore(
-  setStoreToProps: (store: any) => any,
+  setStoreToProps: (state: any) => any,
   Builder: typeof Component,
 ) {
   return class extends Builder {
     public static componentName = Builder.componentName || Builder.name;
 
     constructor(props: any) {
-      super({ ...props, ...setStoreToProps(Store.getStore()) });
+      super({ ...props, ...setStoreToProps(store.getStore()) });
     }
   };
 }

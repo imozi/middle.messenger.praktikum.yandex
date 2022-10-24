@@ -1,7 +1,7 @@
 import { HTTPTransport } from 'core/HTTPTransport';
 import { ErrorResponse } from 'services/types';
 import { validation } from 'core/utils';
-import { UserSignInData, UserSignUpData, ResponseSignup } from './types';
+import { UserSignInData, UserSignUpData, ResponseSignUp } from './types';
 
 export class Auth {
   private request: HTTPTransport;
@@ -21,7 +21,7 @@ export class Auth {
     });
 
     try {
-      await this.request.post<ResponseSignup | ErrorResponse>('/signup', data);
+      await this.request.post<ResponseSignUp | ErrorResponse>('/signup', data);
     } catch (error: ErrorResponse<any>) {
       throw new Error(error.reason);
     }
