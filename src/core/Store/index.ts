@@ -1,1 +1,3 @@
-export { Store } from './Store';
+import { Store } from './Store';
+
+export default new Store();

@@ -1,0 +1,1 @@
+export { HOCStore } from './HOCStore';
