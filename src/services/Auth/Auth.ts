@@ -1,6 +1,8 @@
 import { HTTPTransport } from 'core/HTTPTransport';
 import { ErrorResponse } from 'services/types';
 import { validation } from 'core/utils';
+import { User, stateUser } from 'store/User';
+import { store } from 'store';
 import { UserSignInData, UserSignUpData, ResponseSignUp } from './types';
 
 export class Auth {
@@ -34,13 +36,19 @@ export class Auth {
 
     try {
       await this.request.post<ErrorResponse>('/signin', data);
+      await this.user();
     } catch (error: ErrorResponse<any>) {
       throw new Error(error.reason);
     }
   }
 
   public async user() {
-    this.request.get('/user');
+    try {
+      const user = await this.request.get<stateUser>('/user');
+      store.dispatch(User.ACTION.SET_USER, user);
+    } catch (error: ErrorResponse<any>) {
+      store.dispatch(User.ACTION.DELETE_USER);
+    }
   }
 
   public async logout() {

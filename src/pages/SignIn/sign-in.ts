@@ -3,8 +3,8 @@ import { Component } from 'core/Component';
 import Auth from 'services/Auth';
 
 export class SignInPage extends Component {
-  constructor() {
-    super();
+  constructor(props?: any) {
+    super(props);
 
     this.setState({
       formData: {
@@ -24,7 +24,7 @@ export class SignInPage extends Component {
           this.refs.link.hide();
 
           await Auth.signin(formData);
-          this.hocs.router.go('/messenger');
+          this.props.router.go('/messenger');
 
           target.disabled = false;
           this.refs.link.show();

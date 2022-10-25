@@ -6,12 +6,13 @@ interface LinkProps {
   className?: string;
   icon?: string;
   text: string;
+  click: () => void;
 }
 
 export class Link extends Component {
   static componentName = 'Link';
 
-  constructor(props: LinkProps) {
+  constructor(props: LinkProps, { click } = props) {
     const onClick = (evt: MouseEvent) => {
       evt.preventDefault();
 
@@ -24,7 +25,7 @@ export class Link extends Component {
         Router.go(this.props.url);
       }
     };
-    super({ ...props, events: { click: onClick } });
+    super({ ...props, events: { click: click || onClick } });
   }
 
   render() {

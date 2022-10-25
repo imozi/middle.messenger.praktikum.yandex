@@ -1,17 +1,14 @@
 import { Component } from 'core/Component';
 import Auth from 'services/Auth';
-import Router from 'core/Router';
 
 export class SettingsPage extends Component {
-  constructor() {
-    super();
+  constructor(props?: any) {
+    super(props);
 
     this.setProps({
-      userName: 'Анастасия',
-      displayName: 'anastationkot',
       onClickLogout: async () => {
         await Auth.logout();
-        Router.go('/sign-in');
+        this.props.router.go('/sign-in');
       },
     });
   }
@@ -31,12 +28,26 @@ export class SettingsPage extends Component {
 
           <div class="settings__profile">
             <div class="settings__profile-avatar">
-            <img src="img/svg/user-default.svg" alt="avatar"></span>
+            <img 
+
+            {{#if user.avatar}}
+              src={{user.avatar}}
+            {{else}} 
+              src="img/svg/user-default.svg"
+            {{/if}}
+
+            alt="avatar"></span>
             </div>
             <div class="settings__profile-row">
               <div class="settings__profile-col">
-                <h2 class="settings__profile-name">{{userName}}</h2>
-                <p class="settings__profile-display-name">{{displayName}}</p>
+                <h2 class="settings__profile-name">{{user.first_name}} {{user.second_name}}</h2>
+                <p class="settings__profile-display-name">
+                {{#if user.display_name}}
+                  {{user.display_name}}
+                {{else}}
+                   {{user.login}}
+                {{/if}}
+                </p>
               </div>
             </div>
           </div>

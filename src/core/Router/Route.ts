@@ -10,7 +10,15 @@ export class Route {
 
   private _root: Nullable<HTMLElement>;
 
-  constructor(path: string, builder: typeof Component, root: string) {
+  public isPrivate: boolean;
+
+  constructor(
+    path: string,
+    builder: typeof Component,
+    root: string,
+    isPrivate?: boolean,
+  ) {
+    this.isPrivate = isPrivate || false;
     this._path = path;
     this._Builder = builder;
     this._component = null;
@@ -37,7 +45,7 @@ export class Route {
       throw new Error('Root не найден!');
     }
 
-    window.onload = () => (this._root!.ariaBusy = 'false');
+    this._root!.ariaBusy = 'false';
     this._root.append(this._component?.getEl());
   }
 }

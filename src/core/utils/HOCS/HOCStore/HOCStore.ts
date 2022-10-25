@@ -1,4 +1,5 @@
 import { Component } from 'core/Component';
+import { Store } from 'core/Store';
 import { store } from 'store';
 
 export function HOCStore(
@@ -10,6 +11,10 @@ export function HOCStore(
 
     constructor(props: any) {
       super({ ...props, ...setStoreToProps(store.getStore()) });
+
+      store.on(Store.EVENTS.UPDATED, () => {
+        this.setProps({ ...setStoreToProps(store.getStore()) });
+      });
     }
   };
 }

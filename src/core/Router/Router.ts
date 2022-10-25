@@ -1,5 +1,6 @@
 import { Component } from 'core/Component';
 import { Nullable } from 'core/types';
+import { store } from 'store';
 import { Route } from './Route';
 
 export class Router {
@@ -22,7 +23,13 @@ export class Router {
   }
 
   private _onRoute(path: string): void {
-    const route = this._getRoute(path);
+    let route = this._getRoute(path);
+
+    if (route.isPrivate && !store.getStore().user) {
+      this._history.pushState({}, '', '/');
+      route = this._getRoute('/');
+    }
+
     if (this._currentRoute) {
       this._currentRoute.unmount();
     }
@@ -32,8 +39,12 @@ export class Router {
     route.mount();
   }
 
-  public use(path: string, builder: typeof Component): Router {
-    const route = new Route(path, builder, this._root);
+  public use(
+    path: string,
+    builder: typeof Component,
+    isPrivate?: boolean,
+  ): Router {
+    const route = new Route(path, builder, this._root, isPrivate);
 
     this._routes.push(route);
 

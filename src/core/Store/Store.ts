@@ -7,14 +7,12 @@ export class Store extends EventBus {
     UPDATED: 'updated',
   } as const;
 
-  private _store: Rec<any> = {};
+  private readonly _store: Rec<any> = {};
 
-  private _reducer: any;
+  private readonly _states: Rec<any> = {};
 
   constructor(states: any) {
     super();
-
-    this.states = {};
 
     this.on(Store.EVENTS.INIT, this._init.bind(this, states));
 
@@ -25,18 +23,20 @@ export class Store extends EventBus {
     return this._store;
   }
 
-  public dispatch(action: any) {
-    this._store = this._reducer(this._store, action);
+  public dispatch(action: any, data?: any) {
+    const state = action.split('/')[0];
+
+    this._states[state].emit(action, data);
+    this._store[state] = this._states[state].getState();
 
     this.emit(Store.EVENTS.UPDATED);
   }
 
-  _init(states: any) {
-    Object.entries(states).forEach(([key, state]) => {
+  private _init(states: any) {
+    Object.entries(states).forEach(([key, State]: [string, any]) => {
       const lowKey = key.toLowerCase();
-      this.states[lowKey] = new state();
-      this.states[lowKey].emit('init');
-      this._store[lowKey] = { ...this.states[lowKey].getState() };
+      this._states[lowKey] = new State();
+      this._store[lowKey] = this._states[lowKey].getState();
     });
   }
 }

@@ -1,1 +1,1 @@
-export { User } from './user';
+export { User, stateUser } from './user';
