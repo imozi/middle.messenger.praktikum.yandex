@@ -26,8 +26,8 @@ export class Router {
     let route = this._getRoute(path);
 
     if (route.isPrivate && !store.getStore().user) {
-      this._history.pushState({}, '', '/');
-      route = this._getRoute('/');
+      this._history.pushState({}, '', '/sign-in');
+      route = this._getRoute('/sign-in');
     }
 
     if (this._currentRoute) {

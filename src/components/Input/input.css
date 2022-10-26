@@ -53,4 +53,8 @@ input {
       transform: translateY(-50%);
     }
   }
+
+  &:disabled {
+    color: $color-dark-gray;
+  }
 }

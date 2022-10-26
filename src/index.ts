@@ -1,4 +1,5 @@
 import 'components';
+import 'partials';
 import { HomePage } from 'pages/Home';
 import { SignInPage } from 'pages/SignIn';
 import { SignUpPage } from 'pages/SignUp';

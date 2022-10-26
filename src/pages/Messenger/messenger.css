@@ -45,8 +45,6 @@
   }
 
   &__list {
-    @mixin list-reset;
-
     position: relative;
     height: calc(100% - 168px);
     padding: 0 1.5rem;
@@ -77,19 +75,19 @@
     }
   }
 
-  &__room {
+  &__content {
     position: relative;
     padding: 0 1.5rem;
     padding-bottom: 0;
     background-color: $color-white;
     border-left: 0.1rem solid $color-light-gray;
+  }
 
-    & p {
-      position: absolute;
-      margin: 0;
-      color: $color-blue-900-50;
-      @mixin position-center;
-    }
+  &__placeholder {
+    position: absolute;
+    margin: 0;
+    color: $color-blue-900-50;
+    @mixin position-center;
   }
 
   &__nav {
@@ -103,12 +101,5 @@
     padding: 1.5rem 5rem;
     background-color: $color-gray;
     border-top: 0.1rem solid $color-light-gray;
-
-    &-list {
-      display: flex;
-      flex-grow: 1;
-      justify-content: space-between;
-      @mixin list-reset;
-    }
   }
 }

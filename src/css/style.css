@@ -12,6 +12,9 @@
 @import '../components/Link/link.css';
 @import '../components/Notification/notification.css';
 @import '../components/UserRoom/user-room.css';
+@import '../components/Navigation/navigation.css';
+@import '../partials/Profile/profile.css';
+@import '../components/Avatar/avatar.css';
 @import '../pages/Home/home.css';
 @import '../pages/SignIn/sign-in.css';
 @import '../pages/SignUp/sign-up.css';

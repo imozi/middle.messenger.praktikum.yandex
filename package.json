@@ -33,7 +33,8 @@
     "components": "./src/components",
     "pages": "./src/pages",
     "services": "./src/services",
-    "store": "./src/store"
+    "store": "./src/store",
+    "partials": "./src/partials"
   },
   "parcel-namer-custom": {
     ".css$": "css/[name].[hash].[type]",

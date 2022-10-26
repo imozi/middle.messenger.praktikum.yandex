@@ -3,7 +3,7 @@ import Auth from 'services/Auth';
 
 export class SettingsPage extends Component {
   constructor(props?: any) {
-    super(props);
+    super({ ...props });
 
     this.setProps({
       onClickLogout: async () => {
@@ -60,34 +60,24 @@ export class SettingsPage extends Component {
         <ul class="settings__list">
           <div class="settings__list-wrap">
           <li>
-          {{{Link url="/settings/profile" className="settings__list-item" text="Профиль" icon="user" ref="profile"}}}
+           {{{Button className="settings__list-item" text="Профиль" icon="user" ref="profileBtn"}}}
           </li>
           <li>
-          {{{Link url="/settings/password" className="settings__list-item" text="Изменить пароль" icon="pwd" ref="password"}}}
+          {{{Button className="settings__list-item" text="Изменить пароль" icon="pwd" ref="passwordBtn"}}}
           </li>
           <li>
-          {{{Button className="logout settings__list-item" text="Выйти" icon="exit" ref="logout" click=onClickLogout}}}
+          {{{Button className="logout settings__list-item" text="Выйти" icon="exit" ref="logoutBtn" click=onClickLogout}}}
           </li>
           <div>
         </ul>
 
-        <nav class="messenger__nav">
-          <ul class="messenger__nav-list">
-            <li>
-            {{{Link url="/contacts" className="messenger__nav-item" icon="contacts" ref="contacts"}}}
-            </li>
-            <li>
-            {{{Link url="/messenger" className="messenger__nav-item" icon="chats" ref="chats" click=onClickMessanger}}}
-            </li>
-            <li>
-            {{{Link className="messenger__nav-item" icon="settings" ref="settings" active='true'}}}
-            </li>
-          </ul>
-        </nav>
+        {{{Navigation className="messenger__nav" active="settings"}}}
       </aside>
-      <section class="messenger__room">
-        <p>Выберите, кому хотели бы написать</p>
-      </section>
+      <section class="messenger__content">
+      <span class="messenger__placeholder">Выберите нужный пунк меню настроек</span>
+
+        {{{Profile profile=user ref="profile"}}}
+        
     </main>
     `;
   }

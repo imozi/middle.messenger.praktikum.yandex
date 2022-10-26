@@ -7,6 +7,8 @@ import { Input } from './Input';
 import { Icon } from './Icon';
 import { Notification } from './Notification';
 import { UserRoom } from './UserRoom';
+import { Navigation } from './Navigation';
+import { Avatar } from './Avatar';
 
 const component = [
   Link,
@@ -17,5 +19,7 @@ const component = [
   Icon,
   Notification,
   UserRoom,
+  Navigation,
+  Avatar,
 ];
 component.forEach((component) => Templater.regComponents(component));
