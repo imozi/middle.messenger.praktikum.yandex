@@ -27,9 +27,24 @@
     padding-bottom: 2rem;
 
     & li {
+      margin-bottom: 0.2rem;
       padding: 1rem 3rem;
+      transition: $transition;
+
+      &:hover {
+        background-color: $color-light-gray;
+      }
+
+      &[data-active='true'] {
+        background-color: $color-light-gray;
+
+        & .settings__list-item {
+          opacity: 1;
+        }
+      }
     }
 
+    /* stylelint-disable-next-line no-descending-specificity */
     &-item {
       display: grid;
       grid-template-columns: max-content max-content;

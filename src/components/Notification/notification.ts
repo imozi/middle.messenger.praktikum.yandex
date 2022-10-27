@@ -4,6 +4,7 @@ import { debounce } from 'core/utils';
 enum typeNotification {
   Info = 'info',
   Error = 'error',
+  Success = 'success',
 }
 
 interface NotificationProps {

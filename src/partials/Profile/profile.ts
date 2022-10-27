@@ -1,32 +1,115 @@
 import { Component } from 'core/Component';
+import { deepCompare } from 'core/utils';
+import User from 'services/User';
 import { stateUser } from 'store/User';
 
 interface ProfileProps {
   className?: string;
   profile?: stateUser;
+  notification?: Component;
 }
 
 export class Profile extends Component {
   static componentName = 'Profile';
 
+  static isUpdate = false;
+
   constructor(props: ProfileProps) {
     super({ ...props });
 
+    this.setState({
+      form: {
+        edit: false,
+      },
+      formData: {
+        ...this.props.profile,
+      },
+    });
+
     this.setProps({
-      onClickFormBtn: (evt: Event) => {
+      onClickFormBtn: async (evt: Event) => {
         evt.preventDefault();
 
+        const { form, formData } = this.state;
+        const button = this.refs.button;
+        const target = evt.target as HTMLButtonElement;
+
+        if (!form.edit) {
+          this.props.enabledForm();
+
+          form.edit = true;
+
+          button.setProps({
+            text: 'Сохранить изменения',
+            className: 'btn--green',
+          });
+          return;
+        }
+
+        if (form.edit) {
+          if (deepCompare(formData, this.props.profile)) {
+            this.props.disabledForm();
+            form.edit = false;
+
+            button.setProps({
+              text: 'Изменить данные',
+              className: 'btn--blue',
+            });
+            return;
+          }
+
+          target.disabled = true;
+          await User.profile(formData);
+          Profile.isUpdate = true;
+        }
+      },
+      onKeyUpInput: (evt: { target: HTMLInputElement }) => {
+        const { formData } = this.state;
+        const target = evt.target;
+
+        if (target.dataset.invalid === 'true') {
+          target.dataset.invalid = 'false';
+        }
+
+        formData[target.name] = target.value;
+      },
+      enabledForm: () => {
         Object.entries(this.refs).forEach(([_, ref]: [string, Component]) => {
           const el = ref.getEl() as HTMLInputElement;
           el.disabled = false;
         });
       },
+      disabledForm: () => {
+        Object.entries(this.refs).forEach(([_, ref]: [string, Component]) => {
+          const el = ref.getEl() as HTMLInputElement;
+          el.disabled = true;
+        });
+      },
+      showNotification: (type: string, text: string) => {
+        this.props.notification.setProps({
+          type,
+          text,
+        });
+
+        setTimeout(() => {
+          this.props.notification.show();
+        }, 0);
+
+        this.props.notification.dispatchEvent({ name: 'close' });
+      },
     });
+  }
+
+  componentDidMount() {
+    if (Profile.isUpdate) {
+      this.props.showNotification('success', 'Данные успешно изменены!');
+      Profile.isUpdate = false;
+    }
   }
 
   render() {
     return `
-    <section class="profile">
+    <section class="profile" data-open="false">
       <header class="profile__header"><h2>Профиль</h2></header>
       <div class="profile__row">
        {{{Avatar className="profile__avatar" src=profile.avatar ref="avatar"}}}
@@ -47,7 +130,7 @@ export class Profile extends Component {
             placeholder="Фамилия"
             ref="firstName"
             disabled="true"
-            
+            keyup=onKeyUpInput
             }}}
           </div>
         </div>
@@ -67,6 +150,7 @@ export class Profile extends Component {
             placeholder="+7 (924) 896 33 79"
             ref="phone"
             disabled="true"
+            keyup=onKeyUpInput
             }}}
             {{{Icon className="input-icon" icon="phone"}}}
           </div>
@@ -85,6 +169,7 @@ export class Profile extends Component {
             placeholder="Имя"
             ref="secondName"
             disabled="true"
+            keyup=onKeyUpInput
             }}}
           </div>
         </div>
@@ -102,6 +187,7 @@ export class Profile extends Component {
             placeholder="Ваш логин"
             ref="login"
             disabled="true"
+            keyup=onKeyUpInput
             }}}
             {{{Icon className="input-icon" icon="user"}}}
           </div>
@@ -121,6 +207,7 @@ export class Profile extends Component {
             placeholder="pochta@yandex.ru"
             ref="email"
             disabled="true"
+            keyup=onKeyUpInput
             }}}
           </div>
         </div>
@@ -138,6 +225,7 @@ export class Profile extends Component {
             placeholder="Ваш никнайм"
             ref="displayName"
             disabled="true"
+            keyup=onKeyUpInput
             }}}
           </div>
         </div>
@@ -147,7 +235,7 @@ export class Profile extends Component {
 
 
             <div class="form__btn">
-                {{{Button className="btn--blue" type="submit" text="Изменить данные" click=onClickFormBtn}}}
+                {{{Button className="btn--blue" type="submit" text="Изменить данные" click=onClickFormBtn ref="button"}}}
             </div>
       </form>
 

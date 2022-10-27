@@ -3,6 +3,22 @@
   grid-template-columns: minmax(min-content, 310px) 1fr;
   column-gap: 1rem;
 
+  &__notification {
+    top: -10%;
+    left: 50%;
+    z-index: 9999;
+    min-width: max-content;
+    box-shadow: 0 3px 15px $color-blue-900-15;
+  }
+
+  &__notification[data-hide='false'] {
+    top: 3%;
+  }
+
+  &__notification[data-hide='true'] {
+    top: -10%;
+  }
+
   &__aside {
     position: relative;
     height: 100vh;

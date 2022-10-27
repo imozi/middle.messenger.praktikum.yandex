@@ -45,6 +45,7 @@ export class Auth {
   public async user() {
     try {
       const user = await this.request.get<stateUser>('/user');
+      user.status = null;
       store.dispatch(User.ACTION.SET_USER, user);
     } catch (error: ErrorResponse<any>) {
       store.dispatch(User.ACTION.DELETE_USER);

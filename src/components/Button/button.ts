@@ -6,6 +6,7 @@ interface ButtonProps {
   text?: string;
   active?: boolean;
   icon: string;
+  dataset?: string;
   click?: (evt: Event) => void;
 }
 
@@ -19,7 +20,7 @@ export class Button extends Component {
   render() {
     return `
     {{#if icon}}
-    <button class="btn-icon {{className}}" {{#if active}}disabled{{/if}}>
+    <button class="btn-icon {{className}}" {{#if active}}disabled{{/if}}  {{#if dataset}}data-ref="{{dataset}}"{{/if}}>
       <span><img src="img/icons/icon-{{icon}}.svg" alt="icon {{icon}}"></span>{{text}}
     </button>
     {{else}}

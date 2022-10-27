@@ -2,6 +2,8 @@ import { Component } from 'core/Component';
 import Auth from 'services/Auth';
 
 export class SettingsPage extends Component {
+  static lastActiveMenu = '';
+
   constructor(props?: any) {
     super({ ...props });
 
@@ -10,13 +12,45 @@ export class SettingsPage extends Component {
         await Auth.logout();
         this.props.router.go('/sign-in');
       },
+      onClickShowMenu: (evt: Event) => {
+        const target = evt.target as HTMLButtonElement;
+        const parent = target.parentNode as HTMLElement;
+
+        this.props.disabledActiveMenu();
+
+        this.refs[target.dataset.ref!].show();
+        this.refs[target.dataset.ref!].getEl().dataset.open = 'true';
+
+        SettingsPage.lastActiveMenu = target.dataset.ref!;
+
+        parent.dataset.active = 'true';
+      },
+      closeNotification: () => {
+        this.refs.notification.hide();
+      },
+
+      disabledActiveMenu: () => {
+        const items = document
+          .querySelector('.settings__list')
+          ?.querySelectorAll('li');
+        const sections = document.querySelectorAll('[data-ref]');
+
+        items?.forEach((item) => {
+          item.dataset.active = 'false';
+        });
+
+        sections?.forEach((item) => {
+          const section = item as HTMLElement;
+          this.refs[section.dataset.ref!].hide();
+        });
+      },
     });
   }
 
   render() {
     return `
     <main class="messenger settings">
-      {{{Notification className="messenger__notification" type="" text="" ref="notification"}}}
+      {{{Notification className="messenger__notification" type="" text="" ref="notification" close=closeNotification}}}
       <aside class="messenger__aside">
         <div class="messenger__header">
          <div class="messenger__header-row">
@@ -59,13 +93,13 @@ export class SettingsPage extends Component {
 
         <ul class="settings__list">
           <div class="settings__list-wrap">
-          <li>
-           {{{Button className="settings__list-item" text="Профиль" icon="user" ref="profileBtn"}}}
+          <li data-active="false">
+           {{{Button className="settings__list-item" dataset="profile" text="Профиль" icon="user" ref="profileBtn" click=onClickShowMenu}}}
           </li>
-          <li>
-          {{{Button className="settings__list-item" text="Изменить пароль" icon="pwd" ref="passwordBtn"}}}
+          <li data-active="false">
+          {{{Button className="settings__list-item" dataset="password" text="Изменить пароль" icon="pwd" ref="passwordBtn" click=onClickShowMenu}}}
           </li>
-          <li>
+          <li data-active="false">
           {{{Button className="logout settings__list-item" text="Выйти" icon="exit" ref="logoutBtn" click=onClickLogout}}}
           </li>
           <div>
@@ -76,7 +110,8 @@ export class SettingsPage extends Component {
       <section class="messenger__content">
       <span class="messenger__placeholder">Выберите нужный пунк меню настроек</span>
 
-        {{{Profile profile=user ref="profile"}}}
+        {{{Profile profile=user ref="profile" notification=refs.notification}}}
+        {{{Profile ref="password"}}}
         
     </main>
     `;

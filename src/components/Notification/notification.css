@@ -33,4 +33,8 @@
   &--info::after {
     background-color: $color-blue-200;
   }
+
+  &--success::after {
+    background-color: $color-green-100;
+  }
 }

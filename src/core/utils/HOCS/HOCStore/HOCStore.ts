@@ -1,5 +1,6 @@
 import { Component } from 'core/Component';
 import { Store } from 'core/Store';
+import { deepCompare } from 'core/utils/deepCompare';
 import { store } from 'store';
 
 export function HOCStore(
@@ -10,10 +11,18 @@ export function HOCStore(
     public static componentName = Builder.componentName || Builder.name;
 
     constructor(props: any) {
-      super({ ...props, ...setStoreToProps(store.getStore()) });
+      let state = { ...setStoreToProps(store.getStore()) };
+
+      super({ ...props, ...state });
 
       store.on(Store.EVENTS.UPDATED, () => {
-        this.setProps({ ...setStoreToProps(store.getStore()) });
+        const newState = { ...setStoreToProps(store.getStore()) };
+
+        if (!deepCompare(state, newState)) {
+          this.setProps({ ...setStoreToProps(store.getStore()) });
+        }
+
+        state = newState;
       });
     }
   };
