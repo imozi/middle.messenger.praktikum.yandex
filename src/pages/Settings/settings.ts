@@ -2,8 +2,6 @@ import { Component } from 'core/Component';
 import Auth from 'services/Auth';
 
 export class SettingsPage extends Component {
-  static lastActiveMenu = '';
-
   constructor(props?: any) {
     super({ ...props });
 
@@ -16,12 +14,9 @@ export class SettingsPage extends Component {
         const target = evt.target as HTMLButtonElement;
         const parent = target.parentNode as HTMLElement;
 
-        this.props.disabledActiveMenu();
+        this.props.disabledMenu();
 
         this.refs[target.dataset.ref!].show();
-        this.refs[target.dataset.ref!].getEl().dataset.open = 'true';
-
-        SettingsPage.lastActiveMenu = target.dataset.ref!;
 
         parent.dataset.active = 'true';
       },
@@ -29,7 +24,7 @@ export class SettingsPage extends Component {
         this.refs.notification.hide();
       },
 
-      disabledActiveMenu: () => {
+      disabledMenu: () => {
         const items = document
           .querySelector('.settings__list')
           ?.querySelectorAll('li');
@@ -111,7 +106,7 @@ export class SettingsPage extends Component {
       <span class="messenger__placeholder">Выберите нужный пунк меню настроек</span>
 
         {{{Profile profile=user ref="profile" notification=refs.notification}}}
-        {{{Profile ref="password"}}}
+        {{{Password ref="password"}}}
         
     </main>
     `;

@@ -18,6 +18,7 @@ export class Component {
     INIT: 'init',
     FLOW_CDM: 'flow:component-did-mount',
     FLOW_CDU: 'flow:component-did-update',
+    FLOW_CWDM: 'flow:component-will-did-mount',
     FLOW_CWU: 'flow:component-will-unmount',
     FLOW_RENDER: 'flow:render',
   } as const;
@@ -98,6 +99,7 @@ export class Component {
     this._el?.replaceWith(el);
     this._el = el;
     this._addEvents();
+    this.evtBus().emit(Component.EVENTS.FLOW_CWDM);
   }
 
   private _compile(): DocumentFragment {
@@ -131,6 +133,10 @@ export class Component {
   private _regEvents(evtBus: EventBus): void {
     evtBus.on(Component.EVENTS.INIT, this._init.bind(this));
     evtBus.on(Component.EVENTS.FLOW_CDM, this._componentDidMount.bind(this));
+    evtBus.on(
+      Component.EVENTS.FLOW_CWDM,
+      this._componentWillDidMount.bind(this),
+    );
     evtBus.on(Component.EVENTS.FLOW_CDU, this._componentDidUpdate.bind(this));
     evtBus.on(Component.EVENTS.FLOW_CWU, this._componentWillUnmount.bind(this));
     evtBus.on(Component.EVENTS.FLOW_RENDER, this._render.bind(this));
@@ -148,6 +154,10 @@ export class Component {
     });
   }
 
+  private _componentWillDidMount(): void {
+    this.componentWillDidMount();
+  }
+
   private _componentDidMount(): void {
     this.componentDidMount();
   }
@@ -162,7 +172,6 @@ export class Component {
     if (isProps) {
       return;
     }
-
     this._render();
   }
 
@@ -176,6 +185,8 @@ export class Component {
   }
 
   public componentDidMount(): void {}
+
+  public componentWillDidMount(): void {}
 
   public componentWillUnmount(): void {}
 

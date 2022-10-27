@@ -107,13 +107,30 @@ export class Profile extends Component {
     }
   }
 
+  componentWillDidMount() {
+    if (!Profile.isUpdate) {
+      this.hide();
+    }
+  }
+
+  show() {
+    this.getEl().dataset.open = 'true';
+  }
+
+  hide() {
+    this.getEl().dataset.open = 'false';
+  }
+
   render() {
     return `
-    <section class="profile" data-open="false">
+    <section class="profile" data-open="true">
+
       <header class="profile__header"><h2>Профиль</h2></header>
+
       <div class="profile__row">
        {{{Avatar className="profile__avatar" src=profile.avatar ref="avatar"}}}
       </div>
+      
       <div class="profile__row">
         <form class="form profile__form" method="post" ref="form" disabled>
 
@@ -134,8 +151,6 @@ export class Profile extends Component {
             }}}
           </div>
         </div>
-
-      
 
         <div class="form__row">
           <div class="form__label">
@@ -193,7 +208,6 @@ export class Profile extends Component {
           </div>
         </div>
 
-
         <div class="form__row">
           <div class="form__label">
             {{{Label id="email" text="Почта"}}}
@@ -230,18 +244,13 @@ export class Profile extends Component {
           </div>
         </div>
 
-
-
-
-
-            <div class="form__btn">
-                {{{Button className="btn--blue" type="submit" text="Изменить данные" click=onClickFormBtn ref="button"}}}
-            </div>
+        <div class="form__btn">
+            {{{Button className="btn--blue" type="submit" text="Изменить данные" click=onClickFormBtn ref="button"}}}
+        </div>
       </form>
 
      </div>
 
-     
     </section>
       `;
   }
