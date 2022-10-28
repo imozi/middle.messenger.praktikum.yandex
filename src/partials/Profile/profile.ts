@@ -59,7 +59,7 @@ export class Profile extends Component {
           }
 
           target.disabled = true;
-          await User.profile(formData);
+          await User.profileUpdate(formData);
           Profile.isUpdate = true;
         }
       },

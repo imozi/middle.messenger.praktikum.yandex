@@ -6,3 +6,8 @@ export type UserProfileData = {
   email: string;
   phone: string;
 };
+
+export type UserPasswordResetData = {
+  oldPassword: string;
+  newPassword: string;
+};

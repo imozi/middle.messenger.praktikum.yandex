@@ -106,7 +106,7 @@ export class SettingsPage extends Component {
       <span class="messenger__placeholder">Выберите нужный пунк меню настроек</span>
 
         {{{Profile profile=user ref="profile" notification=refs.notification}}}
-        {{{Password ref="password"}}}
+        {{{Password ref="password" notification=refs.notification}}}
         
     </main>
     `;

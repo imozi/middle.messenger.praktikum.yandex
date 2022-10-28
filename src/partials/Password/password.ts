@@ -1,5 +1,6 @@
 import { Component } from 'core/Component';
 import { deepCompare } from 'core/utils';
+import User from 'services/User';
 
 interface PasswordProps {
   className?: string;
@@ -11,6 +12,8 @@ export class Password extends Component {
 
   static isUpdate = false;
 
+  static cache: any;
+
   constructor(props: PasswordProps) {
     super({ ...props });
 
@@ -18,17 +21,23 @@ export class Password extends Component {
       form: {
         edit: false,
       },
+      formData: {
+        oldPassword: '',
+        newPassword: '',
+        passwordRepeated: '',
+      },
     });
 
     this.setProps({
       onClickFormBtn: async (evt: Event) => {
         evt.preventDefault();
 
-        const { form } = this.state;
+        const { form, formData } = this.state;
         const button = this.refs.button;
         const target = evt.target as HTMLButtonElement;
 
         if (!form.edit) {
+          Password.cache = { ...formData };
           this.props.enabledForm();
 
           form.edit = true;
@@ -37,11 +46,13 @@ export class Password extends Component {
             text: 'Сохранить изменения',
             className: 'btn--green',
           });
+
+          console.log(Password.cache);
           return;
         }
 
         if (form.edit) {
-          if (deepCompare({}, {})) {
+          if (deepCompare(formData, Password.cache)) {
             this.props.disabledForm();
             form.edit = false;
 
@@ -49,12 +60,18 @@ export class Password extends Component {
               text: 'Изменить данные',
               className: 'btn--blue',
             });
+
             return;
           }
 
+          const { oldPassword, newPassword } = formData;
           target.disabled = true;
-          // await User.profile(formData);
+
+          await User.passwordUpdate({ oldPassword, newPassword });
+
           Password.isUpdate = true;
+          this.evtBus().emit(Password.EVENTS.FLOW_RENDER);
+          this.evtBus().emit(Password.EVENTS.FLOW_CDM);
         }
       },
       onKeyUpInput: (evt: { target: HTMLInputElement }) => {
@@ -112,6 +129,13 @@ export class Password extends Component {
     });
   }
 
+  componentDidMount() {
+    if (Password.isUpdate) {
+      this.props.showNotification('success', 'Пароль успешно изменен!');
+      Password.isUpdate = false;
+    }
+  }
+
   componentWillDidMount() {
     if (!Password.isUpdate) {
       this.hide();
@@ -145,6 +169,7 @@ export class Password extends Component {
             placeholder="Старый пароль"
             ref="oldPassword"
             disabled="true"
+            keyup=onKeyUpInput
             }}}
           </div>
         </div>
@@ -163,6 +188,7 @@ export class Password extends Component {
             hide="true"
             ref="newPassword"
             disabled="true"
+            keyup=onKeyUpInput
             }}}
             {{{Icon className="input-icon" icon="hide" ref="icon" click=onClickShowPassword}}}
           </div>
@@ -179,8 +205,9 @@ export class Password extends Component {
             type="password"
             name="passwordRepeated"
             placeholder="Повторите новый пароль"
-            ref="firstName"
+            ref="passwordRepeated"
             disabled="true"
+            keyup=onKeyUpInput
             }}}
           </div>
         </div>
