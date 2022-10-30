@@ -1,12 +1,43 @@
 .avatar {
   display: flex;
 
+  &__change {
+    @mixin visually-hidden;
+  }
+
   &__img {
+    position: relative;
+    display: block;
     width: 150px;
     height: 150px;
+    border-radius: 50%;
+    cursor: pointer;
 
     & img {
       width: 100%;
+    }
+
+    &::before {
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      color: $color-white;
+      background-color: $color-black-50;
+      border: 0;
+      border-radius: 50%;
+      opacity: 0;
+      transition: $transition;
+      content: 'Изменить аватар';
+    }
+
+    &:hover::before {
+      opacity: 1;
     }
   }
 }

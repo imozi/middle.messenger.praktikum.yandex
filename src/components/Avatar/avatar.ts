@@ -15,18 +15,19 @@ export class Avatar extends Component {
   render() {
     return `
     <div class="avatar {{className}}">
-      <div class="avatar__img">
-      <img 
+        <label for="avatar" class="avatar__img">
+          <img 
 
-            {{#if src}}
-              src={{src}}
-            {{else}} 
-              src="img/svg/user-default.svg"
-            {{/if}}
+                {{#if src}}
+                  src={{src}}
+                {{else}} 
+                  src="img/svg/user-default.svg"
+                {{/if}}
 
-            alt="avatar">
-      </div>
+                alt="avatar">
+        </label>
       <div class="avatar__change">
+      {{{Input id="avatar" type="file" name=""}}}
       </div>
     </div>
       `;

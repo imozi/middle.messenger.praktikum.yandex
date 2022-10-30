@@ -2,6 +2,8 @@ import { Component } from 'core/Component';
 import Auth from 'services/Auth';
 
 export class SettingsPage extends Component {
+  static lastActiveMenu: string;
+
   constructor(props?: any) {
     super({ ...props });
 
@@ -13,6 +15,7 @@ export class SettingsPage extends Component {
       onClickShowMenu: (evt: Event) => {
         const target = evt.target as HTMLButtonElement;
         const parent = target.parentNode as HTMLElement;
+        SettingsPage.lastActiveMenu = target.dataset.ref!;
 
         this.props.disabledMenu();
 
@@ -40,6 +43,14 @@ export class SettingsPage extends Component {
         });
       },
     });
+  }
+
+  componentWillDidMount() {
+    if (SettingsPage.lastActiveMenu) {
+      const parent = this.refs[`${SettingsPage.lastActiveMenu}Btn`].getEl()
+        .parentNode as HTMLElement;
+      parent.dataset.active = 'true';
+    }
   }
 
   render() {
