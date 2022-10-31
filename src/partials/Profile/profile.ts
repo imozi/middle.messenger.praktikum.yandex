@@ -27,7 +27,7 @@ export class Profile extends Component {
     });
 
     this.setProps({
-      onClickChangeAvatar() {
+      onChangeAvatar() {
         Profile.isUpdate = true;
       },
       onClickFormBtn: async (evt: Event) => {
@@ -105,7 +105,7 @@ export class Profile extends Component {
 
   componentDidMount() {
     if (Profile.isUpdate) {
-      this.props.showNotification('success', 'Данные успешно изменены!');
+      this.props.showNotification('success', 'Успешно измененно!');
       Profile.isUpdate = false;
     }
   }
@@ -131,7 +131,7 @@ export class Profile extends Component {
       <header class="profile__header"><h2>Профиль</h2></header>
 
       <div class="profile__row">
-       {{{Avatar className="profile__avatar" src=profile.avatar ref="avatar" click=onClickChangeAvatar}}}
+       {{{Avatar className="profile__avatar" src=profile.avatar ref="avatar" update=onChangeAvatar}}}
       </div>
       
       <div class="profile__row">

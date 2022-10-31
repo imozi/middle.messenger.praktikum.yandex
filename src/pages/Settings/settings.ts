@@ -53,6 +53,10 @@ export class SettingsPage extends Component {
     }
   }
 
+  componentWillUnmount() {
+    this.props.disabledMenu();
+  }
+
   render() {
     return `
     <main class="messenger settings">

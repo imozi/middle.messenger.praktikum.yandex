@@ -5,17 +5,17 @@ interface AvatarProps {
   src?: string;
   className?: string;
   change?: (evt: Event) => void;
-  click?: (evt: Event) => void;
+  update?: (evt: Event) => void;
 }
 
 export class Avatar extends Component {
   static componentName = 'Avatar';
 
-  constructor(props: AvatarProps, { change, src } = props) {
+  constructor(props: AvatarProps, { change, update, src } = props) {
     super({
       ...props,
       src: `https://ya-praktikum.tech/api/v2/resources/${src}`,
-      events: { change },
+      events: { change, update },
     });
 
     this.setProps({
@@ -27,10 +27,24 @@ export class Avatar extends Component {
 
           const formData = new FormData();
           formData.append('avatar', file.files[0]);
-          this.props.click();
+          this.dispatchEvent({ name: 'update' });
           label.dataset.loading = 'true';
           await User.avatarUpdate(formData);
         }
+      },
+      enabledChange: () => {
+        const file = this.refs.file.getEl() as HTMLInputElement;
+        const label = this.getEl().firstElementChild as HTMLLabelElement;
+
+        label.dataset.edit = 'true';
+        file.disabled = false;
+      },
+      disabledChange: () => {
+        const file = this.refs.file.getEl() as HTMLInputElement;
+        const label = this.getEl().firstElementChild as HTMLLabelElement;
+
+        label.dataset.edit = 'false';
+        file.disabled = true;
       },
     });
   }
@@ -38,7 +52,7 @@ export class Avatar extends Component {
   render() {
     return `
     <div class="avatar {{className}}">
-        <label for="avatar" class="avatar__img" data-loading="false">
+        <label for="avatar" class="avatar__img" data-loading="false" data-edit="false">
           <img 
 
                 {{#if src}}
