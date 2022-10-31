@@ -96,7 +96,7 @@ export class SignInPage extends Component {
       <main class="login">
           {{{Notification className="login__notification" type="" text="" ref="notification" close=closeNotification}}}
           {{{Header  className="login__header" title="Вход"}}}
-          <form action="/messenger" class="form login__form" method="get">
+          <form class="form login__form" method="get">
               <div class="form__row">
                 <div class="form__label">
                   {{{Label id="login" text="Логин"}}}

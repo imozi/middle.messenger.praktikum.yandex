@@ -17,7 +17,17 @@ export class User {
   }
 
   public async passwordUpdate(data: UserPasswordResetData) {
-    console.log(data);
     await this.request.put<ErrorResponse>('/password', data);
+  }
+
+  public async avatarUpdate(data: any) {
+    const formData = new FormData();
+    formData.append('avatar', data);
+
+    await this.request
+      .put<ErrorResponse>('/profile/avatar', formData, true)
+      .then((data) => console.log(data));
+
+    // store.dispatch(UserState.ACTION.UPDATE_USER, user);
   }
 }

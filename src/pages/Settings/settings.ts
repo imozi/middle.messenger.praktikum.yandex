@@ -71,7 +71,7 @@ export class SettingsPage extends Component {
             <img 
 
             {{#if user.avatar}}
-              src={{user.avatar}}
+              src="https://ya-praktikum.tech/api/v2/resources/{{user.avatar}}"
             {{else}} 
               src="img/svg/user-default.svg"
             {{/if}}

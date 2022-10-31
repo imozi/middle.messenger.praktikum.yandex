@@ -34,7 +34,16 @@ export class HTTPTransport {
     return this._request(Method.Post, path, data);
   }
 
-  public put<Response>(path: string, data: Data): Promise<Response> {
+  public put<Response>(
+    path: string,
+    data: Data,
+    isFile = false,
+  ): Promise<Response> {
+    if (isFile) {
+      this.options.headers = { 'Content-Type': 'multipart/form-data' };
+      return this._request(Method.Put, path, data);
+    }
+
     return this._request(Method.Put, path, data);
   }
 
@@ -74,6 +83,10 @@ export class HTTPTransport {
 
       if (method === Method.Get || !data) {
         xhr.send();
+      } else if (
+        this.options.headers['Content-Type'] === 'multipart/form-data'
+      ) {
+        xhr.send(data);
       } else {
         xhr.send(JSON.stringify(data));
       }

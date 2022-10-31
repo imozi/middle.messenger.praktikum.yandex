@@ -96,8 +96,14 @@ export class Component {
 
   private _render(): void {
     const el: any = this._compile().firstElementChild;
+
+    if (this.el) {
+      this._removeEvents();
+    }
+
     this._el?.replaceWith(el);
     this._el = el;
+
     this._addEvents();
     this.evtBus().emit(Component.EVENTS.FLOW_CWDM);
   }
@@ -151,6 +157,18 @@ export class Component {
 
     Object.entries(events).forEach(([event, listener]) => {
       this._el!.addEventListener(event, listener);
+    });
+  }
+
+  private _removeEvents(): void {
+    const events: Record<string, () => void> = (this.props as any).events;
+
+    if (!events) {
+      return;
+    }
+
+    Object.entries(events).forEach(([event, listener]) => {
+      this._el!.removeEventListener(event, listener);
     });
   }
 

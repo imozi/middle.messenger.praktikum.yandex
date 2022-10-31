@@ -106,7 +106,7 @@ export class SignUpPage extends Component {
     <main class="registration">
          {{{Notification className="registration__notification" text="" type="" ref="notification" close=closeNotification}}}
          {{{Header className="registration__header" title="Регистрация"}}}
-         <form action="/500" class="form registration__form" method="get" ref="form">
+         <form class="form registration__form" method="get" ref="form">
 
          <div class="form__row">
            <div class="form__label">

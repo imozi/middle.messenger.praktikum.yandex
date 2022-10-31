@@ -155,7 +155,7 @@ export class Password extends Component {
     <section class="password" data-open="true">
       <header class="password__header"><h2>Изменить пароль</h2></header>
       <div class="password__row">
-        <form class="form password__form" method="post" ref="form" disabled>
+        <form class="form password__form" method="post" ref="form">
 
         <div class="form__row">
           <div class="form__label">

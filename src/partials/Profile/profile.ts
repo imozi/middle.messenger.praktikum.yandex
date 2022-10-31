@@ -128,11 +128,11 @@ export class Profile extends Component {
       <header class="profile__header"><h2>Профиль</h2></header>
 
       <div class="profile__row">
-       {{{Avatar className="profile__avatar" src=profile.avatar ref="avatar"}}}
+       {{{Avatar className="profile__avatar" src=profile.avatar ref="avatar" change=onChangeAvatar}}}
       </div>
       
       <div class="profile__row">
-        <form class="form profile__form" method="post" ref="form" disabled>
+        <form class="form profile__form" method="post" ref="form">
 
         <div class="form__row">
           <div class="form__label">

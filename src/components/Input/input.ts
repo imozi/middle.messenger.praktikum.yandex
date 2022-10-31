@@ -9,16 +9,20 @@ interface InputProps {
   value?: string;
   required?: boolean;
   disabled?: boolean;
-  blur?: (e: Event) => void;
-  focus?: (e: Event) => void;
-  keyup?: (e: Event) => void;
-  keydown?: (e: Event) => void;
+  change?: (evt: Event) => void;
+  blur?: (evt: Event) => void;
+  focus?: (evt: Event) => void;
+  keyup?: (evt: Event) => void;
+  keydown?: (evt: Event) => void;
 }
 
 export class Input extends Component {
   static componentName = 'Input';
 
-  constructor(props: InputProps, { focus, blur, keyup, keydown } = props) {
+  constructor(
+    props: InputProps,
+    { focus, blur, keyup, keydown, change } = props,
+  ) {
     super({
       ...props,
       events: {
@@ -26,6 +30,7 @@ export class Input extends Component {
         focus,
         keyup: debounce(keyup as Function),
         keydown,
+        change,
       },
     });
   }
