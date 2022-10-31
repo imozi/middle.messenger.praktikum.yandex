@@ -27,6 +27,9 @@ export class Profile extends Component {
     });
 
     this.setProps({
+      onClickChangeAvatar() {
+        Profile.isUpdate = true;
+      },
       onClickFormBtn: async (evt: Event) => {
         evt.preventDefault();
 
@@ -128,7 +131,7 @@ export class Profile extends Component {
       <header class="profile__header"><h2>Профиль</h2></header>
 
       <div class="profile__row">
-       {{{Avatar className="profile__avatar" src=profile.avatar ref="avatar" change=onChangeAvatar}}}
+       {{{Avatar className="profile__avatar" src=profile.avatar ref="avatar" click=onClickChangeAvatar}}}
       </div>
       
       <div class="profile__row">

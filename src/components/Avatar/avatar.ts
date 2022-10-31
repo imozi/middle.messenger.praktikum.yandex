@@ -5,31 +5,31 @@ interface AvatarProps {
   src?: string;
   className?: string;
   change?: (evt: Event) => void;
+  click?: (evt: Event) => void;
 }
 
 export class Avatar extends Component {
   static componentName = 'Avatar';
 
-  constructor(props: AvatarProps, { change } = props) {
-    super({ ...props, events: { change } });
+  constructor(props: AvatarProps, { change, src } = props) {
+    super({
+      ...props,
+      src: `https://ya-praktikum.tech/api/v2/resources/${src}`,
+      events: { change },
+    });
 
     this.setProps({
       onChangeImages: async () => {
         const file = this.refs.file.getEl() as HTMLInputElement;
 
         if (file.files?.length) {
-          const reader = new FileReader();
+          const label = this.getEl().firstElementChild as HTMLLabelElement;
 
-          reader.onload = () => {
-            if (reader.result) {
-              this.setProps({
-                src: reader.result,
-              });
-            }
-          };
-
-          reader.readAsDataURL(file.files[0]);
-          await User.avatarUpdate(file.files[0]);
+          const formData = new FormData();
+          formData.append('avatar', file.files[0]);
+          this.props.click();
+          label.dataset.loading = 'true';
+          await User.avatarUpdate(formData);
         }
       },
     });
@@ -38,11 +38,11 @@ export class Avatar extends Component {
   render() {
     return `
     <div class="avatar {{className}}">
-        <label for="avatar" class="avatar__img">
+        <label for="avatar" class="avatar__img" data-loading="false">
           <img 
 
                 {{#if src}}
-                  src="https://ya-praktikum.tech/api/v2/resources/{{src}}"
+                  src="{{src}}"
                 {{else}} 
                   src="img/svg/user-default.svg"
                 {{/if}}

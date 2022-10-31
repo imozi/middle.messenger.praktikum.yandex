@@ -19,7 +19,9 @@ export class HTTPTransport {
   constructor(
     endpoint: string,
     options: Options = {
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+      },
     },
   ) {
     this.endpoint = `${this.API_URL}${endpoint}`;
@@ -34,16 +36,7 @@ export class HTTPTransport {
     return this._request(Method.Post, path, data);
   }
 
-  public put<Response>(
-    path: string,
-    data: Data,
-    isFile = false,
-  ): Promise<Response> {
-    if (isFile) {
-      this.options.headers = { 'Content-Type': 'multipart/form-data' };
-      return this._request(Method.Put, path, data);
-    }
-
+  public put<Response>(path: string, data: Data): Promise<Response> {
     return this._request(Method.Put, path, data);
   }
 
@@ -74,18 +67,18 @@ export class HTTPTransport {
       xhr.onerror = () => rej({ reason: 'Произошла ошибка!' });
       xhr.ontimeout = () => rej({ reason: 'Запрос занимает много времени!' });
 
-      Object.keys(this.options.headers).forEach((key) => {
-        xhr.setRequestHeader(key, this.options.headers[key]);
-      });
+      if (!(data instanceof FormData)) {
+        Object.keys(this.options.headers).forEach((key) => {
+          xhr.setRequestHeader(key, this.options.headers[key]);
+        });
+      }
 
       xhr.withCredentials = true;
       xhr.responseType = 'json';
 
       if (method === Method.Get || !data) {
         xhr.send();
-      } else if (
-        this.options.headers['Content-Type'] === 'multipart/form-data'
-      ) {
+      } else if (data instanceof FormData) {
         xhr.send(data);
       } else {
         xhr.send(JSON.stringify(data));
