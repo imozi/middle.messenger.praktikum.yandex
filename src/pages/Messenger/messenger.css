@@ -19,11 +19,17 @@
     top: -10%;
   }
 
+  &__new-chat-menu {
+    top: 35px;
+    right: -130px;
+    z-index: -1;
+    opacity: 0;
+  }
+
   &__aside {
     position: relative;
     height: 100vh;
     padding: 2.1rem 0;
-    overflow: hidden;
     background-color: $color-white;
     border-right: 0.1rem solid $color-light-gray;
 
@@ -57,37 +63,6 @@
 
     &-logo {
       width: 24px;
-    }
-  }
-
-  &__list {
-    position: relative;
-    height: calc(100% - 168px);
-    padding: 0 1.5rem;
-    overflow-x: hidden;
-    overflow-y: auto;
-
-    & li {
-      position: relative;
-      display: block;
-      padding: 0.8rem 0;
-      border-bottom: 1px solid $color-light-gray;
-    }
-
-    &-wrap {
-      position: relative;
-    }
-
-    &::-webkit-scrollbar {
-      width: 5px;
-    }
-
-    &::-webkit-scrollbar-track {
-      background-color: #f9f9fd;
-    }
-
-    &::-webkit-scrollbar-thumb {
-      background: $color-light-gray;
     }
   }
 

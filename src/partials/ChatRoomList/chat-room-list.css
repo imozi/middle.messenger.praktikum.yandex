@@ -1,0 +1,30 @@
+.chat-room-list {
+  position: relative;
+  height: calc(100% - 168px);
+  padding: 0 1.5rem;
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  &__item {
+    position: relative;
+    display: block;
+    padding: 0.8rem 0;
+    border-bottom: 1px solid $color-light-gray;
+  }
+
+  &-wrap {
+    position: relative;
+  }
+
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: #f9f9fd;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: $color-light-gray;
+  }
+}

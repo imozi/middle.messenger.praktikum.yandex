@@ -28,12 +28,12 @@ export class Notification extends Component {
     });
   }
 
-  show(): void {
+  show() {
     this.getEl().style.opacity = '1';
     setTimeout(() => (this.getEl().dataset.hide = 'false'), 100);
   }
 
-  hide(): void {
+  hide() {
     this.getEl().style.opacity = '0';
     setTimeout(() => (this.getEl().dataset.hide = 'true'), 100);
   }

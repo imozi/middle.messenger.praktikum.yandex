@@ -39,7 +39,6 @@
     padding-bottom: 2rem;
 
     & li {
-      margin-bottom: 0.2rem;
       padding: 1rem 3rem;
       transition: $transition;
 

@@ -6,9 +6,13 @@ import { Label } from './Label';
 import { Input } from './Input';
 import { Icon } from './Icon';
 import { Notification } from './Notification';
-import { UserRoom } from './UserRoom';
+import { ChatRoom } from './ChatRoom';
 import { Navigation } from './Navigation';
 import { Avatar } from './Avatar';
+import { NewMessage } from './NewMessage';
+import { Message } from './Message';
+import { NewChat } from './NewChat';
+import { Correspondence } from './Correspondence';
 
 const component = [
   Link,
@@ -18,8 +22,12 @@ const component = [
   Input,
   Icon,
   Notification,
-  UserRoom,
+  ChatRoom,
   Navigation,
   Avatar,
+  NewMessage,
+  Message,
+  NewChat,
+  Correspondence,
 ];
 component.forEach((component) => Templater.regComponents(component));
