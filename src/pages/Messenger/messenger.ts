@@ -1,8 +1,14 @@
 import { Component } from 'core/Component';
+import Chats from 'services/Chats';
+import { stateChat } from 'store/Chats/chats';
 
 export class MessengerPage extends Component {
+  static lastActiveChatId: string;
+
   constructor(props?: any) {
     super({ ...props });
+
+    this.getChats();
 
     this.setProps({
       onClickShowHideNewChatMenu: (evt: Event) => {
@@ -24,23 +30,23 @@ export class MessengerPage extends Component {
       },
       onClickCreateNewChat: (evt: Event) => {
         evt.stopPropagation();
-        if (this.refs.newChatModal.getEl().dataset.hide === 'true') {
+        if (this.refs.chatModal.getEl().dataset.hide === 'true') {
           this.refs.newChatMenu.hide();
-          this.refs.newChatModal.show();
+          this.refs.chatModal.show();
           document.addEventListener(
             'click',
-            this.refs.newChatModal.hide.bind(this.refs.newChatModal),
+            this.refs.chatModal.hide.bind(this.refs.chatModal),
           );
           return;
         }
 
-        this.refs.newChatModal.hide();
+        this.refs.chatModal.hide();
         document.removeEventListener(
           'click',
-          this.refs.newChatModal.hide.bind(this.refs.newChatModal),
+          this.refs.chatModal.hide.bind(this.refs.chatModal),
         );
       },
-      onClickForm: (evt: Event) => {
+      onClickModal: (evt: Event) => {
         const target = evt.target as HTMLFormElement;
         const parent = target.parentNode?.parentNode
           ?.parentNode as HTMLFormElement;
@@ -51,7 +57,80 @@ export class MessengerPage extends Component {
           evt.stopPropagation();
         }
       },
+      onClickSubmit: async () => {
+        if (this.state.newChat.title) {
+          await Chats.createChats(this.state.newChat);
+        }
+      },
+      onClickRoom: (evt: Event) => {
+        this.props.disabledRoom();
+        const chat = this.refs.chat;
+        const evtTarget = evt.target as HTMLElement;
+        const item = evtTarget.offsetParent as HTMLElement;
+
+        MessengerPage.lastActiveChatId = item.dataset.id || '';
+        item.dataset.active = 'true';
+
+        chat.setProps({
+          id: item.dataset.id,
+          chat: this.props.getCurrentChat(item.dataset.id),
+        });
+
+        setTimeout(() => chat.show(), 100);
+      },
+      disabledRoom: () => {
+        const rooms = document
+          .querySelector('.messenger__list')
+          ?.querySelectorAll('[data-active]');
+        rooms?.forEach((item) => {
+          const room = item as HTMLElement;
+          room.dataset.active = 'false';
+        });
+      },
+      getCurrentChat: (id: string) => {
+        const currentChatData = Object.entries(this.props.chats).find(
+          ([_, e]) => {
+            const chat = e as stateChat;
+            return chat.id.toString() === id;
+          },
+        );
+        return currentChatData![1];
+      },
     });
+
+    this.setState({
+      newChat: {
+        title: '',
+      },
+    });
+  }
+
+  async getChats() {
+    await Chats.getChats();
+  }
+
+  componentWillDidMount() {
+    const chat = this.refs.chat;
+    const room = document
+      .querySelector('.messenger__list')
+      ?.querySelector(
+        `[data-id='${MessengerPage.lastActiveChatId}']`,
+      ) as HTMLElement;
+
+    if (room) {
+      chat.getEl().dataset.chatId = MessengerPage.lastActiveChatId;
+      chat.setProps({
+        id: MessengerPage.lastActiveChatId,
+        chat: this.props.getCurrentChat(MessengerPage.lastActiveChatId),
+      });
+      room.dataset.active = 'true';
+    } else {
+      MessengerPage.lastActiveChatId = '';
+    }
+
+    if (!MessengerPage.lastActiveChatId) {
+      chat.hide();
+    }
   }
 
   render() {
@@ -82,17 +161,17 @@ export class MessengerPage extends Component {
           </div>
         </div>
 
-        {{{ChatRoomList className="messenger__list"}}}
+        {{{ChatRoomList className="messenger__list" chats=chats click=onClickRoom ref="chatRooms"}}}
 
         {{{Navigation className="messenger__nav" active="chats"}}}
         
       </aside>
 
       <section class="messenger__content">
-      {{{Chat}}}
+      {{{Chat ref="chat" }}}
         <span class="messenger__placeholder">Выберите, кому хотели бы написать</span>
       </section>
-    {{{NewChatModal ref="newChatModal" click=onClickForm}}}
+    {{{ChatModal data=newChat id="newChat" label="Введите название чата" input="text" name="title" text="Создать чат" placeholder="Название чата" ref="chatModal" click=onClickModal submit=onClickSubmit}}}
     </main>
     `;
   }

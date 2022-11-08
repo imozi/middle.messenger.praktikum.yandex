@@ -1,15 +1,28 @@
 import { Component } from 'core/Component';
 import { Rec } from 'core/types';
+import { stateChat } from 'store/Chats/chats';
 
 interface ChatRoomListProps {
   className: string;
-  chats?: Rec<any>[];
+  chats?: Rec<stateChat>;
+  click: (evt: Event) => void;
+}
+
+interface chatsProps extends stateChat {
+  click: Function;
 }
 
 export class ChatRoomList extends Component {
   static componentName = 'ChatRoomList';
 
-  constructor(props: ChatRoomListProps) {
+  constructor(props: ChatRoomListProps, { click } = props) {
+    if (props.chats) {
+      Object.entries(props.chats).forEach(([_, item]) => {
+        const chat = item as chatsProps;
+        chat.click = click;
+      });
+    }
+
     super({ ...props });
   }
 
@@ -20,13 +33,15 @@ export class ChatRoomList extends Component {
           {{#each chats}}
             {{#with this}}
               <li class="chat-room-list__item">
-              {{{ChatRoom 
+              {{{ChatRoom
+                id=id 
                 className=className 
                 chatAvatar=avatar 
                 chatName=title 
                 lastMessage=last_message.content
-                time="22:00"
+                time=last_message.text
                 countUnread=unread_count
+                click=click
               }}}
               </li>  
             {{/with}}

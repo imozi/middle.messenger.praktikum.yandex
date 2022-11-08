@@ -1,11 +1,13 @@
 .correspondence {
   position: relative;
+  z-index: 100;
   height: calc(100% - 148px);
   padding-top: 2.5rem;
   padding-right: 1.5rem;
   padding-left: 0.5rem;
   overflow-x: hidden;
   overflow-y: auto;
+  background-color: $color-white;
 
   &::-webkit-scrollbar {
     width: 5px;

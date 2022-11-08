@@ -8,18 +8,19 @@ interface ChatRoomProps {
   lastMessage: string;
   time: string;
   countUnread: string;
+  click: (evt: Event) => void;
 }
 
 export class ChatRoom extends Component {
   static componentName = 'ChatRoom';
 
-  constructor(props: ChatRoomProps) {
-    super({ ...props });
+  constructor(props: ChatRoomProps, { click } = props) {
+    super({ ...props, events: { click } });
   }
 
   render() {
     return `
-    <div class="chat-room {{className}}" tabindex="0">
+    <div class="chat-room {{className}}" tabindex="0" data-active="false" data-id={{id}} >
       <div class="chat-room__avatar">
         <img 
 

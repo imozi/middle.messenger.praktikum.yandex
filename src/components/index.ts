@@ -12,6 +12,7 @@ import { Avatar } from './Avatar';
 import { NewMessage } from './NewMessage';
 import { Message } from './Message';
 import { NewChat } from './NewChat';
+import { ChatMenu } from './ChatMenu';
 import { Correspondence } from './Correspondence';
 
 const component = [
@@ -29,5 +30,6 @@ const component = [
   Message,
   NewChat,
   Correspondence,
+  ChatMenu,
 ];
 component.forEach((component) => Templater.regComponents(component));

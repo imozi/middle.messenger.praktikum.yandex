@@ -1,5 +1,5 @@
-.new-chat__modal {
-  position: absolute;
+.chat__modal {
+  position: fixed;
   top: 0;
   right: 0;
   bottom: 0;
@@ -13,7 +13,7 @@
   transition: $transition;
 }
 
-.new-chat__form {
+.chat__form {
   padding: 3rem;
   background-color: $color-white;
   border-radius: $border-radius;

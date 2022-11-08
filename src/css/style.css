@@ -18,11 +18,12 @@
 @import '../components/Message/message.css';
 @import '../components/NewChat/new-chat.css';
 @import '../components/Correspondence/correspondence.css';
+@import '../components/ChatMenu/chat-menu.css';
 @import '../partials/Profile/profile.css';
 @import '../partials/Password/password.css';
 @import '../partials/Chat/chat.css';
 @import '../partials/ChatRoomList/chat-room-list.css';
-@import '../partials/NewChatModal/new-chat-modal.css';
+@import '../partials/ChatModal/chat-modal.css';
 @import '../pages/Home/home.css';
 @import '../pages/SignIn/sign-in.css';
 @import '../pages/SignUp/sign-up.css';

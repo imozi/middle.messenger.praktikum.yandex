@@ -1,0 +1,36 @@
+.chat-menu {
+  position: absolute;
+  @mixin list-reset;
+
+  padding: 0.5rem 0;
+  background-color: $color-gray;
+  border: 0.1rem solid $color-light-gray;
+  border-radius: $border-radius;
+  transition: opacity 0.2s ease-in-out;
+
+  &__item {
+    padding: 0.5rem 1rem;
+
+    &:hover {
+      background-color: $color-light-gray;
+    }
+  }
+
+  &__btn {
+    &:first-child {
+      display: flex;
+      align-items: center;
+      width: 100%;
+
+      & span {
+        width: 15px;
+        height: 15px;
+        margin-right: 1rem;
+      }
+
+      & img {
+        height: auto;
+      }
+    }
+  }
+}

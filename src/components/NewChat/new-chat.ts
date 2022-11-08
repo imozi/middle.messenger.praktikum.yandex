@@ -13,7 +13,7 @@ export class NewChat extends Component {
   }
 
   show() {
-    this.getEl().style.zIndex = '1';
+    this.getEl().style.zIndex = '103';
     this.getEl().dataset.hide = 'false';
     this.getEl().style.opacity = '1';
   }
@@ -28,7 +28,7 @@ export class NewChat extends Component {
     return `
     <ul class="new-chat-list {{className}}" data-hide="true">
       <li class="new-chat__item">
-      {{{Button className="new-chat--add" icon="add-chat" text="Создать новый чат" ref="newChat"}}} 
+      {{{Button className="new-chat--add" icon="add" text="Создать новый чат" ref="newChat"}}} 
       </li>
     </ul>
     `;

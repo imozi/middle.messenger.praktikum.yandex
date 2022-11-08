@@ -27,6 +27,10 @@
     background: $color-blue;
   }
 
+  &[data-active='true']::after {
+    background: $color-blue;
+  }
+
   &__avatar {
     display: flex;
     align-items: center;

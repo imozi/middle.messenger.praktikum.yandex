@@ -2,14 +2,13 @@ import { Component } from 'core/Component';
 
 interface CorrespondenceProps {
   className: string;
-  messages: [];
 }
 
 export class Correspondence extends Component {
   static componentName = 'Correspondence';
 
   constructor(props: CorrespondenceProps) {
-    super({ ...props, messages: [{ text: 'Привет' }] });
+    super({ ...props });
   }
 
   render() {
@@ -17,7 +16,7 @@ export class Correspondence extends Component {
     <div class="correspondence {{className}}">
       {{#each messages}}
         {{#with this}}
-          {{{Message text=text isMy=true}}}
+          {{{Message text=text}}}
         {{/with}}
     {{/each}}             
     </div>

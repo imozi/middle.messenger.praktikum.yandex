@@ -47,7 +47,6 @@ export class Password extends Component {
             className: 'btn--green',
           });
 
-          console.log(Password.cache);
           return;
         }
 
