@@ -1,6 +1,7 @@
 import { Component } from 'core/Component';
-import Chats from 'services/Chats';
+import { Socket } from 'core/Socket';
 import { stateChat } from 'store/Chats/chats';
+import Chats from 'services/Chats';
 
 export class MessengerPage extends Component {
   static lastActiveChatId: string;
@@ -62,18 +63,30 @@ export class MessengerPage extends Component {
           await Chats.createChats(this.state.newChat);
         }
       },
-      onClickRoom: (evt: Event) => {
+      onClickRoom: async (evt: Event) => {
         this.props.disabledRoom();
+
         const chat = this.refs.chat;
         const evtTarget = evt.target as HTMLElement;
         const item = evtTarget.offsetParent as HTMLElement;
+        const idChat = item.dataset.id;
+
+        await Chats.getToken(idChat!);
+        const currentChat = this.props.getCurrentChat(item.dataset.id);
+        const wsData = {
+          userId: this.props.userId as string,
+          chatId: idChat!,
+          token: currentChat.token,
+        };
 
         MessengerPage.lastActiveChatId = item.dataset.id || '';
         item.dataset.active = 'true';
 
+        // const socket = new Socket(wsData);
+
         chat.setProps({
-          id: item.dataset.id,
-          chat: this.props.getCurrentChat(item.dataset.id),
+          id: idChat,
+          chat: currentChat,
         });
 
         setTimeout(() => chat.show(), 100);
@@ -134,6 +147,7 @@ export class MessengerPage extends Component {
   }
 
   render() {
+    console.log(this);
     return `
     <main class="messenger">
       {{{Notification className="messenger__notification" type="" text="" ref="notification"}}}

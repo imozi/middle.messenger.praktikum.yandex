@@ -10,6 +10,7 @@ export type stateChat = {
   last_message: stateUser;
   time: string;
   content: string;
+  token?: string;
 };
 
 export type stateChats = Rec<stateChat>;
@@ -20,6 +21,7 @@ export class Chats extends EventBus {
     SET_CHATS: 'chats/set',
     DELETE_CHATS: 'chats/delete',
     UPDATE_CHATS: 'chats/update',
+    SET_TOKEN: 'chats/token',
   } as const;
 
   private _state: Nullable<stateChats> = null;
@@ -47,6 +49,16 @@ export class Chats extends EventBus {
     this._state = { ...chats };
   }
 
+  private _setToken({ id, token }: Record<string, string>) {
+    const chat = Object.entries(this._state!).find(
+      ([_, chat]) => chat.id.toString() === id,
+    );
+
+    if (chat) {
+      chat[1].token = token;
+    }
+  }
+
   getState() {
     return this._state;
   }
@@ -56,5 +68,6 @@ export class Chats extends EventBus {
     this.on(Chats.ACTION.SET_CHATS, this._setChats.bind(this));
     this.on(Chats.ACTION.DELETE_CHATS, this._deleteChats.bind(this));
     this.on(Chats.ACTION.UPDATE_CHATS, this._updateChats.bind(this));
+    this.on(Chats.ACTION.SET_TOKEN, this._setToken.bind(this));
   }
 }

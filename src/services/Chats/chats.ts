@@ -28,4 +28,9 @@ export class Chats {
     const chats = await this.request.get('');
     store.dispatch(ChatsState.ACTION.UPDATE_CHATS, chats);
   }
+
+  public async getToken(id: string) {
+    const token = (await this.request.post(`/token/${id}`)) as {};
+    store.dispatch(ChatsState.ACTION.SET_TOKEN, { id, ...token });
+  }
 }
