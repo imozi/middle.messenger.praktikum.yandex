@@ -20,7 +20,7 @@ export class ChatModal extends Component {
     super({ ...props, events: { click } });
 
     this.setProps({
-      onKeyupTitle: (evt: Event) => {
+      onKeyupData: (evt: Event) => {
         const { data } = this.props;
         const target = evt.target as HTMLTextAreaElement;
 
@@ -61,7 +61,7 @@ export class ChatModal extends Component {
             name=name
             placeholder=placeholder
             ref="input"
-            keyup=onKeyupTitle
+            keyup=onKeyupData
             }}}
           </div>
         </div>

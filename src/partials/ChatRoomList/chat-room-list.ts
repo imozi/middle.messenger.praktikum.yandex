@@ -5,12 +5,19 @@ import { stateChat } from 'store/Chats/chats';
 interface ChatRoomListProps {
   className: string;
   chats?: Rec<stateChat>;
+  user?: user;
   click: (evt: Event) => void;
 }
 
 interface chatsProps extends stateChat {
   click: Function;
+  currentUser?: user;
 }
+
+type user = {
+  id: string;
+  login: string;
+};
 
 export class ChatRoomList extends Component {
   static componentName = 'ChatRoomList';
@@ -20,6 +27,7 @@ export class ChatRoomList extends Component {
       Object.entries(props.chats).forEach(([_, item]) => {
         const chat = item as chatsProps;
         chat.click = click;
+        chat.currentUser = props.user;
       });
     }
 
@@ -37,8 +45,8 @@ export class ChatRoomList extends Component {
                 id=id 
                 className=className 
                 chatAvatar=avatar 
-                chatName=title 
-                lastMessage=last_message.content
+                chatName=title
+                login=last_message.user.login
                 time=last_message.text
                 countUnread=unread_count
                 click=click

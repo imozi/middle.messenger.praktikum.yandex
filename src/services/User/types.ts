@@ -11,3 +11,7 @@ export type UserPasswordResetData = {
   oldPassword: string;
   newPassword: string;
 };
+
+export type LoginData = {
+  login: string;
+};

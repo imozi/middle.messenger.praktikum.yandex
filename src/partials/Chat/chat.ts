@@ -1,10 +1,14 @@
 import { Component } from 'core/Component';
+import { Socket } from 'core/Socket';
 import Chats from 'services/Chats';
+import User from 'services/User';
 
 interface ChatProps {
   id: string;
   chat: string;
+  socket?: Socket;
   className?: string;
+  userId: string;
 }
 
 export class Chat extends Component {
@@ -17,6 +21,9 @@ export class Chat extends Component {
       message: {
         content: '',
         type: 'message',
+      },
+      user: {
+        login: '',
       },
     });
 
@@ -44,27 +51,41 @@ export class Chat extends Component {
           this.refs.chatMenu.hide.bind(this.refs.chatMenu),
         );
       },
-      onClickShowModal: (evt: Event) => {
+      onClickShowAddUserModal: (evt: Event) => {
         evt.stopPropagation();
-        if (this.refs.chatModal.getEl().dataset.hide === 'true') {
+        if (this.refs.addUserModal.getEl().dataset.hide === 'true') {
           this.refs.chatMenu.hide();
-          this.refs.chatModal.show();
+          this.refs.addUserModal.show();
           document.addEventListener(
             'click',
-            this.refs.chatModal.hide.bind(this.refs.chatModal),
+            this.refs.addUserModal.hide.bind(this.refs.addUserModal),
           );
           return;
         }
 
-        this.refs.chatModal.hide();
+        this.refs.addUserModal.hide();
         document.removeEventListener(
           'click',
-          this.refs.chatModal.hide.bind(this.refs.chatModal),
+          this.refs.addUserModal.hide.bind(this.refs.addUserModal),
         );
       },
-      removeChat: async () => {
-        const id = this.getEl().dataset.chatId;
-        await Chats.deleteChats(id!);
+      onClickShowDeleteUserModal: (evt: Event) => {
+        evt.stopPropagation();
+        if (this.refs.deleteUserModal.getEl().dataset.hide === 'true') {
+          this.refs.chatMenu.hide();
+          this.refs.deleteUserModal.show();
+          document.addEventListener(
+            'click',
+            this.refs.deleteUserModal.hide.bind(this.refs.deleteUserModal),
+          );
+          return;
+        }
+
+        this.refs.deleteUserModal.hide();
+        document.removeEventListener(
+          'click',
+          this.refs.deleteUserModal.hide.bind(this.refs.deleteUserModal),
+        );
       },
       onClickModal: (evt: Event) => {
         const target = evt.target as HTMLFormElement;
@@ -77,10 +98,42 @@ export class Chat extends Component {
           evt.stopPropagation();
         }
       },
-      onClickSubmit: () => {
-        console.log('tut');
+      onClickAddUserSubmit: async () => {
+        const user = (await User.searchUser(this.state.user)) as any;
+        const userId = user[0].id;
+        const chatId = Number(this.getEl().dataset.chatId);
+
+        await Chats.addedUserToChat(userId, chatId);
+
+        this.state.user.login = '';
+      },
+      onClickDeleteUserSubmit: async () => {
+        const user = (await User.searchUser(this.state.user)) as any;
+        const userId = user[0].id;
+        const chatId = Number(this.getEl().dataset.chatId);
+
+        await Chats.deleteUserFromChat(userId, chatId);
+
+        this.state.user.login = '';
+      },
+      onClickSendMessage: (evt: Event) => {
+        const { message } = this.state;
+        const target = evt.target as HTMLElement;
+        const btn = target.parentNode?.parentNode as HTMLButtonElement;
+        const socket = this.props.socket as Socket;
+
+        btn.blur();
+
+        if (!message.content) {
+          return;
+        }
+        socket.send(message);
       },
     });
+  }
+
+  public componentDidMount(): void {
+    this.hide();
   }
 
   render() {
@@ -105,13 +158,11 @@ export class Chat extends Component {
         </div>
         <div class="chat__header-col">
         {{{Button className="chat__btn chat__btn--menu" icon="menu-top-right" click=onClickShowHideChatMenu}}}
-        {{{ChatMenu className="chat__menu" ref="chatMenu" remove=removeChat add=onClickShowModal}}}
+        {{{ChatMenu className="chat__menu" ref="chatMenu" remove=removeChat add=onClickShowAddUserModal removeUser=onClickShowDeleteUserModal}}}
         </div>
       </header>
        
-
-      {{{Correspondence ref="correspondence"}}}
-
+      {{{Correspondence ref="correspondence" messages=messages userId=userId}}}
 
       <div class="chat__message">
         <div class="chat__message-col">
@@ -121,10 +172,14 @@ export class Chat extends Component {
           {{{NewMessage keyup=onKeyupMessage}}}
         </div>
         <div class="chat__message-col">
-          {{{Button className="chat__btn chat__btn--send" icon="send-msg" }}}
+          {{{Button className="chat__btn chat__btn--send" icon="send-msg" click=onClickSendMessage}}}
         </div>
       </div>
-      {{{ChatModal id="newChat" label="Введите ник или id пользователя" input="text" name="title" text="Добавить пользователя" placeholder="Ник или id пользователя" ref="chatModal" click=onClickModal submit=onClickSubmit}}}
+
+      {{{ChatModal data=user id="addUser" label="Введите логин пользователя" input="text" name="login" text="Добавить пользователя" placeholder="Логин пользователя" ref="addUserModal" click=onClickModal submit=onClickAddUserSubmit}}}
+
+      {{{ChatModal data=user id="deleteUser" label="Введите логин пользователя" input="text" name="login" text="Удалить пользователя" placeholder="Логин пользователя" ref="deleteUserModal" click=onClickModal submit=onClickDeleteUserSubmit}}}
+
     </section>
     
       `;

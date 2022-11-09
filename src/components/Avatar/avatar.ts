@@ -14,7 +14,9 @@ export class Avatar extends Component {
   constructor(props: AvatarProps, { change, update, src } = props) {
     super({
       ...props,
-      src: `https://ya-praktikum.tech/api/v2/resources/${src}`,
+      src: src
+        ? `https://ya-praktikum.tech/api/v2/resources/${src}`
+        : 'img/svg/user-default.svg',
       events: { change, update },
     });
 
@@ -53,15 +55,7 @@ export class Avatar extends Component {
     return `
     <div class="avatar {{className}}">
         <label for="avatar" class="avatar__img" data-loading="false" data-edit="false">
-          <img 
-
-                {{#if src}}
-                  src="{{src}}"
-                {{else}} 
-                  src="img/svg/user-default.svg"
-                {{/if}}
-
-                alt="avatar">
+          <img src="{{src}}" alt="avatar">
         </label>
       <div class="avatar__change">
       {{{Input id="avatar" type="file" name="" change=onChangeImages ref="file"}}}

@@ -10,7 +10,14 @@ export class Chats {
   }
 
   public async getChats() {
-    const chats = await this.request.get('');
+    const chats = (await this.request.get('')) as ChatsState;
+    Object.entries(chats).forEach(async ([_, chat]) => {
+      const token = (await this.request.post(`/token/${chat.id}`)) as {
+        token: string;
+      };
+      chat.token = token.token;
+    });
+
     store.dispatch(ChatsState.ACTION.SET_CHATS, chats);
   }
 
@@ -29,7 +36,21 @@ export class Chats {
     store.dispatch(ChatsState.ACTION.UPDATE_CHATS, chats);
   }
 
-  public async getToken(id: string) {
+  public async addedUserToChat(userId: number, chatId: number) {
+    await this.request.put('/users', {
+      users: [userId],
+      chatId,
+    });
+  }
+
+  public async deleteUserFromChat(userId: number, chatId: number) {
+    await this.request.delete('/users', {
+      users: [userId],
+      chatId,
+    });
+  }
+
+  public async updateToken(id: string) {
     const token = (await this.request.post(`/token/${id}`)) as {};
     store.dispatch(ChatsState.ACTION.SET_TOKEN, { id, ...token });
   }

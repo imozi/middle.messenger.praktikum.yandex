@@ -181,6 +181,7 @@ export class Component {
   }
 
   private _componentWillUpdate(oldProps: any, nextProps: any): boolean {
+    this.componentWillUpdate();
     return deepCompare(oldProps, nextProps);
   }
 
@@ -207,6 +208,8 @@ export class Component {
   public componentWillDidMount(): void {}
 
   public componentWillUnmount(): void {}
+
+  public componentWillUpdate(): void {}
 
   public getEl(): HTMLElement {
     if (this.el?.parentNode?.nodeType === Node.DOCUMENT_FRAGMENT_NODE) {

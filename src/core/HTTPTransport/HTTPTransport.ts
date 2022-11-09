@@ -28,8 +28,8 @@ export class HTTPTransport {
     this.options = options;
   }
 
-  public get<Response>(path: string): Promise<Response> {
-    return this._request<Response>(Method.Get, path);
+  public get<Response>(path: string, data?: Data): Promise<Response> {
+    return this._request<Response>(Method.Get, path, data);
   }
 
   public post<Response>(path: string, data?: Data): Promise<Response> {

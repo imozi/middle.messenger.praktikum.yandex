@@ -9,7 +9,7 @@ interface MessageProps {
 export class Message extends Component {
   static componentName = 'Message';
 
-  constructor(props: MessageProps, { isMy = true } = props) {
+  constructor(props: MessageProps, { isMy = false } = props) {
     super({ ...props, isMy });
   }
 

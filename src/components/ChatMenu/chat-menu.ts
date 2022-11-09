@@ -4,14 +4,18 @@ interface ChatMenuProps {
   className: string;
   click?: (evt: Event) => void;
   remove?: (evt: Event) => void;
+  removeUser?: (evt: Event) => void;
   add?: (evt: Event) => void;
 }
 
 export class ChatMenu extends Component {
   static componentName = 'ChatMenu';
 
-  constructor(props: ChatMenuProps, { click, remove, add } = props) {
-    super({ ...props, events: { click, remove, add } });
+  constructor(
+    props: ChatMenuProps,
+    { click, remove, add, removeUser } = props,
+  ) {
+    super({ ...props, events: { click, remove, add, removeUser } });
 
     this.setProps({
       removeDispatch: () => {
@@ -20,6 +24,10 @@ export class ChatMenu extends Component {
       addDispatch: (evt: Event) => {
         evt.stopPropagation();
         this.dispatchEvent({ name: 'add' });
+      },
+      removeUserDispatch: (evt: Event) => {
+        evt.stopPropagation();
+        this.dispatchEvent({ name: 'removeUser' });
       },
     });
   }
@@ -41,6 +49,9 @@ export class ChatMenu extends Component {
     <ul class="chat-menu {{className}}" data-hide="true">
       <li class="chat-menu__item">
        {{{Button className="chat-menu__btn" icon="add" text="Добавить пользователя" ref="add" click=addDispatch add=add}}} 
+      </li>
+      <li class="chat-menu__item">
+       {{{Button className="chat-menu__btn" icon="clear" text="Удалить пользователя" ref="removeUser" click=removeUserDispatch removeUser=removeUser}}} 
       </li>
       <li class="chat-menu__item">
         {{{Button className="chat-menu__btn" icon="remove" text="Удалить чат" ref="remove" click=removeDispatch remove=remove}}} 

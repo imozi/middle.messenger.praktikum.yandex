@@ -2,7 +2,6 @@ import { Component } from 'core/Component';
 import { debounce } from 'core/utils';
 
 interface NewMessageProps {
-  text: string;
   keyup?: (evt: Event) => void;
 }
 
@@ -20,7 +19,10 @@ export class NewMessage extends Component {
   constructor(props: NewMessageProps, { keyup } = props) {
     super({
       ...props,
-      events: { input: autoResize, keyup: debounce(keyup as Function, 200) },
+      events: {
+        input: autoResize,
+        keyup: debounce(keyup as Function, 200),
+      },
     });
   }
 

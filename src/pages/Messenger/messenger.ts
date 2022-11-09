@@ -2,9 +2,12 @@ import { Component } from 'core/Component';
 import { Socket } from 'core/Socket';
 import { stateChat } from 'store/Chats/chats';
 import Chats from 'services/Chats';
+import { Nullable } from 'core/types';
 
 export class MessengerPage extends Component {
   static lastActiveChatId: string;
+
+  static lastWSActive: Nullable<Socket>;
 
   constructor(props?: any) {
     super({ ...props });
@@ -70,24 +73,54 @@ export class MessengerPage extends Component {
         const evtTarget = evt.target as HTMLElement;
         const item = evtTarget.offsetParent as HTMLElement;
         const idChat = item.dataset.id;
-
-        await Chats.getToken(idChat!);
         const currentChat = this.props.getCurrentChat(item.dataset.id);
+
+        if (idChat === MessengerPage.lastActiveChatId) {
+          console.log(MessengerPage.lastActiveChatId);
+          return;
+        }
+
+        if (MessengerPage.lastActiveChatId) {
+          MessengerPage.lastWSActive!.destroy();
+          MessengerPage.lastWSActive = null;
+        }
+
         const wsData = {
-          userId: this.props.userId as string,
-          chatId: idChat!,
-          token: currentChat.token,
+          userId: this.props.user.id as string,
+          chatId: idChat as string,
+          token: currentChat.token as string,
+          events: {
+            open: () => 'open',
+            close: () => 'close',
+            message: (messages: MessageEvent) => {
+              const json = JSON.parse(messages.data);
+
+              if (json.type === 'pong') {
+                return;
+              }
+
+              if (Array.isArray(json)) {
+                chat.setProps({
+                  messages: json,
+                });
+              } else {
+                socket.getMessages();
+              }
+            },
+          },
         };
 
-        MessengerPage.lastActiveChatId = item.dataset.id || '';
-        item.dataset.active = 'true';
-
-        // const socket = new Socket(wsData);
+        const socket = new Socket(wsData);
+        MessengerPage.lastWSActive = socket;
 
         chat.setProps({
           id: idChat,
-          chat: currentChat,
+          chat: this.props.getCurrentChat(item.dataset.id),
+          socket,
         });
+
+        MessengerPage.lastActiveChatId = item.dataset.id || '';
+        item.dataset.active = 'true';
 
         setTimeout(() => chat.show(), 100);
       },
@@ -122,32 +155,20 @@ export class MessengerPage extends Component {
     await Chats.getChats();
   }
 
-  componentWillDidMount() {
-    const chat = this.refs.chat;
-    const room = document
-      .querySelector('.messenger__list')
-      ?.querySelector(
-        `[data-id='${MessengerPage.lastActiveChatId}']`,
-      ) as HTMLElement;
-
-    if (room) {
-      chat.getEl().dataset.chatId = MessengerPage.lastActiveChatId;
-      chat.setProps({
-        id: MessengerPage.lastActiveChatId,
-        chat: this.props.getCurrentChat(MessengerPage.lastActiveChatId),
-      });
-      room.dataset.active = 'true';
-    } else {
+  public componentWillUnmount(): void {
+    if (MessengerPage.lastActiveChatId) {
+      const chat = this.refs.chat;
+      MessengerPage.lastWSActive!.destroy();
+      MessengerPage.lastWSActive = null;
       MessengerPage.lastActiveChatId = '';
-    }
 
-    if (!MessengerPage.lastActiveChatId) {
-      chat.hide();
+      chat.setProps({
+        socket: null,
+      });
     }
   }
 
   render() {
-    console.log(this);
     return `
     <main class="messenger">
       {{{Notification className="messenger__notification" type="" text="" ref="notification"}}}
@@ -175,15 +196,15 @@ export class MessengerPage extends Component {
           </div>
         </div>
 
-        {{{ChatRoomList className="messenger__list" chats=chats click=onClickRoom ref="chatRooms"}}}
+        {{{ChatRoomList className="messenger__list" chats=chats user=user click=onClickRoom ref="chatRooms"}}}
 
         {{{Navigation className="messenger__nav" active="chats"}}}
         
       </aside>
 
       <section class="messenger__content">
-      {{{Chat ref="chat" }}}
-        <span class="messenger__placeholder">Выберите, кому хотели бы написать</span>
+        {{{Chat ref="chat" userId=user.id}}}
+        <span class="messenger__placeholder">Выберите, куда хотели бы написать или создайте чат</span>
       </section>
     {{{ChatModal data=newChat id="newChat" label="Введите название чата" input="text" name="title" text="Создать чат" placeholder="Название чата" ref="chatModal" click=onClickModal submit=onClickSubmit}}}
     </main>

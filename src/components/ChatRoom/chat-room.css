@@ -72,6 +72,10 @@
     margin: 0;
     color: $color-dark-gray-50;
     font-size: 1.3rem;
+
+    & span {
+      font-weight: 900;
+    }
   }
 
   &__time {

@@ -5,6 +5,11 @@ export type SocketProps = {
   userId: string;
   chatId: string;
   token: string;
+  events: {
+    open: () => void;
+    close: () => void;
+    message: (evt: MessageEvent) => void;
+  };
 };
 
 export type Message = {
@@ -43,8 +48,9 @@ export class Socket extends EventBus {
     const { userId, chatId, token } = this._props;
     this._socket = new WebSocket(`${Socket.URL}/${userId}/${chatId}/${token}`);
 
-    this._socket.addEventListener('open', this._connection.bind(this));
+    this._socket.addEventListener('open', this._open.bind(this));
     this._socket.addEventListener('close', this._close.bind(this));
+    this._socket.addEventListener('message', this._props.events.message);
   }
 
   private _regEvents() {
@@ -53,11 +59,11 @@ export class Socket extends EventBus {
     this.on(Socket.EVENTS.CONNECT, this._connection.bind(this));
   }
 
-  private _ping() {
-    setInterval(() => this.send({ content: '', type: 'ping' }), 10000);
+  public ping() {
+    this.send({ content: '', type: 'ping' });
   }
 
-  public send(data: Message | MessagePing) {
+  public async send(data: Message | MessagePing) {
     this._socket?.send(JSON.stringify(data));
   }
 
@@ -65,13 +71,24 @@ export class Socket extends EventBus {
     this.emit(Socket.EVENTS.DISCONNECT);
   }
 
-  private _disconnection() {
-    console.log('disconnect');
+  private _open() {
+    this.emit(Socket.EVENTS.CONNECT);
   }
 
-  private _connection() {
-    this.send({ content: 'Тестовое сообщение4', type: 'message' });
+  private _disconnection() {
+    this._props.events.close();
+  }
+
+  public getMessages() {
     this.send({ content: '0', type: 'get old' });
-    // this._ping();
+  }
+
+  public destroy() {
+    this._socket?.close();
+  }
+
+  private async _connection() {
+    this._props.events.open();
+    this.getMessages();
   }
 }

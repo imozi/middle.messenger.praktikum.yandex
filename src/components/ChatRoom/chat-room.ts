@@ -5,9 +5,11 @@ interface ChatRoomProps {
   className?: string;
   chatAvatar?: string;
   chatName: string;
+  login: string;
   lastMessage: string;
   time: string;
   countUnread: string;
+  currentLogin: string;
   click: (evt: Event) => void;
 }
 
@@ -35,12 +37,19 @@ export class ChatRoom extends Component {
       <div class="chat-room-row">
         <div class="chat-room-col">
           <h2 class="chat-room__name">{{chatName}}</h2>
+
+          {{#ifEqual login currentLogin }}
+          <p class="chat-room__last-message"><span>Вы:</span> {{lastMessage}}</p>
+          {{else}}
           <p class="chat-room__last-message">{{lastMessage}}</p>
+          {{/ifEqual}}
+
+          
         </div>
         <div class="chat-room-col">
           <span class="chat-room__time">{{time}}</span>
           {{#if countUnread}}
-          <span class="chat-room__unread">{{countUnread}}</span>
+          <span class="chat-room__unread"></span>
           {{/if}}
         </div>
       </div>
