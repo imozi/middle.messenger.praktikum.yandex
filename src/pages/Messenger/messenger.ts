@@ -76,7 +76,6 @@ export class MessengerPage extends Component {
         const currentChat = this.props.getCurrentChat(item.dataset.id);
 
         if (idChat === MessengerPage.lastActiveChatId) {
-          console.log(MessengerPage.lastActiveChatId);
           return;
         }
 
