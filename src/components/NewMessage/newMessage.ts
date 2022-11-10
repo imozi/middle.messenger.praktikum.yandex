@@ -3,6 +3,7 @@ import { debounce } from 'core/utils';
 
 interface NewMessageProps {
   keyup?: (evt: Event) => void;
+  events: any;
 }
 
 function autoResize(this: HTMLTextAreaElement) {
@@ -13,7 +14,7 @@ function autoResize(this: HTMLTextAreaElement) {
   this.style.height = `${this.scrollHeight}px`;
 }
 
-export class NewMessage extends Component {
+export class NewMessage extends Component<NewMessageProps> {
   static componentName = 'NewMessage';
 
   constructor(props: NewMessageProps, { keyup } = props) {

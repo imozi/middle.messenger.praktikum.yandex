@@ -1,18 +1,23 @@
 import { Component } from 'core/Component';
 import { Socket } from 'core/Socket';
-import { stateChat } from 'store/Chats/chats';
+import { StateChat } from 'store/Chats/chats';
 import Chats from 'services/Chats';
-import { Nullable } from 'core/types';
+import { Nullable, Rec } from 'core/types';
 
-export class MessengerPage extends Component {
+interface MessengerPageProps {
+  chats: Rec<StateChat>;
+  user: { id: string; login: string };
+}
+
+export class MessengerPage extends Component<MessengerPageProps> {
   static lastActiveChatId: string;
 
   static lastWSActive: Nullable<Socket>;
 
-  constructor(props?: any) {
-    super({ ...props });
+  static createdNewChat: string = '';
 
-    this.getChats();
+  constructor(props: MessengerPageProps) {
+    super({ ...props });
 
     this.setProps({
       onClickShowHideNewChatMenu: (evt: Event) => {
@@ -64,6 +69,7 @@ export class MessengerPage extends Component {
       onClickSubmit: async () => {
         if (this.state.newChat.title) {
           await Chats.createChats(this.state.newChat);
+          MessengerPage.createdNewChat = 'success';
         }
       },
       onClickRoom: async (evt: Event) => {
@@ -91,7 +97,7 @@ export class MessengerPage extends Component {
           events: {
             open: () => 'open',
             close: () => 'close',
-            message: (messages: MessageEvent) => {
+            message: async (messages: MessageEvent) => {
               const json = JSON.parse(messages.data);
 
               if (json.type === 'pong') {
@@ -114,6 +120,7 @@ export class MessengerPage extends Component {
 
         chat.setProps({
           id: idChat,
+          isOpen: true,
           chat: this.props.getCurrentChat(item.dataset.id),
           socket,
         });
@@ -135,11 +142,32 @@ export class MessengerPage extends Component {
       getCurrentChat: (id: string) => {
         const currentChatData = Object.entries(this.props.chats).find(
           ([_, e]) => {
-            const chat = e as stateChat;
+            const chat = e as StateChat;
             return chat.id.toString() === id;
           },
         );
         return currentChatData![1];
+      },
+      onKeyUpSearch: (evt: Event) => {
+        const { searchChat } = this.state;
+        const target = evt.target as HTMLInputElement;
+
+        searchChat.id = target.value;
+      },
+      closeNotification: () => {
+        this.refs.notification.hide();
+      },
+      showNotification: (type: string, text: string) => {
+        this.refs.notification.setProps({
+          type,
+          text,
+        });
+
+        setTimeout(() => {
+          this.refs.notification.show();
+        }, 0);
+
+        this.refs.notification.dispatchEvent({ name: 'close' });
       },
     });
 
@@ -147,14 +175,37 @@ export class MessengerPage extends Component {
       newChat: {
         title: '',
       },
+      searchChat: {
+        id: '',
+      },
     });
   }
 
   async getChats() {
-    await Chats.getChats();
+    try {
+      await Chats.getChats();
+    } catch (error) {
+      this.props.showNotification(`error`, 'Попробуйте обновить страницу');
+    }
   }
 
-  public componentWillUnmount(): void {
+  async componentDidMount() {
+    await this.getChats();
+  }
+
+  public componentWillUpdate(): void {
+    if (MessengerPage.createdNewChat) {
+      setTimeout(() => {
+        this.props.showNotification(
+          `${MessengerPage.createdNewChat}`,
+          'Чат успешно создан!',
+        );
+        MessengerPage.createdNewChat = '';
+      }, 300);
+    }
+  }
+
+  componentWillUnmount() {
     if (MessengerPage.lastActiveChatId) {
       const chat = this.refs.chat;
       MessengerPage.lastWSActive!.destroy();
@@ -170,7 +221,7 @@ export class MessengerPage extends Component {
   render() {
     return `
     <main class="messenger">
-      {{{Notification className="messenger__notification" type="" text="" ref="notification"}}}
+      {{{Notification className="messenger__notification" type="" text="" ref="notification" close=closeNotification}}}
       <aside class="messenger__aside">
 
         <div class="messenger__header">
@@ -190,6 +241,7 @@ export class MessengerPage extends Component {
               placeholder="Поиск"
               icon="search"
               ref="search"
+              keyup=onKeyUpSearch
             }}}
             {{{Icon className="input-icon" icon="search" ref="icon"}}}
           </div>
@@ -202,7 +254,7 @@ export class MessengerPage extends Component {
       </aside>
 
       <section class="messenger__content">
-        {{{Chat ref="chat" userId=user.id}}}
+        {{{Chat ref="chat" notification=refs.notification userId=user.id }}}
         <span class="messenger__placeholder">Выберите, куда хотели бы написать или создайте чат</span>
       </section>
     {{{ChatModal data=newChat id="newChat" label="Введите название чата" input="text" name="title" text="Создать чат" placeholder="Название чата" ref="chatModal" click=onClickModal submit=onClickSubmit}}}

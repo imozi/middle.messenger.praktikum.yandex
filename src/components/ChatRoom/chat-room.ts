@@ -10,29 +10,28 @@ interface ChatRoomProps {
   time: string;
   countUnread: string;
   currentLogin: string;
-  click: (evt: Event) => void;
+  click?: (evt: Event) => void;
+  events?: any;
 }
 
-export class ChatRoom extends Component {
+export class ChatRoom extends Component<ChatRoomProps> {
   static componentName = 'ChatRoom';
 
-  constructor(props: ChatRoomProps, { click } = props) {
-    super({ ...props, events: { click } });
+  constructor(props: ChatRoomProps, { click, chatAvatar } = props) {
+    super({
+      ...props,
+      chatAvatar: chatAvatar
+        ? `https://ya-praktikum.tech/api/v2/resources/${chatAvatar}`
+        : 'img/svg/user-default.svg',
+      events: { click },
+    });
   }
 
   render() {
     return `
     <div class="chat-room {{className}}" tabindex="0" data-active="false" data-id={{id}} >
       <div class="chat-room__avatar">
-        <img 
-
-        {{#if chatAvatar}}
-          src="{{chatAvatar}}"
-        {{else}} 
-          src="img/svg/user-default.svg"
-        {{/if}}
-
-        alt="avatar">
+        <img src="{{chatAvatar}}" alt="avatar">
       </div>
       <div class="chat-room-row">
         <div class="chat-room-col">

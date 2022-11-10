@@ -4,9 +4,10 @@ interface IconProps {
   className: string;
   icon: string;
   click?: (evt: Event) => void;
+  events: any;
 }
 
-export class Icon extends Component {
+export class Icon extends Component<IconProps> {
   static componentName = 'Icon';
 
   constructor(props: IconProps, { click } = props) {

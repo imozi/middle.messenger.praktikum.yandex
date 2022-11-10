@@ -2,7 +2,7 @@ import { EventBus } from 'core/EventBus';
 import { Nullable, Rec } from 'core/types';
 import { stateUser } from 'store/User';
 
-export type stateChat = {
+export type StateChat = {
   id: number;
   title: string;
   avatar: string;
@@ -13,7 +13,7 @@ export type stateChat = {
   token?: string;
 };
 
-export type stateChats = Rec<stateChat>;
+export type StateChats = Rec<StateChat>;
 
 export class Chats extends EventBus {
   static ACTION = {
@@ -24,7 +24,7 @@ export class Chats extends EventBus {
     SET_TOKEN: 'chats/token',
   } as const;
 
-  private _state: Nullable<stateChats> = null;
+  private _state: Nullable<StateChats> = null;
 
   constructor() {
     super();
@@ -37,7 +37,7 @@ export class Chats extends EventBus {
     this._state = null;
   }
 
-  private _setChats(chats: stateChats) {
+  private _setChats(chats: StateChats) {
     this._state = { ...chats };
   }
 
@@ -45,7 +45,7 @@ export class Chats extends EventBus {
     this._state = null;
   }
 
-  private _updateChats(chats: stateChats) {
+  private _updateChats(chats: StateChats) {
     this._state = { ...chats };
   }
 

@@ -13,7 +13,7 @@ type CustomEventsProps = {
   };
 };
 
-export class Component {
+export class Component<Props extends Record<string, any> = any> {
   static EVENTS = {
     INIT: 'init',
     FLOW_CDM: 'flow:component-did-mount',
@@ -39,7 +39,7 @@ export class Component {
 
   evtBus: () => EventBus;
 
-  public constructor(props?: any) {
+  public constructor(props?: Props) {
     const eventBus = new EventBus();
     this.evtBus = () => eventBus;
 
@@ -56,15 +56,15 @@ export class Component {
     return this._el;
   }
 
-  private _makeProxyProps(props: any) {
+  private _makeProxyProps<P>(props: Rec<P>) {
     let waitUpdate = false;
 
     return new Proxy(props, {
-      get(target, prop) {
+      get(target, prop: string) {
         const value: any = target[prop];
         return typeof value === 'function' ? value.bind(target) : value;
       },
-      set: (target, prop, value) => {
+      set: (target, prop: string, value) => {
         const oldProps = { ...target };
 
         if (target[prop] === value) {
@@ -223,13 +223,13 @@ export class Component {
     return this.el!;
   }
 
-  public setProps = <T>(nextProps?: Rec<T>): void => {
+  public setProps = <P>(nextProps?: P): void => {
     if (!nextProps) {
       return;
     }
 
     if (isEmpty(this.props)) {
-      this.props = this._makeProxyProps(nextProps);
+      this.props = this._makeProxyProps<P>(nextProps);
       this.evtBus().emit(Component.EVENTS.FLOW_RENDER);
       return;
     }
@@ -237,13 +237,13 @@ export class Component {
     Object.assign(this.props, nextProps);
   };
 
-  public setState = <T>(nextState?: Rec<T>): void => {
+  public setState = <S>(nextState?: S): void => {
     if (!nextState) {
       return;
     }
 
     if (isEmpty(this.state)) {
-      this.state = this._makeProxyProps(nextState);
+      this.state = this._makeProxyProps<S>(nextState);
       return;
     }
 

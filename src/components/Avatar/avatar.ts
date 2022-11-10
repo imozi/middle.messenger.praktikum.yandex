@@ -6,9 +6,10 @@ interface AvatarProps {
   className?: string;
   change?: (evt: Event) => void;
   update?: (evt: Event) => void;
+  events: any;
 }
 
-export class Avatar extends Component {
+export class Avatar extends Component<AvatarProps> {
   static componentName = 'Avatar';
 
   constructor(props: AvatarProps, { change, update, src } = props) {

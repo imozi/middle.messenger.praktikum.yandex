@@ -1,10 +1,15 @@
 import { Component } from 'core/Component';
 import Auth from 'services/Auth';
+import { UserProfileData } from 'services/User/types';
 
-export class SettingsPage extends Component {
+interface SettingsProps {
+  user: UserProfileData;
+}
+
+export class SettingsPage extends Component<SettingsProps> {
   static lastActiveMenu: string;
 
-  constructor(props?: any) {
+  constructor(props: SettingsProps) {
     super({ ...props });
 
     this.setProps({
@@ -26,7 +31,6 @@ export class SettingsPage extends Component {
       closeNotification: () => {
         this.refs.notification.hide();
       },
-
       disabledMenu: () => {
         const items = document
           .querySelector('.settings__list')

@@ -8,9 +8,10 @@ interface ButtonProps {
   icon: string;
   dataset?: string;
   click?: (evt: Event) => void;
+  events: any;
 }
 
-export class Button extends Component {
+export class Button extends Component<ButtonProps> {
   static componentName = 'Button';
 
   constructor(props: ButtonProps, { click } = props) {

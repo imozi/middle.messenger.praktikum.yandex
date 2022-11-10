@@ -1,15 +1,15 @@
 import { Component } from 'core/Component';
 import { Rec } from 'core/types';
-import { stateChat } from 'store/Chats/chats';
+import { StateChat } from 'store/Chats/chats';
 
 interface ChatRoomListProps {
   className: string;
-  chats?: Rec<stateChat>;
+  chats?: Rec<StateChat>;
   user?: user;
   click: (evt: Event) => void;
 }
 
-interface chatsProps extends stateChat {
+interface ChatsProps extends StateChat {
   click: Function;
   currentUser?: user;
 }
@@ -19,13 +19,13 @@ type user = {
   login: string;
 };
 
-export class ChatRoomList extends Component {
+export class ChatRoomList extends Component<ChatRoomListProps> {
   static componentName = 'ChatRoomList';
 
   constructor(props: ChatRoomListProps, { click } = props) {
     if (props.chats) {
       Object.entries(props.chats).forEach(([_, item]) => {
-        const chat = item as chatsProps;
+        const chat = item as ChatsProps;
         chat.click = click;
         chat.currentUser = props.user;
       });

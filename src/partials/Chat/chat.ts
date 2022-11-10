@@ -1,3 +1,4 @@
+import { Message } from 'components/Correspondence';
 import { Component } from 'core/Component';
 import { Socket } from 'core/Socket';
 import Chats from 'services/Chats';
@@ -6,16 +7,22 @@ import User from 'services/User';
 interface ChatProps {
   id: string;
   chat: string;
+  userId: string;
   socket?: Socket;
   className?: string;
-  userId: string;
+  isOpen?: boolean;
+  messages?: Message[];
 }
 
-export class Chat extends Component {
+export class Chat extends Component<ChatProps> {
   static componentName = 'Chat';
 
-  constructor(props: ChatProps) {
-    super({ ...props });
+  static isDeleteChat = false;
+
+  static isAddedUserChat = false;
+
+  constructor(props: ChatProps, { isOpen = false } = props) {
+    super({ ...props, isOpen });
 
     this.setState({
       message: {
@@ -87,6 +94,15 @@ export class Chat extends Component {
           this.refs.deleteUserModal.hide.bind(this.refs.deleteUserModal),
         );
       },
+      removeChat: async () => {
+        const id = this.getEl().dataset.chatId;
+        try {
+          await Chats.deleteChats(id!);
+          Chat.isDeleteChat = true;
+        } catch (error) {
+          this.props.showNotification('success', error);
+        }
+      },
       onClickModal: (evt: Event) => {
         const target = evt.target as HTMLFormElement;
         const parent = target.parentNode?.parentNode
@@ -104,6 +120,7 @@ export class Chat extends Component {
         const chatId = Number(this.getEl().dataset.chatId);
 
         await Chats.addedUserToChat(userId, chatId);
+        this.props.showNotification('success', 'Пользователь успешно добавлен');
 
         this.state.user.login = '';
       },
@@ -113,6 +130,10 @@ export class Chat extends Component {
         const chatId = Number(this.getEl().dataset.chatId);
 
         await Chats.deleteUserFromChat(userId, chatId);
+        this.props.showNotification(
+          'success',
+          'Пользователь успешно удален из чата!',
+        );
 
         this.state.user.login = '';
       },
@@ -129,11 +150,38 @@ export class Chat extends Component {
         }
         socket.send(message);
       },
+      showNotification: (type: string, text: string) => {
+        this.props.notification.setProps({
+          type,
+          text,
+        });
+
+        setTimeout(() => {
+          this.props.notification.show();
+        }, 0);
+
+        this.props.notification.dispatchEvent({ name: 'close' });
+      },
     });
   }
 
   public componentDidMount(): void {
-    this.hide();
+    if (Chat.isDeleteChat) {
+      this.props.showNotification('success', 'Чат успешно удален!');
+      Chat.isDeleteChat = false;
+    }
+  }
+
+  public componentWillDidMount(): void {
+    if (!this.props.isOpen) {
+      this.hide();
+    }
+  }
+
+  public componentWillUpdate(): void {
+    if (!this.props.isOpen) {
+      this.hide();
+    }
   }
 
   render() {
@@ -141,19 +189,19 @@ export class Chat extends Component {
     <section class="chat {{className}}" data-chat-id="{{id}}">
       <header class="chat__header">
         <div class="chat__header-col">
-          <div class="chat__user">
-            <div class="chat__user-img">
+          <div class="chat__avatar">
+            <div class="chat__avatar-img">
               <img 
 
               {{#if chat.avatar}}
-                src="{{chat.avatar}}"
+                src="https://ya-praktikum.tech/api/v2/resources/{{chat.avatar}}"
               {{else}} 
                 src="img/svg/user-default.svg"
               {{/if}}
 
               alt="avatar">
             </div>
-            <p class="chat__user-name">{{chat.title}}</p>
+            <p class="chat__name">{{chat.title}}</p>
           </div>
         </div>
         <div class="chat__header-col">

@@ -14,9 +14,10 @@ interface InputProps {
   focus?: (evt: Event) => void;
   keyup?: (evt: Event) => void;
   keydown?: (evt: Event) => void;
+  events: any;
 }
 
-export class Input extends Component {
+export class Input extends Component<InputProps> {
   static componentName = 'Input';
 
   constructor(

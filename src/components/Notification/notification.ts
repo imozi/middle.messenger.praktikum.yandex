@@ -12,9 +12,10 @@ interface NotificationProps {
   type: typeNotification;
   className?: string;
   close?: (e: Event) => void;
+  events: any;
 }
 
-export class Notification extends Component {
+export class Notification extends Component<NotificationProps> {
   static componentName = 'Notification';
 
   constructor(

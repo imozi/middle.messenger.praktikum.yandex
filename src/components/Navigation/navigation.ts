@@ -5,7 +5,7 @@ interface NavigationProps {
   className?: string;
 }
 
-export class Navigation extends Component {
+export class Navigation extends Component<NavigationProps> {
   static componentName = 'Navigation';
 
   constructor(props: NavigationProps) {

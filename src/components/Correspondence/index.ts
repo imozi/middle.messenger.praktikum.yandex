@@ -1,1 +1,1 @@
-export { Correspondence } from './correspondence';
+export { Correspondence, Message } from './correspondence';

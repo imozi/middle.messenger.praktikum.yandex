@@ -1,12 +1,8 @@
-import { Component } from 'core/Component';
 import { Store } from 'core/Store';
 import { deepCompare } from 'core/utils/deepCompare';
 import { store } from 'store';
 
-export function HOCStore(
-  setStoreToProps: (state: any) => any,
-  Builder: typeof Component,
-) {
+export function HOCStore(setStoreToProps: (state: any) => any, Builder: any) {
   return class extends Builder {
     public static componentName = Builder.componentName || Builder.name;
 

@@ -3,9 +3,10 @@ import { Component } from 'core/Component';
 interface NewChatProps {
   className: string;
   click: (evt: Event) => void;
+  events: any;
 }
 
-export class NewChat extends Component {
+export class NewChat extends Component<NewChatProps> {
   static componentName = 'NewChat';
 
   constructor(props: NewChatProps, { click } = props) {

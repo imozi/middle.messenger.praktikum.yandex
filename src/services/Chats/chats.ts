@@ -9,15 +9,18 @@ export class Chats {
     this.request = new HTTPTransport('/chats');
   }
 
-  public async getChats() {
-    const chats = (await this.request.get('')) as ChatsState;
+  private _setToken(chats: ChatsState) {
     Object.entries(chats).forEach(async ([_, chat]) => {
       const token = (await this.request.post(`/token/${chat.id}`)) as {
         token: string;
       };
       chat.token = token.token;
     });
+  }
 
+  public async getChats() {
+    const chats = (await this.request.get('')) as ChatsState;
+    this._setToken(chats);
     store.dispatch(ChatsState.ACTION.SET_CHATS, chats);
   }
 
@@ -32,7 +35,8 @@ export class Chats {
   }
 
   public async updateChats() {
-    const chats = await this.request.get('');
+    const chats = (await this.request.get('')) as ChatsState;
+    this._setToken(chats);
     store.dispatch(ChatsState.ACTION.UPDATE_CHATS, chats);
   }
 

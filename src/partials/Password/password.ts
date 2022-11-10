@@ -7,7 +7,7 @@ interface PasswordProps {
   notification?: Component;
 }
 
-export class Password extends Component {
+export class Password extends Component<PasswordProps> {
   static componentName = 'Password';
 
   static isUpdate = false;

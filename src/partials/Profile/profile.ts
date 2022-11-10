@@ -1,5 +1,5 @@
 import { Component } from 'core/Component';
-import { deepCompare } from 'core/utils';
+import { validation, deepCompare } from 'core/utils';
 import User from 'services/User';
 import { stateUser } from 'store/User';
 
@@ -9,7 +9,7 @@ interface ProfileProps {
   notification?: Component;
 }
 
-export class Profile extends Component {
+export class Profile extends Component<ProfileProps> {
   static componentName = 'Profile';
 
   static isUpdate = false;
@@ -64,6 +64,24 @@ export class Profile extends Component {
           target.disabled = true;
           await User.profileUpdate(formData);
           Profile.isUpdate = true;
+        }
+      },
+      onValidateInput: (evt: { target: HTMLInputElement }) => {
+        const { formData } = this.state;
+        const target = evt.target;
+        const name = target.name;
+        const value = formData[name];
+
+        try {
+          if (name === 'display_name') {
+            return;
+          }
+          validation[name](value, name === 'first_name' ? 'Фамилия' : 'Имя');
+        } catch (error: Error | any) {
+          if (value) {
+            target.dataset.invalid = 'true';
+          }
+          this.props.showNotification(value ? 'error' : 'info', error.message);
         }
       },
       onKeyUpInput: (evt: { target: HTMLInputElement }) => {
@@ -151,6 +169,8 @@ export class Profile extends Component {
             ref="firstName"
             disabled="true"
             keyup=onKeyUpInput
+            focus=onValidateInput
+            blur=onValidateInput
             }}}
           </div>
         </div>
@@ -169,6 +189,8 @@ export class Profile extends Component {
             ref="phone"
             disabled="true"
             keyup=onKeyUpInput
+            focus=onValidateInput
+            blur=onValidateInput
             }}}
             {{{Icon className="input-icon" icon="phone"}}}
           </div>
@@ -188,6 +210,8 @@ export class Profile extends Component {
             ref="secondName"
             disabled="true"
             keyup=onKeyUpInput
+            focus=onValidateInput
+            blur=onValidateInput
             }}}
           </div>
         </div>
@@ -206,6 +230,8 @@ export class Profile extends Component {
             ref="login"
             disabled="true"
             keyup=onKeyUpInput
+            focus=onValidateInput
+            blur=onValidateInput
             }}}
             {{{Icon className="input-icon" icon="user"}}}
           </div>
@@ -225,6 +251,8 @@ export class Profile extends Component {
             ref="email"
             disabled="true"
             keyup=onKeyUpInput
+            focus=onValidateInput
+            blur=onValidateInput
             }}}
           </div>
         </div>
@@ -243,6 +271,8 @@ export class Profile extends Component {
             ref="displayName"
             disabled="true"
             keyup=onKeyUpInput
+            focus=onValidateInput
+            blur=onValidateInput
             }}}
           </div>
         </div>

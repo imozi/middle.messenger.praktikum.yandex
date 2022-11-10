@@ -2,15 +2,21 @@ import { Component } from 'core/Component';
 
 interface MessageProps {
   text: string;
-  src: string;
+  src?: string;
   isMy: boolean;
 }
 
-export class Message extends Component {
+export class Message extends Component<MessageProps> {
   static componentName = 'Message';
 
-  constructor(props: MessageProps, { isMy = false } = props) {
-    super({ ...props, isMy });
+  constructor(props: MessageProps, { isMy = false, src } = props) {
+    super({
+      ...props,
+      isMy,
+      src: src
+        ? `https://ya-praktikum.tech/api/v2/resources/${src}`
+        : 'img/svg/user-default.svg',
+    });
   }
 
   render() {
@@ -18,15 +24,7 @@ export class Message extends Component {
       <div class="message" data-isMy={{isMy}}>
        <p class="message__content">{{text}}</p>
         <div class="message__user-img">
-          <img 
-
-          {{#if src}}
-            src="{{src}}"
-          {{else}} 
-            src="img/svg/user-default.svg"
-          {{/if}}
-
-          alt="avatar">
+          <img src="{{src}}" alt="avatar">
         </div>
       </div>
     `;

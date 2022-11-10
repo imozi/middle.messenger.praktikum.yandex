@@ -7,9 +7,10 @@ interface LinkProps {
   icon?: string;
   text: string;
   click: () => void;
+  events: any;
 }
 
-export class Link extends Component {
+export class Link extends Component<LinkProps> {
   static componentName = 'Link';
 
   constructor(props: LinkProps, { click } = props) {

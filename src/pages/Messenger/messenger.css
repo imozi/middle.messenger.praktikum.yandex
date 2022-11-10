@@ -7,7 +7,7 @@
     top: -10%;
     left: 50%;
     z-index: 9999;
-    min-width: max-content;
+    max-width: 300px;
     box-shadow: 0 3px 15px $color-blue-900-15;
   }
 

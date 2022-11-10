@@ -31,7 +31,7 @@ export class User {
   }
 
   public async getUserById(id: string) {
-    const user = await this.request.get<ErrorResponse>('', id);
+    const user = await this.request.get<ErrorResponse>(`/${id}`);
     return user;
   }
 }

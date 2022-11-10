@@ -1,7 +1,12 @@
 import { Component } from 'core/Component';
+import { UserProfileData } from 'services/User/types';
 
-export class HomePage extends Component {
-  constructor(props?: any) {
+interface HomeProps {
+  user: UserProfileData;
+}
+
+export class HomePage extends Component<HomeProps> {
+  constructor(props: HomeProps) {
     super(props);
 
     this.setProps({

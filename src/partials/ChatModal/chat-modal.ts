@@ -11,9 +11,10 @@ interface ChatModalProps {
   placeholder: string;
   click: (evt: Event) => void;
   submit: (evt: Event) => void;
+  events?: any;
 }
 
-export class ChatModal extends Component {
+export class ChatModal extends Component<ChatModalProps> {
   static componentName = 'ChatModal';
 
   constructor(props: ChatModalProps, { click } = props) {

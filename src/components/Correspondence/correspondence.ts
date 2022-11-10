@@ -1,16 +1,13 @@
 import { Component } from 'core/Component';
 import { Rec } from 'core/types';
-import User from 'services/User';
-
-User;
 
 interface CorrespondenceProps {
   className: string;
   userId: string;
-  messages: Rec<message>;
+  messages: Rec<Message>;
 }
 
-type message = {
+export type Message = {
   id: string;
   time: string;
   user_id: string;
@@ -26,14 +23,15 @@ type message = {
     upload_date: string;
   };
   currentUserId: string;
+  userData: any;
 };
 
-export class Correspondence extends Component {
+export class Correspondence extends Component<CorrespondenceProps> {
   static componentName = 'Correspondence';
 
   constructor(props: CorrespondenceProps) {
     if (props.messages) {
-      Object.entries(props.messages).forEach(async ([_, msg]) => {
+      Object.entries(props.messages).forEach(([_, msg]) => {
         msg.currentUserId = props.userId;
       });
     }
@@ -46,9 +44,9 @@ export class Correspondence extends Component {
       {{#each messages}}
         {{#with this}}
           {{#ifEqual currentUserId user_id}}
-            {{{Message text=content isMy="true"}}}
+            {{{Message src=avatar text=content isMy="true" }}}
           {{else}}
-            {{{Message text=content}}}
+            {{{Message text=content src=ss}}}
           {{/ifEqual}}
         {{/with}}
     {{/each}}             

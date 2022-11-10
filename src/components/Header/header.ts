@@ -5,7 +5,7 @@ interface HeaderProps {
   title: string;
 }
 
-export class Header extends Component {
+export class Header extends Component<HeaderProps> {
   static componentName = 'Header';
 
   constructor(props: HeaderProps) {

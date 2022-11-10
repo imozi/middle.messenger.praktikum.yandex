@@ -5,7 +5,7 @@ interface LabelProps {
   text: string;
 }
 
-export class Label extends Component {
+export class Label extends Component<LabelProps> {
   static componentName = 'Label';
 
   constructor(props: LabelProps) {

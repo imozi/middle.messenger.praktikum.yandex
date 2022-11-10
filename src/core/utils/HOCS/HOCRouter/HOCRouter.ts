@@ -1,7 +1,6 @@
-import { Component } from 'core/Component';
 import Router from 'core/Router';
 
-export function HOCRouter(Builder: typeof Component) {
+export function HOCRouter(Builder: any) {
   return class extends Builder {
     public static componentName = Builder.componentName || Builder.name;
 

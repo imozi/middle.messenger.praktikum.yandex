@@ -6,9 +6,10 @@ interface ChatMenuProps {
   remove?: (evt: Event) => void;
   removeUser?: (evt: Event) => void;
   add?: (evt: Event) => void;
+  events: any;
 }
 
-export class ChatMenu extends Component {
+export class ChatMenu extends Component<ChatMenuProps> {
   static componentName = 'ChatMenu';
 
   constructor(

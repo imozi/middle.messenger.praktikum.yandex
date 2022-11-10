@@ -2,8 +2,12 @@ import { validation } from 'core/utils';
 import { Component } from 'core/Component';
 import Auth from 'services/Auth';
 
-export class SignInPage extends Component {
-  constructor(props?: any) {
+interface SignInProps {
+  [key: string]: any;
+}
+
+export class SignInPage extends Component<SignInProps> {
+  constructor(props?: SignInProps) {
     super(props);
 
     this.setState({
