@@ -25,6 +25,7 @@
     "import/prefer-default-export": "off",
     "no-restricted-syntax": "off",
     "no-underscore-dangle": "off",
+    "no-empty":"off",
     "prettier/prettier": "error",
     "no-return-assign": "off",
     "prefer-destructuring": "off",

@@ -27,12 +27,16 @@ export class Avatar extends Component<AvatarProps> {
 
         if (file.files?.length) {
           const label = this.getEl().firstElementChild as HTMLLabelElement;
-
-          const formData = new FormData();
-          formData.append('avatar', file.files[0]);
-          this.dispatchEvent({ name: 'update' });
-          label.dataset.loading = 'true';
-          await User.avatarUpdate(formData);
+          try {
+            const formData = new FormData();
+            formData.append('avatar', file.files[0]);
+            label.dataset.loading = 'true';
+            await User.avatarUpdate(formData);
+            this.dispatchEvent({ name: 'update' });
+          } catch (error) {
+            label.dataset.loading = 'false';
+            this.props.showNotification('error', 'Не удалось обновить аватар!');
+          }
         }
       },
       enabledChange: () => {
@@ -49,6 +53,19 @@ export class Avatar extends Component<AvatarProps> {
         label.dataset.edit = 'false';
         file.disabled = true;
       },
+      showNotification: (type: string, text: string) => {
+        this.props.notification.setProps({
+          type,
+          text,
+        });
+
+        setTimeout(() => {
+          this.props.notification.show();
+        }, 0);
+
+        this.props.notification.dispatchEvent({ name: 'close' });
+      },
+      keyUp: () => {},
     });
   }
 
@@ -59,7 +76,7 @@ export class Avatar extends Component<AvatarProps> {
           <img src="{{src}}" alt="avatar">
         </label>
       <div class="avatar__change">
-      {{{Input id="avatar" type="file" name="" change=onChangeImages ref="file"}}}
+      {{{Input id="avatar" type="file" name="" change=onChangeImages ref="file" keyup=keyUp}}}
       </div>
     </div>
       `;

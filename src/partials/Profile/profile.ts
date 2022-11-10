@@ -1,4 +1,5 @@
 import { Component } from 'core/Component';
+import { ErrorResponse } from 'services/types';
 import { validation, deepCompare } from 'core/utils';
 import User from 'services/User';
 import { stateUser } from 'store/User';
@@ -31,13 +32,12 @@ export class Profile extends Component<ProfileProps> {
         Profile.isUpdate = true;
       },
       onClickFormBtn: async (evt: Event) => {
-        evt.preventDefault();
-
         const { form, formData } = this.state;
         const button = this.refs.button;
         const target = evt.target as HTMLButtonElement;
 
         if (!form.edit) {
+          evt.preventDefault();
           this.props.enabledForm();
 
           form.edit = true;
@@ -53,7 +53,6 @@ export class Profile extends Component<ProfileProps> {
           if (deepCompare(formData, this.props.profile)) {
             this.props.disabledForm();
             form.edit = false;
-
             button.setProps({
               text: 'Изменить данные',
               className: 'btn--blue',
@@ -61,9 +60,19 @@ export class Profile extends Component<ProfileProps> {
             return;
           }
 
-          target.disabled = true;
-          await User.profileUpdate(formData);
-          Profile.isUpdate = true;
+          try {
+            target.disabled = true;
+            await User.profileUpdate(formData);
+            Profile.isUpdate = true;
+          } catch (error: ErrorResponse<any>) {
+            this.props.disabledForm();
+            form.edit = false;
+            button.setProps({
+              text: 'Изменить данные',
+              className: 'btn--blue',
+            });
+            this.props.showNotification('error', error.message);
+          }
         }
       },
       onValidateInput: (evt: { target: HTMLInputElement }) => {
@@ -149,7 +158,7 @@ export class Profile extends Component<ProfileProps> {
       <header class="profile__header"><h2>Профиль</h2></header>
 
       <div class="profile__row">
-       {{{Avatar className="profile__avatar" src=profile.avatar ref="avatar" update=onChangeAvatar}}}
+       {{{Avatar className="profile__avatar" src=profile.avatar ref="avatar" update=onChangeAvatar notification=notification}}}
       </div>
       
       <div class="profile__row">

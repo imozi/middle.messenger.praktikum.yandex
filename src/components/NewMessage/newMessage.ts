@@ -3,6 +3,8 @@ import { debounce } from 'core/utils';
 
 interface NewMessageProps {
   keyup?: (evt: Event) => void;
+  keydown?: (evt: Event) => void;
+
   events: any;
 }
 
@@ -17,12 +19,13 @@ function autoResize(this: HTMLTextAreaElement) {
 export class NewMessage extends Component<NewMessageProps> {
   static componentName = 'NewMessage';
 
-  constructor(props: NewMessageProps, { keyup } = props) {
+  constructor(props: NewMessageProps, { keyup, keydown } = props) {
     super({
       ...props,
       events: {
         input: autoResize,
         keyup: debounce(keyup as Function, 200),
+        keydown,
       },
     });
   }

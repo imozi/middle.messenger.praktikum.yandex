@@ -16,6 +16,8 @@ export class MessengerPage extends Component<MessengerPageProps> {
 
   static createdNewChat: string = '';
 
+  static intervalId: any;
+
   constructor(props: MessengerPageProps) {
     super({ ...props });
 
@@ -97,7 +99,7 @@ export class MessengerPage extends Component<MessengerPageProps> {
           events: {
             open: () => 'open',
             close: () => 'close',
-            message: async (messages: MessageEvent) => {
+            message: (messages: MessageEvent) => {
               const json = JSON.parse(messages.data);
 
               if (json.type === 'pong') {
@@ -107,6 +109,7 @@ export class MessengerPage extends Component<MessengerPageProps> {
               if (Array.isArray(json)) {
                 chat.setProps({
                   messages: json,
+                  isLoading: 'false',
                 });
               } else {
                 socket.getMessages();
@@ -121,6 +124,7 @@ export class MessengerPage extends Component<MessengerPageProps> {
         chat.setProps({
           id: idChat,
           isOpen: true,
+          isLoading: 'true',
           chat: this.props.getCurrentChat(item.dataset.id),
           socket,
         });
@@ -129,6 +133,14 @@ export class MessengerPage extends Component<MessengerPageProps> {
         item.dataset.active = 'true';
 
         setTimeout(() => chat.show(), 100);
+
+        if (MessengerPage.intervalId) {
+          clearInterval(MessengerPage.intervalId);
+        }
+
+        MessengerPage.intervalId = setInterval(() => {
+          socket.ping();
+        }, 30000);
       },
       disabledRoom: () => {
         const rooms = document
@@ -193,6 +205,12 @@ export class MessengerPage extends Component<MessengerPageProps> {
     await this.getChats();
   }
 
+  public componentWillDidMount(): void {
+    if (this.props.chats) {
+      this.getEl().dataset.loading = 'false';
+    }
+  }
+
   public componentWillUpdate(): void {
     if (MessengerPage.createdNewChat) {
       setTimeout(() => {
@@ -201,7 +219,7 @@ export class MessengerPage extends Component<MessengerPageProps> {
           'Чат успешно создан!',
         );
         MessengerPage.createdNewChat = '';
-      }, 300);
+      }, 200);
     }
   }
 
@@ -220,7 +238,7 @@ export class MessengerPage extends Component<MessengerPageProps> {
 
   render() {
     return `
-    <main class="messenger">
+    <main class="messenger" data-loading="true">
       {{{Notification className="messenger__notification" type="" text="" ref="notification" close=closeNotification}}}
       <aside class="messenger__aside">
 

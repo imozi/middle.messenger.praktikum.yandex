@@ -1,5 +1,6 @@
 import { Component } from 'core/Component';
-import { deepCompare } from 'core/utils';
+import { deepCompare, validation } from 'core/utils';
+import { ErrorResponse } from 'services/types';
 import User from 'services/User';
 
 interface PasswordProps {
@@ -30,13 +31,12 @@ export class Password extends Component<PasswordProps> {
 
     this.setProps({
       onClickFormBtn: async (evt: Event) => {
-        evt.preventDefault();
-
         const { form, formData } = this.state;
         const button = this.refs.button;
         const target = evt.target as HTMLButtonElement;
 
         if (!form.edit) {
+          evt.preventDefault();
           Password.cache = { ...formData };
           this.props.enabledForm();
 
@@ -63,14 +63,24 @@ export class Password extends Component<PasswordProps> {
             return;
           }
 
-          const { oldPassword, newPassword } = formData;
-          target.disabled = true;
+          try {
+            const { oldPassword, newPassword } = formData;
+            target.disabled = true;
 
-          await User.passwordUpdate({ oldPassword, newPassword });
+            await User.passwordUpdate({ oldPassword, newPassword });
 
-          Password.isUpdate = true;
-          this.evtBus().emit(Password.EVENTS.FLOW_RENDER);
-          this.evtBus().emit(Password.EVENTS.FLOW_CDM);
+            Password.isUpdate = true;
+            this.evtBus().emit(Password.EVENTS.FLOW_RENDER);
+            this.evtBus().emit(Password.EVENTS.FLOW_CDM);
+          } catch (error: ErrorResponse<any>) {
+            this.props.disabledForm();
+            form.edit = false;
+            button.setProps({
+              text: 'Изменить данные',
+              className: 'btn--blue',
+            });
+            this.props.showNotification('error', error.message);
+          }
         }
       },
       onKeyUpInput: (evt: { target: HTMLInputElement }) => {
@@ -99,6 +109,26 @@ export class Password extends Component<PasswordProps> {
           password.type = 'password';
 
           icon.getEl().dataset.hide = 'true';
+        }
+      },
+      onValidateInput: (evt: { target: HTMLInputElement }) => {
+        const { formData } = this.state;
+        const target = evt.target;
+        const name = target.name;
+        const value = formData[name];
+
+        try {
+          if (name === 'passwordRepeated') {
+            const { newPassword } = formData;
+            validation[name](value, newPassword);
+          } else if (name === 'newPassword') {
+            validation.password(value);
+          }
+        } catch (error: Error | any) {
+          if (value) {
+            target.dataset.invalid = 'true';
+          }
+          this.props.showNotification(value ? 'error' : 'info', error.message);
         }
       },
       enabledForm: () => {
@@ -188,6 +218,8 @@ export class Password extends Component<PasswordProps> {
             ref="newPassword"
             disabled="true"
             keyup=onKeyUpInput
+            focus=onValidateInput
+            blur=onValidateInput
             }}}
             {{{Icon className="input-icon" icon="hide" ref="icon" click=onClickShowPassword}}}
           </div>
@@ -207,6 +239,8 @@ export class Password extends Component<PasswordProps> {
             ref="passwordRepeated"
             disabled="true"
             keyup=onKeyUpInput
+            focus=onValidateInput
+            blur=onValidateInput
             }}}
           </div>
         </div>

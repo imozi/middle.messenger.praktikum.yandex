@@ -53,6 +53,10 @@ export class Auth {
   }
 
   public async logout() {
-    this.request.post('/logout');
+    try {
+      await this.request.post('/logout');
+    } catch (error: ErrorResponse<any>) {
+      throw new Error(error.reason);
+    }
   }
 }

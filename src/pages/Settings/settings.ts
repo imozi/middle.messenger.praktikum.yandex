@@ -14,8 +14,12 @@ export class SettingsPage extends Component<SettingsProps> {
 
     this.setProps({
       onClickLogout: async () => {
-        await Auth.logout();
-        this.props.router.go('/sign-in');
+        try {
+          await Auth.logout();
+          this.props.router.go('/sign-in');
+        } catch (error) {
+          this.props.showNotification('error', 'Похоже что то пошло не так!');
+        }
       },
       onClickShowMenu: (evt: Event) => {
         const target = evt.target as HTMLButtonElement;
@@ -30,6 +34,18 @@ export class SettingsPage extends Component<SettingsProps> {
       },
       closeNotification: () => {
         this.refs.notification.hide();
+      },
+      showNotification: (type: string, text: string) => {
+        this.refs.notification.setProps({
+          type,
+          text,
+        });
+
+        setTimeout(() => {
+          this.refs.notification.show();
+        }, 0);
+
+        this.refs.notification.dispatchEvent({ name: 'close' });
       },
       disabledMenu: () => {
         const items = document

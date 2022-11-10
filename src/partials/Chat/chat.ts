@@ -10,6 +10,7 @@ interface ChatProps {
   userId: string;
   socket?: Socket;
   className?: string;
+  isLoading?: string;
   isOpen?: boolean;
   messages?: Message[];
 }
@@ -35,11 +36,25 @@ export class Chat extends Component<ChatProps> {
     });
 
     this.setProps({
-      onKeyupMessage: (evt: Event) => {
+      onKeyupMessage: (evt: Event | KeyboardEvent) => {
         const { message } = this.state;
         const target = evt.target as HTMLTextAreaElement;
+        const e = evt as KeyboardEvent;
 
         message.content = target.value;
+
+        if (e.code === 'Enter' || e.code === 'NumpadEnter') {
+          e.preventDefault();
+          target.value = '';
+          this.props.sendMessage();
+        }
+      },
+      onKeydownMessage: (evt: Event | KeyboardEvent) => {
+        const e = evt as KeyboardEvent;
+
+        if (e.code === 'Enter' || e.code === 'NumpadEnter') {
+          e.preventDefault();
+        }
       },
       onClickShowHideChatMenu: (evt: Event) => {
         evt.stopPropagation();
@@ -100,7 +115,10 @@ export class Chat extends Component<ChatProps> {
           await Chats.deleteChats(id!);
           Chat.isDeleteChat = true;
         } catch (error) {
-          this.props.showNotification('success', error);
+          this.props.showNotification(
+            'error',
+            'Не удалось удалить чат, попробуйте позже!',
+          );
         }
       },
       onClickModal: (evt: Event) => {
@@ -115,36 +133,55 @@ export class Chat extends Component<ChatProps> {
         }
       },
       onClickAddUserSubmit: async () => {
-        const user = (await User.searchUser(this.state.user)) as any;
-        const userId = user[0].id;
-        const chatId = Number(this.getEl().dataset.chatId);
+        try {
+          const user = (await User.searchUser(this.state.user)) as any;
+          const userId = user[0].id;
+          const chatId = Number(this.getEl().dataset.chatId);
 
-        await Chats.addedUserToChat(userId, chatId);
-        this.props.showNotification('success', 'Пользователь успешно добавлен');
+          await Chats.addedUserToChat(userId, chatId);
+          this.props.showNotification(
+            'success',
+            'Пользователь успешно добавлен!',
+          );
 
-        this.state.user.login = '';
+          this.state.user.login = '';
+        } catch (error) {
+          this.props.showNotification(
+            'error',
+            'Не удалось добавить пользователя, попробуйте позже!',
+          );
+        }
       },
       onClickDeleteUserSubmit: async () => {
-        const user = (await User.searchUser(this.state.user)) as any;
-        const userId = user[0].id;
-        const chatId = Number(this.getEl().dataset.chatId);
+        try {
+          const user = (await User.searchUser(this.state.user)) as any;
+          const userId = user[0].id;
+          const chatId = Number(this.getEl().dataset.chatId);
 
-        await Chats.deleteUserFromChat(userId, chatId);
-        this.props.showNotification(
-          'success',
-          'Пользователь успешно удален из чата!',
-        );
+          await Chats.deleteUserFromChat(userId, chatId);
+          this.props.showNotification(
+            'success',
+            'Пользователь успешно удален из чата!',
+          );
 
-        this.state.user.login = '';
+          this.state.user.login = '';
+        } catch (error) {
+          this.props.showNotification(
+            'error',
+            'Не удалось удалить пользователя, попробуйте позже!',
+          );
+        }
       },
       onClickSendMessage: (evt: Event) => {
-        const { message } = this.state;
         const target = evt.target as HTMLElement;
         const btn = target.parentNode?.parentNode as HTMLButtonElement;
-        const socket = this.props.socket as Socket;
 
         btn.blur();
-
+        this.props.sendMessage();
+      },
+      sendMessage: () => {
+        const { message } = this.state;
+        const socket = this.props.socket as Socket;
         if (!message.content) {
           return;
         }
@@ -165,20 +202,23 @@ export class Chat extends Component<ChatProps> {
     });
   }
 
-  public componentDidMount(): void {
+  componentDidMount() {
     if (Chat.isDeleteChat) {
       this.props.showNotification('success', 'Чат успешно удален!');
       Chat.isDeleteChat = false;
     }
   }
 
-  public componentWillDidMount(): void {
+  componentWillDidMount() {
     if (!this.props.isOpen) {
       this.hide();
     }
+    if (this.props.isLoading) {
+      this.getEl().dataset.loading = this.props.isLoading;
+    }
   }
 
-  public componentWillUpdate(): void {
+  componentWillUpdate() {
     if (!this.props.isOpen) {
       this.hide();
     }
@@ -186,7 +226,7 @@ export class Chat extends Component<ChatProps> {
 
   render() {
     return `
-    <section class="chat {{className}}" data-chat-id="{{id}}">
+    <section class="chat {{className}}" data-chat-id="{{id}}" data-loading="true">
       <header class="chat__header">
         <div class="chat__header-col">
           <div class="chat__avatar">
@@ -217,7 +257,7 @@ export class Chat extends Component<ChatProps> {
            {{{Button className="chat__btn chat__btn--file" icon="file-send" }}}
         </div>
         <div class="chat__message-col">
-          {{{NewMessage keyup=onKeyupMessage}}}
+          {{{NewMessage keyup=onKeyupMessage keydown=onKeydownMessage}}}
         </div>
         <div class="chat__message-col">
           {{{Button className="chat__btn chat__btn--send" icon="send-msg" click=onClickSendMessage}}}
