@@ -1,37 +1,48 @@
 import { Component } from 'core/Component';
 import { debounce } from 'core/utils';
 
-interface NotificationProps {
-  text: string;
-  type: string;
-  className?: string;
-  click?: (e: Event) => void;
+enum typeNotification {
+  Info = 'info',
+  Error = 'error',
+  Success = 'success',
 }
 
-export class Notification extends Component {
+interface NotificationProps {
+  text: string;
+  type: typeNotification;
+  className?: string;
+  close?: (e: Event) => void;
+  events: any;
+}
+
+export class Notification extends Component<NotificationProps> {
   static componentName = 'Notification';
 
-  constructor({ text, type, className, click }: NotificationProps) {
+  constructor(
+    props: NotificationProps,
+    { close, type = typeNotification.Info } = props,
+  ) {
     super({
-      text,
+      ...props,
       type,
-      className,
-      events: { click: debounce(click as Function, 2500) },
+      events: { close: debounce(close as Function, 2500) },
     });
   }
 
-  show(): void {
+  show() {
     this.getEl().style.opacity = '1';
+    setTimeout(() => (this.getEl().dataset.hide = 'false'), 100);
   }
 
-  hide(): void {
+  hide() {
     this.getEl().style.opacity = '0';
+    setTimeout(() => (this.getEl().dataset.hide = 'true'), 100);
   }
 
   render() {
     return `
-      <div class="notification {{className}} notification--{{type}}">
-      <p>{{text}}</p>
+      <div class="notification {{className}} notification--{{type}}" data-hide="true">
+        <p>{{text}}</p>
       </div>
     `;
   }

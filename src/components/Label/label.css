@@ -1,4 +1,4 @@
-label {
+label:not([for='avatar']) {
   display: inline-block;
   margin-bottom: 0.7rem;
   color: $color-dark-gray;

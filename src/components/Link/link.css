@@ -10,4 +10,31 @@
   &:focus {
     color: $color-blue-400;
   }
+
+  &--icon {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    color: $color-dark-gray;
+    text-decoration: none;
+    opacity: 0.5;
+
+    & img {
+      width: 25px;
+      height: 25px;
+    }
+
+    &:not([href]) {
+      opacity: 1;
+    }
+
+    &:hover {
+      color: $color-dark-gray;
+      opacity: 1;
+    }
+
+    &:focus {
+      color: $color-dark-gray;
+      opacity: 1;
+    }
+  }
 }

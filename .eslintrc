@@ -25,6 +25,7 @@
     "import/prefer-default-export": "off",
     "no-restricted-syntax": "off",
     "no-underscore-dangle": "off",
+    "no-empty":"off",
     "prettier/prettier": "error",
     "no-return-assign": "off",
     "prefer-destructuring": "off",
@@ -34,13 +35,18 @@
     "no-unused-vars": "off",
     "no-shadow":"off", 
     "prefer-promise-reject-errors":"off",
+    "react/destructuring-assignment": "off",
     "react/sort-comp": "off",
     "react/no-unused-class-component-methods": "off",
     "react/no-string-refs": "off",
     "react/prop-types": "off",
+    "react/no-unused-state": "off",
+    "react/no-unused-prop-types": "off",
+    "react/require-default-props": "off",
     "no-undef": "off",
     "guard-for-in":"off",
-    "no-unused-expressions": "off"
+    "no-unused-expressions": "off",
+    "no-constructor-return": "off"
   },
   "settings": {
     "import/resolver": {

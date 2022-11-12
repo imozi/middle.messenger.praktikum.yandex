@@ -1,0 +1,72 @@
+.message {
+  display: flex;
+  align-items: center;
+  margin-bottom: 2.5rem;
+
+  &__content {
+    position: relative;
+    margin: 0;
+    padding: 0.9rem;
+    padding-right: 1.5rem;
+    padding-left: 1.5rem;
+    border-radius: $border-radius;
+  }
+
+  &[data-ismy='true'] {
+    & .message__content {
+      margin-right: 2rem;
+      margin-left: auto;
+      background-color: $color-blue;
+      border: 0.1rem solid $color-light-blue-50;
+
+      &::after {
+        position: absolute;
+        top: 50%;
+        right: -15px;
+        width: 15px;
+        height: 12px;
+        background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTIiIHZpZXdCb3g9IjAgMCAxNiAxMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTE1LjA4NTEgNkwxLjY3MzdlLTA1IDIuOTQyODVlLTA3TDEuNjIxMjVlLTA1IDEyTDE1LjA4NTEgNloiIGZpbGw9IiNFRkY2RkYiLz4KPHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0xMi41MjkyIDZMMCAwLjkyMzA3N1YwTDE1IDZMMCAxMlYxMS4wNzY5TDEyLjUyOTIgNloiIGZpbGw9IiNBOENERkQiLz4KPC9zdmc+Cg==');
+        background-repeat: no-repeat;
+        background-position: center;
+        transform: translateY(-50%);
+        content: '';
+      }
+    }
+  }
+
+  &[data-ismy='false'] {
+    & .message__content {
+      order: 1;
+      margin-left: 2rem;
+      background-color: $color-gray;
+      border: 0.1rem solid $color-light-gray;
+
+      &::before {
+        position: absolute;
+        top: 50%;
+        left: -15px;
+        width: 15px;
+        height: 12px;
+        background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTIiIHZpZXdCb3g9IjAgMCAxNiAxMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTS0yLjYyMjY4ZS0wNyA2TDE1LjA4NTEgMi45NDI4NWUtMDdMMTUuMDg1MSAxMkwtMi42MjI2OGUtMDcgNloiIGZpbGw9IiNGM0Y0RjYiLz4KPHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0yLjU1NTkgNkwxNS4wODUxIDAuOTIzMDc3VjBMMC4wODUwODMgNkwxNS4wODUxIDEyVjExLjA3NjlMMi41NTU5IDZaIiBmaWxsPSIjRTVFN0VCIi8+Cjwvc3ZnPgo=');
+        background-repeat: no-repeat;
+        background-position: center;
+        transform: translateY(-50%);
+        content: '';
+      }
+    }
+  }
+
+  &__user-img {
+    position: relative;
+    top: -13px;
+    width: 50px;
+    height: 50px;
+
+    & img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+  }
+}

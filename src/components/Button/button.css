@@ -1,7 +1,7 @@
 .btn {
+  position: relative;
   display: block;
   width: 100%;
-  max-width: 200px;
   padding: 1.3rem 2.4rem;
   color: white;
   font-weight: 400;
@@ -38,6 +38,63 @@
     &:focus {
       background-color: $color-green-100;
       box-shadow: 0 0 0 4px $color-green-200-50;
+    }
+  }
+
+  &-icon {
+    display: block;
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: $transition;
+
+    & img {
+      width: 25px;
+      height: 25px;
+    }
+
+    &:hover {
+      opacity: 1;
+    }
+
+    &:focus {
+      opacity: 1;
+    }
+
+    &:disabled {
+      cursor: auto;
+      opacity: 1;
+    }
+  }
+
+  &::after {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
+    background-color: $color-white;
+    opacity: 0;
+    transition: $transition;
+    content: '';
+  }
+
+  &:disabled {
+    background-color: transparent;
+    cursor: auto;
+
+    &::after {
+      z-index: 1;
+      background-image: url('data:image/svg+xml;base64,PHN2ZyBmaWxsPSJub25lIiBoZWlnaHQ9IjEwMyIgdmlld0JveD0iMCAwIDkwIDEwMyIgd2lkdGg9IjkwIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxnIGZpbGw9IiMxZDRlZDgiPjxwYXRoIGQ9Im03MS4yNjk3IDE1LjQ5MDggMTcuNDgwNCAxMC4yODk2LjE3MDggMjAuMjgzMy0xNy42NjQ2LTkuNzg2NXoiLz48cGF0aCBkPSJtNDMuNjIgMjAuMjgyMi4wMzM5IDMxLjkzMTMtNDMuMDU5ODk0IDI0Ljg2MDYgNDMuMTQ2OTk0IDI0Ljk1OTljLjkyODYuNTM3IDIuMDczMi41MzggMy4wMDIyLjAwMmw0MC45MjgxLTIzLjYzMDJjLjkzNi0uNTQwNCAxLjUwOS0xLjU0MjYgMS40OTk5LTIuNjIzM2wtLjE4NC0yMS44NTE5LTE3LjcyMjQtOS42NzA2LjAyNTQgMjMuOTQ4NS0yNy42MDI0IDE1LjkzNjMtMTAuNjM1Ni02LjE1NTUgMjcuMDAyLTE1LjU4OTZjLjkyNTctLjUzNDUgMS40OTcxLTEuNTIxMiAxLjQ5OTktMi41OTAxbC4xMjkyLTQ4LjIzODRjLjAwMjgtMS4wNjU2LS41NTk4LTIuMDUyNzktMS40NzgyLTIuNTkzMzdsLTE0LjU0NzUtOC41NjMxODJjLS45MzE1LS41NDgyNzctMi4wODU4LS41NTMxMzktMy4wMjE5LS4wMTI3MjVsLTQxLjEzNTcgMjMuNzQ5Njc3Yy0uOTM1NDkuNTQwMi0xLjUwODM4MjIzIDEuNTQxNS0xLjQ5OTkwNzI2IDIuNjIxN2wuMzUxMzQ2MjYgNDQuNzgxMSAxNS42OTM5NjEtOS4wNjA5LS4wMjc5LTI2LjI3NXoiLz48L2c+PC9zdmc+');
+      background-repeat: no-repeat;
+      background-position: center center;
+      background-size: 100% 100%;
+      opacity: 1;
+      @mixin animation-pulse ease-in-out, 1.2s, infinite;
     }
   }
 }

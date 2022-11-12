@@ -5,7 +5,7 @@ interface HeaderProps {
   title: string;
 }
 
-export class Header extends Component {
+export class Header extends Component<HeaderProps> {
   static componentName = 'Header';
 
   constructor(props: HeaderProps) {
@@ -15,11 +15,9 @@ export class Header extends Component {
   render() {
     return `
     <header class="{{className}} header">
-        <a href="/" class="header__link" area-label="home page">
         <div class="header__logo">
           <img src="img/svg/logo.svg" alt="OziHub Messanger">
         </div>
-        </a>
         <h1 class="header__title">{{title}}</h1>
     </header>
     `;

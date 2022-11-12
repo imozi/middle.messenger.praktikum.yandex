@@ -2,10 +2,10 @@ import hbs, { HelperOptions } from 'handlebars';
 import { Component } from '../Component';
 import { helpers } from './helpers';
 
-interface ComponentConstructable<Props = any> {
+type ComponentConstructable<Props = any> = {
   componentName: string;
   new (props: Props): Component;
-}
+};
 
 export class Templater {
   protected template = new Map();
@@ -51,6 +51,7 @@ export class Templater {
         const component = new Cmpnt(hash);
 
         children[component.id] = component;
+
         this.components.set(
           Cmpnt.componentName,
           hbs.helpers[Cmpnt.componentName],
@@ -59,6 +60,7 @@ export class Templater {
         if (ref) {
           refs[ref] = component;
         }
+
         return `<component id="${component.id}"></component>`;
       },
     );

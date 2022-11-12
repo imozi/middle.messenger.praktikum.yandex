@@ -5,6 +5,7 @@
 
 @define-mixin visually-hidden {
   position: absolute;
+  z-index: -1;
   width: 1px;
   height: 1px;
   margin: -1px;
@@ -21,9 +22,22 @@
   animation-iteration-count: $iteration;
 }
 
+@define-mixin animation-pulse $timing, $duration, $iteration {
+  animation-name: pulse;
+  animation-duration: $duration;
+  animation-timing-function: $timing;
+  animation-iteration-count: $iteration;
+}
+
 @define-mixin position-center {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+@define-mixin list-reset {
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }

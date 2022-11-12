@@ -1,4 +1,4 @@
-import { Component } from '../../../core/Component';
+import { Component } from 'core/Component';
 
 export class ServError extends Component {
   render() {
@@ -8,7 +8,7 @@ export class ServError extends Component {
           <img src="img/svg/500.svg" alt="OziHub Messanger">
         </div>
       <h1 class="serv-error__title">Ошибка сервера!</h1>
-      {{{Link url="registration" text="Вернуться"}}}
+      {{{Link url="/back" text="Вернуться"}}}
     </section>
     `;
   }

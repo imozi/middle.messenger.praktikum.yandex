@@ -1,6 +1,5 @@
 .notification {
   position: absolute;
-  top: 0;
   min-width: 380px;
   max-width: 380px;
   min-height: 60px;
@@ -8,8 +7,9 @@
   padding: 2rem;
   padding-left: 3rem;
   background-color: $color-white;
+  border-radius: $border-radius;
   opacity: 0;
-  transition: opacity 0.3s ease-in-out;
+  transition: $transition;
 
   & p {
     margin: 0;
@@ -32,5 +32,9 @@
 
   &--info::after {
     background-color: $color-blue-200;
+  }
+
+  &--success::after {
+    background-color: $color-green-100;
   }
 }
