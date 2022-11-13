@@ -5,7 +5,7 @@ const express = require('express');
 
 const app = express();
 
-const PORT = process.env.PORT || 5500;
+const PORT = process.env.PORT || 3000;
 const HOST = process.env.HOST || 'localhost';
 const url = `http://${process.env.HOST}:${process.env.PORT}`;
 

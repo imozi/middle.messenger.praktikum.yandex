@@ -1,4 +1,3 @@
-import { Component } from 'core/Component';
 import { Nullable } from 'core/types';
 import { store } from 'store';
 import { Route } from './Route';
@@ -39,11 +38,7 @@ export class Router {
     route.mount();
   }
 
-  public use(
-    path: string,
-    builder: typeof Component,
-    isPrivate?: boolean,
-  ): Router {
+  public use(path: string, builder: any, isPrivate?: boolean): Router {
     const route = new Route(path, builder, this._root, isPrivate);
 
     this._routes.push(route);
