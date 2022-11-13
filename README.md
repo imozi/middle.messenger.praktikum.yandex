@@ -10,7 +10,7 @@
 
 ## Технологии
 
- - Сборщик проекта - [Parcel](https://parceljs.org/) 
+ - Сборщик проекта - [Webpack](https://webpack.js.org/) 
  - Шаблонизатор HTML - [Handlebars](https://handlebarsjs.com/)
  - CSS - [PostCSS](https://postcss.org/)
  - TypeScript - [TS](https://www.typescriptlang.org/)
