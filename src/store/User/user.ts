@@ -1,7 +1,7 @@
 import { EventBus } from 'core/EventBus';
 import { Nullable } from 'core/types';
 
-export type stateUser = {
+export type StateUser = {
   id: number;
   first_name: string;
   second_name: string;
@@ -21,7 +21,7 @@ export class User extends EventBus {
     UPDATE_USER: 'user/update',
   } as const;
 
-  private _state: Nullable<stateUser> = null;
+  private _state: Nullable<StateUser> = null;
 
   constructor() {
     super();
@@ -34,7 +34,7 @@ export class User extends EventBus {
     this._state = null;
   }
 
-  private _setUser(profile: stateUser) {
+  private _setUser(profile: StateUser) {
     this._state = { ...profile };
   }
 
@@ -42,7 +42,7 @@ export class User extends EventBus {
     this._state = null;
   }
 
-  private _updateUser(profile: stateUser) {
+  private _updateUser(profile: StateUser) {
     this._state = { ...profile };
   }
 

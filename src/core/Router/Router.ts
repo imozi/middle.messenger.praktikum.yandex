@@ -1,5 +1,5 @@
 import { Nullable } from 'core/types';
-import { store } from 'store';
+// import { store } from 'store';
 import { Route } from './Route';
 
 export class Router {
@@ -24,7 +24,7 @@ export class Router {
   private _onRoute(path: string): void {
     let route = this._getRoute(path);
 
-    if (route.isPrivate && !store.getStore().user) {
+    if (route.isPrivate) {
       this._history.pushState({}, '', '/sign-in');
       route = this._getRoute('/sign-in');
     }

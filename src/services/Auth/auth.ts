@@ -1,7 +1,7 @@
 import { HTTPTransport } from 'core/HTTPTransport';
 import { ErrorResponse } from 'services/types';
 import { validation } from 'core/utils';
-import { User, stateUser } from 'store/User';
+import { User, StateUser } from 'store/User';
 import { store } from 'store';
 import { UserSignInData, UserSignUpData, ResponseSignUp } from './types';
 
@@ -44,7 +44,7 @@ export class Auth {
 
   public async user() {
     try {
-      const user = await this.request.get<stateUser>('/user');
+      const user = await this.request.get<StateUser>('/user');
       user.status = null;
       store.dispatch(User.ACTION.SET_USER, user);
     } catch (error: ErrorResponse<any>) {

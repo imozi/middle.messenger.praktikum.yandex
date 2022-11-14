@@ -46,7 +46,8 @@
     "no-undef": "off",
     "guard-for-in":"off",
     "no-unused-expressions": "off",
-    "no-constructor-return": "off"
+    "no-constructor-return": "off",
+    "max-classes-per-file": "off"
   },
   "settings": {
     "import/resolver": {
