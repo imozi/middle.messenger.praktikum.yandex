@@ -245,7 +245,10 @@ export class Chat extends Component<ChatProps> {
           </div>
         </div>
         <div class="chat__header-col">
+
+        {{{Button className="chat__btn chat__btn--search chat__btn--menu" icon="search" }}}
         {{{Button className="chat__btn chat__btn--menu" icon="menu-top-right" click=onClickShowHideChatMenu}}}
+
         {{{ChatMenu className="chat__menu" ref="chatMenu" remove=removeChat add=onClickShowAddUserModal removeUser=onClickShowDeleteUserModal}}}
         </div>
       </header>

@@ -10,7 +10,7 @@ type Options<T = any> = Record<string, T>;
 type Data<T = any> = T;
 
 export class HTTPTransport {
-  private API_URL = 'https://ya-praktikum.tech/api/v2';
+  static API_URL = 'https://ya-praktikum.tech/api/v2';
 
   protected endpoint: string;
 
@@ -24,7 +24,7 @@ export class HTTPTransport {
       },
     },
   ) {
-    this.endpoint = `${this.API_URL}${endpoint}`;
+    this.endpoint = `${HTTPTransport.API_URL}${endpoint}`;
     this.options = options;
   }
 

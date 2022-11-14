@@ -2,11 +2,11 @@ import { Component } from 'core/Component';
 import { ErrorResponse } from 'services/types';
 import { validation, deepCompare } from 'core/utils';
 import User from 'services/User';
-import { stateUser } from 'store/User';
+import { StateUser } from 'store/User';
 
 interface ProfileProps {
   className?: string;
-  profile?: stateUser;
+  profile?: StateUser;
   notification?: Component;
 }
 

@@ -1,13 +1,13 @@
 import { EventBus } from 'core/EventBus';
 import { Nullable, Rec } from 'core/types';
-import { stateUser } from 'store/User';
+import { StateUser } from 'store/User';
 
 export type StateChat = {
   id: number;
   title: string;
   avatar: string;
   unread_count: number;
-  last_message: stateUser;
+  last_message: StateUser;
   time: string;
   content: string;
   token?: string;

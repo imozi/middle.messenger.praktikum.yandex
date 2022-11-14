@@ -1,3 +1,4 @@
+import './css/style.css';
 import 'components';
 import 'partials';
 import { HomePage } from 'pages/Home';

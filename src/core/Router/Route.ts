@@ -15,14 +15,14 @@ export class Route {
   constructor(
     path: string,
     builder: typeof Component,
-    root: string,
+    root: Nullable<HTMLElement>,
     isPrivate?: boolean,
   ) {
     this.isPrivate = isPrivate || false;
     this._path = path;
     this._Builder = builder;
     this._component = null;
-    this._root = document.querySelector(root);
+    this._root = root;
   }
 
   public match(path: string): boolean {

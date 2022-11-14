@@ -1,10 +1,9 @@
-import { Component } from 'core/Component';
 import { Nullable } from 'core/types';
 import { store } from 'store';
 import { Route } from './Route';
 
 export class Router {
-  private _root: string;
+  private _root: Nullable<HTMLElement>;
 
   private _routes: Route[] = [];
 
@@ -13,7 +12,7 @@ export class Router {
   private _currentRoute: Nullable<Route> = null;
 
   constructor(root: string = '#root') {
-    this._root = root;
+    this._root = document.querySelector(root);
   }
 
   private _getRoute(path: string): Route {
@@ -39,11 +38,7 @@ export class Router {
     route.mount();
   }
 
-  public use(
-    path: string,
-    builder: typeof Component,
-    isPrivate?: boolean,
-  ): Router {
+  public use(path: string, builder: any, isPrivate?: boolean): Router {
     const route = new Route(path, builder, this._root, isPrivate);
 
     this._routes.push(route);
