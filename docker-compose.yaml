@@ -1,0 +1,11 @@
+version: "3"
+services:
+  messenger:
+    container_name: messenger
+    image: ozihub_messenger
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: on-failure
+    ports: 
+     - 80:3000
