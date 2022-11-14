@@ -15,7 +15,8 @@
 > Макет дизайна в Figma: [https://www.figma.com/file/QBZvh8czFxsV8XJfMBVlcC/Messanger?node-id=0%3A1](https://www.figma.com/file/QBZvh8czFxsV8XJfMBVlcC/Messanger?node-id=0:1)
 
 > Предварительный просмотр в Netlify: [![Netlify Status](https://api.netlify.com/api/v1/badges/69f2bec3-b856-4781-bc17-85b972126262/deploy-status)](https://ozihub.netlify.app)
-> Предварительный просмотр в Heroku: [![Heroku Status](https://user-images.githubusercontent.com/29326762/201558415-139cf191-9437-4f41-8c31-7def37c2035a.svg)](https://ozihub.netlify.app)
+
+> Предварительный просмотр в Heroku: [![Heroku Status](https://user-images.githubusercontent.com/29326762/201558415-139cf191-9437-4f41-8c31-7def37c2035a.svg)](https://ozihub.herokuapp.com)
 
   
 
