@@ -11,6 +11,7 @@ module.exports = {
     '^core(.*)$': '<rootDir>/src/core$1',
     '^utils(.*)$': '<rootDir>/src/core/utils$1',
     '^pages(.*)$': '<rootDir>/src/pages$1',
+    '^store(.*)$': '<rootDir>/src/store$1',
     '^components(.*)$': '<rootDir>/src/components$1',
     '^services(.*)$': '<rootDir>/src/services$1',
   },

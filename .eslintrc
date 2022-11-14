@@ -47,6 +47,7 @@
     "guard-for-in":"off",
     "no-unused-expressions": "off",
     "no-constructor-return": "off",
+    "no-useless-constructor": "off",
     "max-classes-per-file": "off"
   },
   "settings": {

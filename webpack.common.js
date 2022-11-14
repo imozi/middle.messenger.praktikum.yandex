@@ -1,7 +1,4 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
-const TerserPlugin = require('terser-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const path = require('path');
 
@@ -9,10 +6,7 @@ module.exports = {
   entry: {
     main: path.resolve(__dirname, './src/index.ts'),
   },
-  output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: 'js/[chunkhash:6].bundle.js',
-  },
+  stats: 'errors-warnings',
   resolve: {
     extensions: ['.ts', '.js', '.css'],
     alias: {
@@ -29,12 +23,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, './public/index.html'),
       favicon: path.resolve(__dirname, './public/favicon.ico'),
-      minify: true,
     }),
-    new MiniCssExtractPlugin({
-      filename: 'css/style.[chunkhash:6].css',
-    }),
-    new CssMinimizerPlugin(),
     new CopyPlugin({
       patterns: [
         {
@@ -44,35 +33,12 @@ module.exports = {
       ],
     }),
   ],
-  optimization: {
-    minimize: true,
-    minimizer: [
-      new CssMinimizerPlugin(),
-      new TerserPlugin({
-        parallel: true,
-        extractComments: false,
-      }),
-    ],
-  },
   module: {
     rules: [
       {
         test: /\.(ts|tsx)$/i,
         loader: 'ts-loader',
         exclude: ['/node_modules/'],
-      },
-      {
-        test: /\.css$/i,
-        use: [
-          {
-            loader: MiniCssExtractPlugin.loader,
-            options: {
-              publicPath: '../',
-            },
-          },
-          'css-loader',
-          'postcss-loader',
-        ],
       },
     ],
   },

@@ -1,9 +1,9 @@
 import { Nullable } from 'core/types';
-// import { store } from 'store';
+import { store } from 'store';
 import { Route } from './Route';
 
 export class Router {
-  private _root: string;
+  private _root: Nullable<HTMLElement>;
 
   private _routes: Route[] = [];
 
@@ -12,7 +12,7 @@ export class Router {
   private _currentRoute: Nullable<Route> = null;
 
   constructor(root: string = '#root') {
-    this._root = root;
+    this._root = document.querySelector(root);
   }
 
   private _getRoute(path: string): Route {
@@ -24,7 +24,7 @@ export class Router {
   private _onRoute(path: string): void {
     let route = this._getRoute(path);
 
-    if (route.isPrivate) {
+    if (route.isPrivate && !store.getStore().user) {
       this._history.pushState({}, '', '/sign-in');
       route = this._getRoute('/sign-in');
     }
